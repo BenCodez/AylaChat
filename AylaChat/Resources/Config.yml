@@ -1,0 +1,65 @@
+DataStorage: SQLITE
+
+# Information for mysql
+MySQL:
+  Host: ''
+  # Default port is 3306
+  Port: 3306 
+  Database: ''
+  Username: ''
+  Password: ''
+  # Max number of connections
+  MaxConnections: 1
+  # Maxium size of caching mysql
+  # -1 for no limit
+  # Affecting this value may affect performance
+  MaxSize: -1
+  # Table name prefix, for use with mutliple servers
+  Prefix: ''
+  #UseSSL: true
+  
+# Remove old player files
+# Happens on startup or /av purge
+PurgeOldData: false
+
+# Minimum number of days offline in order to purge
+PurgeMin: 90
+
+# Disable checking on world change
+# May improve performance
+DisableCheckOnWorldChange: false
+
+# Debug
+Debug: false
+
+# Extra Debug
+# Only needed in extreme cases
+ExtraDebug: false
+
+# Debug info ingame
+# Players with permission "VotingPlugin.Debug"
+# will see debug info if debug is true
+DebugInGame: false
+
+# Will log debug messages to VotingPlugin/Log/log.txt
+# Requires Debug to be on
+LogDebugToFile: false
+
+Channels:
+  General:
+    Format: '&a[G]%group% %player%: %message%'
+    Permission: ''
+    # WIP
+    Bungeecoord: false
+    Distance: -1
+    AutoJoin: true
+    Default: true
+  Staff:
+    Format: '&a[S]%player%: %message%'
+    Permission: 'AylaChat.Staff'
+    # WIP
+    Bungeecoord: false
+    Distance: -1
+    AutoJoin: true
+    Default: false
+    

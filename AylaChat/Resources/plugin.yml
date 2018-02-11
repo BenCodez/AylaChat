@@ -1,0 +1,8 @@
+name: ${project.name}
+version: ${project.version}
+main: com.Ben12345rocks.AylaChat.Main
+description: Highly Customizable Chat Plugin
+author: Ben12345rocks
+commands:
+  aylachat:
+    description: AylaChat Command
