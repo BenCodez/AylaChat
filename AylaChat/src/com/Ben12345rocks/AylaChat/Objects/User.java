@@ -79,9 +79,21 @@ public class User extends com.Ben12345rocks.AdvancedCore.Objects.User {
 	public ArrayList<String> getChannelsLeft() {
 		return getData().getStringList("ChannelsLeft");
 	}
-	
+
 	public void checkChannels() {
-		// for future use
+		if (getCurrentChannel().isEmpty()) {
+			Channel d = ChannelHandler.getInstance().getChannel(ChannelHandler.getInstance().getDefaultChannelName());
+			if (d.canTalk(getPlayer())) {
+				setCurrentChannel(d.getChannelName());
+				return;
+			}
+			for (Channel ch : ChannelHandler.getInstance().getChannels()) {
+				if (ch.canTalk(getPlayer())) {
+					setCurrentChannel(ch.getChannelName());
+					return;
+				}
+			}
+		}
 	}
 
 }

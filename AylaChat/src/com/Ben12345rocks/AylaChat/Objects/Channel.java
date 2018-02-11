@@ -4,6 +4,9 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
+import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
+
 public class Channel {
 
 	private String channelName;
@@ -22,6 +25,14 @@ public class Channel {
 		distance = data.getInt("Distance", -1);
 		autojoin = data.getBoolean("AutoJoin", true);
 		defaultChannel = data.getBoolean("Default", false);
+	}
+
+	public boolean canTalk(Player p) {
+		if (p.hasPermission(permission) || permission.isEmpty()) {
+			return true;
+		}
+		p.sendMessage(StringUtils.getInstance().colorize(AdvancedCoreHook.getInstance().getFormatNoPerms()));
+		return false;
 	}
 
 	/**

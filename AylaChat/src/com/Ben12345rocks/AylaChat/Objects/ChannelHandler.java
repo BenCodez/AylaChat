@@ -90,7 +90,7 @@ public class ChannelHandler {
 
 	public Channel getChannel(String channel) {
 		for (Channel ch : getChannels()) {
-			if (ch.getChannelName().equals(channel)) {
+			if (ch.getChannelName().equalsIgnoreCase(channel)) {
 				return ch;
 			}
 		}
