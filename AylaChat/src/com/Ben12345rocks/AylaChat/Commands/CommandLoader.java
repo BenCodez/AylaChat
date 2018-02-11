@@ -38,6 +38,11 @@ public class CommandLoader {
 	public void load() {
 		plugin.commands = new ArrayList<CommandHandler>();
 
+		plugin.commands.addAll(
+				com.Ben12345rocks.AdvancedCore.Commands.CommandLoader.getInstance().getBasicCommands("AylaChat"));
+		plugin.commands.addAll(
+				com.Ben12345rocks.AdvancedCore.Commands.CommandLoader.getInstance().getBasicAdminCommands("AylaChat"));
+
 		plugin.commands.add(new CommandHandler(new String[] { "Help" }, "AylaChat.Help", "View help information") {
 
 			@Override

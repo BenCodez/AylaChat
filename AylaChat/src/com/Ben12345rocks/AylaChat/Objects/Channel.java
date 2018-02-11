@@ -32,12 +32,16 @@ public class Channel {
 	 * @return
 	 */
 	public boolean canHear(Player reciever, Location loc) {
-		if (reciever.hasPermission(permission)) {
+		if (reciever.hasPermission(permission) || permission.isEmpty()) {
 			if (UserManager.getInstance().getAylaChatUser(reciever).getChannelsLeft().contains(channelName)) {
 				return false;
 			}
 			if (distance > 0) {
 				if (loc.distance(reciever.getLocation()) < distance) {
+					return true;
+				}
+			} else if (distance == 0) {
+				if (loc.getWorld().getName().equals(reciever.getWorld().getName())) {
 					return true;
 				}
 			} else {

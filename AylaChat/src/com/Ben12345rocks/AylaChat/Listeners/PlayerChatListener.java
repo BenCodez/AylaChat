@@ -13,6 +13,7 @@ import com.Ben12345rocks.AylaChat.Objects.UserManager;
 public class PlayerChatListener implements Listener {
 
 	/** The plugin. */
+	@SuppressWarnings("unused")
 	private static Main plugin;
 
 	/**

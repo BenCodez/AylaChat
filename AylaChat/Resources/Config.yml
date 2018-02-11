@@ -51,6 +51,9 @@ Channels:
     Permission: ''
     # WIP
     Bungeecoord: false
+    # Setting to -1 means no distance limitation
+    # Setting to 0 means global world chat
+    # Sett to any other value means local chat (with 200 blocks for example)
     Distance: -1
     AutoJoin: true
     Default: true
@@ -59,7 +62,7 @@ Channels:
     Permission: ''
     # WIP
     Bungeecoord: false
-    Distance: 400
+    Distance: 200
     AutoJoin: true
     Default: false
   Staff:

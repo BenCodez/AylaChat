@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
@@ -16,6 +15,7 @@ public class ChannelHandler {
 
 	private static ChannelHandler instance = new ChannelHandler();
 
+	@SuppressWarnings("unused")
 	private Main plugin = Main.plugin;
 
 	private ArrayList<Channel> channels;
