@@ -46,7 +46,7 @@ DebugInGame: false
 LogDebugToFile: false
 
 Channels:
-  General:
+  Global:
     Format: '&a[G]%group% %player%: %message%'
     Permission: ''
     # WIP
@@ -54,6 +54,14 @@ Channels:
     Distance: -1
     AutoJoin: true
     Default: true
+  Local:
+    Format: '&a[L]%group% %player%: %message%'
+    Permission: ''
+    # WIP
+    Bungeecoord: false
+    Distance: 400
+    AutoJoin: true
+    Default: false
   Staff:
     Format: '&a[S]%player%: %message%'
     Permission: 'AylaChat.Staff'
