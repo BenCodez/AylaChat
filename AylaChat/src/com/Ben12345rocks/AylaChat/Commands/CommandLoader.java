@@ -2,6 +2,7 @@ package com.Ben12345rocks.AylaChat.Commands;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -67,6 +68,23 @@ public class CommandLoader {
 			public void execute(CommandSender sender, String[] args) {
 				UserManager.getInstance().getAylaChatUser((Player) sender).setCurrentChannel(args[1]);
 				sendMessage(sender, "Set channel to " + args[1]);
+			}
+		});
+
+		plugin.commands.add(new CommandHandler(new String[] { "ClearChat" }, "AylaChat.ClearChat", "Clear Chat") {
+
+			@Override
+			public void execute(CommandSender sender, String[] args) {
+				ChannelHandler.getInstance().clearChatAll();
+			}
+		});
+
+		plugin.commands.add(new CommandHandler(new String[] { "ClearChat", "(Player)" }, "AylaChat.ClearChat.Player",
+				"Clear Chat for a specific player") {
+
+			@Override
+			public void execute(CommandSender sender, String[] args) {
+				ChannelHandler.getInstance().clearChat(Bukkit.getPlayer(args[1]));
 			}
 		});
 

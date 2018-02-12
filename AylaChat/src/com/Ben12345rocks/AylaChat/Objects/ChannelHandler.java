@@ -9,6 +9,7 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
+import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Commands.Executors.ChannelCommands;
@@ -88,6 +89,22 @@ public class ChannelHandler {
 		}
 
 		Bukkit.getConsoleSender().sendMessage(msg);
+	}
+
+	public void clearChat(Player player) {
+		if (player != null) {
+			ArrayList<String> blank = new ArrayList<String>();
+			for (int i = 0; i < 200; i++) {
+				blank.add("");
+			}
+			player.sendMessage(ArrayUtils.getInstance().convert(blank));
+		}
+	}
+
+	public void clearChatAll() {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			clearChat(player);
+		}
 	}
 
 	public String getDefaultChannelName() {
