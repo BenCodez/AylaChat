@@ -1,5 +1,7 @@
 package com.Ben12345rocks.AylaChat.Objects;
 
+import java.util.ArrayList;
+
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -16,6 +18,7 @@ public class Channel {
 	private int distance;
 	private boolean autojoin;
 	private boolean defaultChannel;
+	private ArrayList<String> aliases;
 
 	public Channel(ConfigurationSection data, String channelName) {
 		this.channelName = channelName;
@@ -25,6 +28,22 @@ public class Channel {
 		distance = data.getInt("Distance", -1);
 		autojoin = data.getBoolean("AutoJoin", true);
 		defaultChannel = data.getBoolean("Default", false);
+		aliases = (ArrayList<String>) data.getList("Aliases", new ArrayList<String>());
+	}
+
+	/**
+	 * @return the aliases
+	 */
+	public ArrayList<String> getAliases() {
+		return aliases;
+	}
+
+	/**
+	 * @param aliases
+	 *            the aliases to set
+	 */
+	public void setAliases(ArrayList<String> aliases) {
+		this.aliases = aliases;
 	}
 
 	public boolean canTalk(Player p) {

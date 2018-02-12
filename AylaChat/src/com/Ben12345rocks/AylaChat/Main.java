@@ -52,5 +52,6 @@ public class Main extends JavaPlugin {
 		Config.getInstance().reloadData();
 		AdvancedCoreHook.getInstance().setConfigData(Config.getInstance().getData());
 		AdvancedCoreHook.getInstance().reload();
+		ChannelHandler.getInstance().load();
 	}
 }

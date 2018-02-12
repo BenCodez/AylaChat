@@ -1,14 +1,17 @@
 package com.Ben12345rocks.AylaChat.Objects;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AylaChat.Main;
+import com.Ben12345rocks.AylaChat.Commands.Executors.ChannelCommands;
 import com.Ben12345rocks.AylaChat.Config.Config;
 
 public class ChannelHandler {
@@ -42,7 +45,27 @@ public class ChannelHandler {
 		channels = new ArrayList<Channel>();
 
 		for (String ch : Config.getInstance().getChannels()) {
-			channels.add(new Channel(Config.getInstance().getData().getConfigurationSection("Channels." + ch), ch));
+			Channel channel = new Channel(Config.getInstance().getData().getConfigurationSection("Channels." + ch), ch);
+			channels.add(channel);
+
+			loadChannelCommand(ch, channel);
+
+			for (String aliases : channel.getAliases()) {
+				loadChannelCommand(aliases, channel);
+			}
+		}
+	}
+
+	private void loadChannelCommand(String cmd, Channel channel) {
+		try {
+			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+
+			bukkitCommandMap.setAccessible(true);
+			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
+
+			commandMap.register(cmd, new ChannelCommands(cmd, channel));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -92,6 +115,11 @@ public class ChannelHandler {
 		for (Channel ch : getChannels()) {
 			if (ch.getChannelName().equalsIgnoreCase(channel)) {
 				return ch;
+			}
+			for (String aliases : ch.getAliases()) {
+				if (aliases.equalsIgnoreCase(channel)) {
+					return ch;
+				}
 			}
 		}
 		return null;

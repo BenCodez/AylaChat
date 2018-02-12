@@ -57,6 +57,8 @@ Channels:
     Distance: -1
     AutoJoin: true
     Default: true
+    Aliases:
+    - g
   Local:
     Format: '&a[L]%group% %player%: %message%'
     Permission: ''
@@ -65,6 +67,8 @@ Channels:
     Distance: 200
     AutoJoin: true
     Default: false
+    Aliases:
+    - l
   Staff:
     Format: '&a[S]%player%: %message%'
     Permission: 'AylaChat.Staff'
@@ -73,4 +77,6 @@ Channels:
     Distance: -1
     AutoJoin: true
     Default: false
+    Aliases:
+    - s
     
