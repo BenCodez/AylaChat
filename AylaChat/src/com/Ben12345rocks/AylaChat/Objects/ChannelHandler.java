@@ -74,6 +74,10 @@ public class ChannelHandler {
 			channel = getDefaultChannelName();
 		}
 		Channel ch = getChannel(channel);
+		if (!ch.canTalk(player)) {
+			plugin.debug("Player " + player.getName() + " can't talk in " + ch.getChannelName());
+			return;
+		}
 		String msg = format(message, ch, player);
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (p != null) {

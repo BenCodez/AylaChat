@@ -20,6 +20,7 @@ public class Channel {
 	private boolean defaultChannel;
 	private ArrayList<String> aliases;
 
+	@SuppressWarnings("unchecked")
 	public Channel(ConfigurationSection data, String channelName) {
 		this.channelName = channelName;
 		format = data.getString("Format");
