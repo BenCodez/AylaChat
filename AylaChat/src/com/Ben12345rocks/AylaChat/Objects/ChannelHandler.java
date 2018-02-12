@@ -22,6 +22,15 @@ public class ChannelHandler {
 	@SuppressWarnings("unused")
 	private Main plugin = Main.plugin;
 
+	private ArrayList<String> socialSpyPlayers = new ArrayList<String>();
+
+	/**
+	 * @return the socialSpyPlayers
+	 */
+	public ArrayList<String> getSocialSpyPlayers() {
+		return socialSpyPlayers;
+	}
+
 	private ArrayList<Channel> channels;
 
 	/**

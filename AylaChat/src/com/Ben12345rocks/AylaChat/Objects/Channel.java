@@ -63,9 +63,13 @@ public class Channel {
 	 * @return
 	 */
 	public boolean canHear(Player reciever, Location loc) {
+
 		if (reciever.hasPermission(permission) || permission.isEmpty()) {
 			if (UserManager.getInstance().getAylaChatUser(reciever).getChannelsLeft().contains(channelName)) {
 				return false;
+			}
+			if (ChannelHandler.getInstance().getSocialSpyPlayers().contains(reciever.getUniqueId().toString())) {
+				return true;
 			}
 			if (distance > 0) {
 				if (loc.distance(reciever.getLocation()) < distance) {

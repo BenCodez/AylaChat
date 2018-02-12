@@ -88,6 +88,17 @@ public class CommandLoader {
 			}
 		});
 
+		plugin.commands.add(new CommandHandler(new String[] { "SocialSpy", "(Boolean)" }, "AylaChat.SocialSpy",
+				"Set whether or not social spy is enabled", false) {
+
+			@Override
+			public void execute(CommandSender sender, String[] args) {
+				UserManager.getInstance().getAylaChatUser((Player) sender)
+						.setSocialSpyEnabled(Boolean.valueOf(args[1]));
+				sendMessage(sender, "Set Socialspy to " + args[1]);
+			}
+		});
+
 		TabCompleteHandler.getInstance().addTabCompleteOption(
 				new TabCompleteHandle("(Channel)", ChannelHandler.getInstance().getChannelNames()) {
 

@@ -94,6 +94,25 @@ public class User extends com.Ben12345rocks.AdvancedCore.Objects.User {
 				}
 			}
 		}
+
+		if (getSocialSpyEnabled()) {
+			if (!ChannelHandler.getInstance().getSocialSpyPlayers().contains(getUUID())) {
+				ChannelHandler.getInstance().getSocialSpyPlayers().add(getUUID());
+			}
+		} else {
+			if (ChannelHandler.getInstance().getSocialSpyPlayers().contains(getUUID())) {
+				ChannelHandler.getInstance().getSocialSpyPlayers().remove(getUUID());
+			}
+		}
+	}
+
+	public void setSocialSpyEnabled(boolean value) {
+		getData().setString("SocialSpy", "" + value);
+		checkChannels();
+	}
+
+	public boolean getSocialSpyEnabled() {
+		return Boolean.valueOf(getData().getString("SocialSpy"));
 	}
 
 }
