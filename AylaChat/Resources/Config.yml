@@ -1,3 +1,4 @@
+# Options: FLAT, SQLITE, MYSQL
 DataStorage: SQLITE
 
 # Information for mysql
@@ -17,35 +18,17 @@ MySQL:
   # Table name prefix, for use with mutliple servers
   Prefix: ''
   #UseSSL: true
-  
-# Remove old player files
-# Happens on startup or /av purge
-PurgeOldData: false
 
-# Minimum number of days offline in order to purge
-PurgeMin: 90
-
-# Disable checking on world change
-# May improve performance
-DisableCheckOnWorldChange: false
-
-# Debug
-Debug: false
-
-# Extra Debug
-# Only needed in extreme cases
-ExtraDebug: false
-
-# Debug info ingame
-# Players with permission "VotingPlugin.Debug"
-# will see debug info if debug is true
-DebugInGame: false
-
-# Will log debug messages to VotingPlugin/Log/log.txt
-# Requires Debug to be on
-LogDebugToFile: false
-
+# Variables:
+# %group%
+# %player%
+# %message%
+# %nickname%
+# Any placeholderapi placeholders supported as well
+#
+# Setting channel name to Town or Nation will enable towny chats
 Channels:
+  # Channel name
   Global:
     Format: '&a[G]%group% %player%: %message%'
     Permission: ''
@@ -79,4 +62,10 @@ Channels:
     Default: false
     Aliases:
     - s
-    
+
+# Debug
+Debug: false
+
+# Extra Debug
+# Only needed in extreme cases
+ExtraDebug: false
