@@ -2,12 +2,15 @@ package com.Ben12345rocks.AylaChat.Objects;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.object.Resident;
 
 public class Channel {
 
@@ -198,5 +201,49 @@ public class Channel {
 	 */
 	public void setDefaultChannel(boolean defaultChannel) {
 		this.defaultChannel = defaultChannel;
+	}
+
+	@SuppressWarnings("deprecation")
+	public ArrayList<Player> getPlayers(Player player) {
+		ArrayList<Player> players = new ArrayList<Player>();
+
+		if (getChannelName().equalsIgnoreCase("Town")) {
+			try {
+				Resident res = Towny.plugin.getTownyUniverse().getResident(player.getName());
+				if (res.hasTown()) {
+					for (Resident r : res.getTown().getResidents()) {
+						Player p = Bukkit.getPlayer(r.getName());
+						if (p != null) {
+							players.add(p);
+						}
+					}
+				} else {
+					players.add(player);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (getChannelName().equalsIgnoreCase("Nation")) {
+			try {
+				Resident res = Towny.plugin.getTownyUniverse().getResident(player.getName());
+				if (res.hasNation()) {
+					for (Resident r : res.getTown().getNation().getResidents()) {
+						Player p = Bukkit.getPlayer(r.getName());
+						if (p != null) {
+							players.add(p);
+						}
+					}
+				} else {
+					players.add(player);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				players.add(p);
+			}
+		}
+		return players;
 	}
 }

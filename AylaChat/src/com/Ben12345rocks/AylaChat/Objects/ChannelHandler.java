@@ -89,7 +89,8 @@ public class ChannelHandler {
 			return;
 		}
 		String msg = format(message, ch, player);
-		for (Player p : Bukkit.getOnlinePlayers()) {
+
+		for (Player p : ch.getPlayers(player)) {
 			if (p != null) {
 				if (ch.canHear(p, player.getLocation())) {
 					p.sendMessage(msg);

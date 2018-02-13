@@ -174,5 +174,12 @@
 			<version>1.6</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.palmergames</groupId>
+			<artifactId>LlmDl</artifactId>
+			<version>LATEST</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/Jars/Towny.jar</systemPath>
+		</dependency>
 	</dependencies>
 </project>
