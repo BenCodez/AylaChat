@@ -11,6 +11,7 @@ import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandle;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
+import com.Ben12345rocks.AylaChat.Objects.User;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
 
 public class CommandLoader {
@@ -96,6 +97,17 @@ public class CommandLoader {
 				UserManager.getInstance().getAylaChatUser((Player) sender)
 						.setSocialSpyEnabled(Boolean.valueOf(args[1]));
 				sendMessage(sender, "Set Socialspy to " + args[1]);
+			}
+		});
+
+		plugin.commands.add(new CommandHandler(new String[] { "Mute", "(Player)" }, "AylaChat.Mute", "Mute player") {
+
+			@Override
+			public void execute(CommandSender sender, String[] args) {
+				User user = UserManager.getInstance().getAylaChatUser(args[1]);
+				boolean muted = !user.getMuted();
+				user.setMuted(muted);
+				sendMessage(sender, "&cSet muted for " + args[1] + " to " + muted);
 			}
 		});
 

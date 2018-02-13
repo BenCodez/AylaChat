@@ -115,4 +115,12 @@ public class User extends com.Ben12345rocks.AdvancedCore.Objects.User {
 		return Boolean.valueOf(getData().getString("SocialSpy"));
 	}
 
+	public void setMuted(boolean value) {
+		getData().setString("Muted", "" + value);
+	}
+
+	public boolean getMuted() {
+		return Boolean.valueOf(getData().getString("Muted"));
+	}
+
 }

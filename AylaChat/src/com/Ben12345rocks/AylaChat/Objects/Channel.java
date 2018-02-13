@@ -50,8 +50,17 @@ public class Channel {
 	public boolean canTalk(Player p) {
 		if (p.hasPermission(permission) || permission.isEmpty()) {
 			return true;
+		} else {
+			// no permission
+			p.sendMessage(StringUtils.getInstance().colorize(AdvancedCoreHook.getInstance().getFormatNoPerms()));
 		}
-		p.sendMessage(StringUtils.getInstance().colorize(AdvancedCoreHook.getInstance().getFormatNoPerms()));
+
+		User user = UserManager.getInstance().getAylaChatUser(p);
+		if (user.getMuted()) {
+			p.sendMessage("Muted");
+			return false;
+		}
+
 		return false;
 	}
 
