@@ -10,6 +10,8 @@ import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandle;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
 import com.Ben12345rocks.AylaChat.Main;
+import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliases;
+import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasesTabCompleter;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
 import com.Ben12345rocks.AylaChat.Objects.User;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
@@ -124,5 +126,26 @@ public class CommandLoader {
 						setReplace(ChannelHandler.getInstance().getChannelNames());
 					}
 				});
+		
+		loadAliases();
+	}
+
+	public void loadAliases() {
+		for (CommandHandler cmdHandle : plugin.commands) {
+			if (cmdHandle.getArgs().length > 0) {
+				String[] args = cmdHandle.getArgs()[0].split("&");
+				for (String arg : args) {
+					try {
+						plugin.getCommand("aylachat" + arg).setExecutor(new CommandAliases(cmdHandle));
+
+						plugin.getCommand("aylachat" + arg)
+								.setTabCompleter(new AliasesTabCompleter().setCMDHandle(cmdHandle));
+					} catch (Exception ex) {
+						plugin.debug("Failed to load command and tab completer for /aylachat" + arg);
+					}
+				}
+
+			}
+		}
 	}
 }

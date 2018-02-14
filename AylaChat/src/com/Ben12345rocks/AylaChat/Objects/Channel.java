@@ -207,7 +207,11 @@ public class Channel {
 	public ArrayList<Player> getPlayers(Player player) {
 		ArrayList<Player> players = new ArrayList<Player>();
 
-		if (getChannelName().equalsIgnoreCase("Town")) {
+		if (player == null) {
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				players.add(p);
+			}
+		} else if (getChannelName().equalsIgnoreCase("Town")) {
 			try {
 				Resident res = Towny.plugin.getTownyUniverse().getResident(player.getName());
 				if (res.hasTown()) {

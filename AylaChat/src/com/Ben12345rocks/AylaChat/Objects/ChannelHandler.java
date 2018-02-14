@@ -14,6 +14,8 @@ import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Commands.Executors.ChannelCommands;
 import com.Ben12345rocks.AylaChat.Config.Config;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 
 public class ChannelHandler {
 
@@ -99,6 +101,16 @@ public class ChannelHandler {
 		}
 
 		Bukkit.getConsoleSender().sendMessage(msg);
+
+		if (ch.isBungeecoord()) {
+			ByteArrayDataOutput out = ByteStreams.newDataOutput();
+			out.writeUTF("Forward");
+			out.writeUTF("ALL");
+			out.writeUTF("aylachat");
+			out.writeUTF(ch.getChannelName() + "%Sep%" + msg);
+
+			player.sendPluginMessage(plugin, "AylaChat", out.toByteArray());
+		}
 	}
 
 	public void clearChat(Player player) {
@@ -128,10 +140,12 @@ public class ChannelHandler {
 
 	public String format(String msg, Channel ch, Player player) {
 		HashMap<String, String> placeholders = new HashMap<String, String>();
-		placeholders.put("player", player.getName());
-		placeholders.put("nickname", player.getDisplayName());
+		if (player != null) {
+			placeholders.put("player", player.getName());
+			placeholders.put("nickname", player.getDisplayName());
+			placeholders.put("group", AdvancedCoreHook.getInstance().getPerms().getPrimaryGroup(player));
+		}
 		placeholders.put("message", msg);
-		placeholders.put("group", AdvancedCoreHook.getInstance().getPerms().getPrimaryGroup(player));
 
 		String message = StringUtils.getInstance().replacePlaceHolder(ch.getFormat(), placeholders);
 		message = StringUtils.getInstance().replaceJavascript(message);

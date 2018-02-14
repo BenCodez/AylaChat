@@ -2,7 +2,9 @@ package com.Ben12345rocks.AylaChat;
 
 import java.util.ArrayList;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
@@ -17,8 +19,10 @@ import com.Ben12345rocks.AylaChat.Config.Config;
 import com.Ben12345rocks.AylaChat.Listeners.PlayerChatListener;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
 
-public class Main extends JavaPlugin {
+public class Main extends JavaPlugin implements PluginMessageListener {
 
 	public static Main plugin;
 	public ArrayList<CommandHandler> commands;
@@ -59,6 +63,27 @@ public class Main extends JavaPlugin {
 
 		PluginUtils.getInstance().registerCommands(plugin, "aylachat", new CommandAylaChat(plugin),
 				new AylaChatTabCompleter());
+
+		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "AylaChat");
+		this.getServer().getMessenger().registerIncomingPluginChannel(this, "AylaChat", this);
+	}
+
+	@Override
+	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
+		if (!channel.equals("AylaChat")) {
+			return;
+		}
+		ByteArrayDataInput in = ByteStreams.newDataInput(message);
+		String subchannel = in.readUTF();
+		if (subchannel.equals("Forward")) {
+			String str = in.readUTF();
+			String[] data = str.split("%Sep%");
+			if (data.length > 1) {
+				String channelName = data[0];
+				String msg = data[1];
+				ChannelHandler.getInstance().onChat(null, channelName, msg);
+			}
+		}
 	}
 
 	@Override
