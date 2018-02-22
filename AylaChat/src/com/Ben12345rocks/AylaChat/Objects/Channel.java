@@ -51,6 +51,9 @@ public class Channel {
 	}
 
 	public boolean canTalk(Player p) {
+		if (p == null) {
+			return false;
+		}
 		if (p.hasPermission(permission) || permission.isEmpty()) {
 			return true;
 		} else {

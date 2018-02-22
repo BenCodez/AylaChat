@@ -17,6 +17,7 @@ import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAylaChat;
 import com.Ben12345rocks.AylaChat.Commands.TabComplete.AylaChatTabCompleter;
 import com.Ben12345rocks.AylaChat.Config.Config;
 import com.Ben12345rocks.AylaChat.Listeners.PlayerChatListener;
+import com.Ben12345rocks.AylaChat.Objects.Channel;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
 import com.google.common.io.ByteArrayDataInput;
@@ -70,19 +71,23 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
+		//plugin.getLogger().info("Got plugin message " + channel + " : " + message);
 		if (!channel.equals("AylaChat")) {
 			return;
 		}
 		ByteArrayDataInput in = ByteStreams.newDataInput(message);
 		String subchannel = in.readUTF();
-		if (subchannel.equals("Forward")) {
-			String str = in.readUTF();
-			String[] data = str.split("%Sep%");
-			if (data.length > 1) {
-				String channelName = data[0];
-				String msg = data[1];
-				ChannelHandler.getInstance().onChat(null, channelName, msg);
+		if (subchannel.equals("Chat")) {
+			String chatchannel = in.readUTF();
+			String msg = in.readUTF();
+
+			Channel ch = ChannelHandler.getInstance().getChannel(chatchannel);
+			if (ch.isBungeecoord()) {
+				ChannelHandler.getInstance().forceChat(null, ch, msg);
+			} else {
+				plugin.debug(ch.getChannelName() + " isn't bungeecoord, error?");
 			}
+
 		}
 	}
 

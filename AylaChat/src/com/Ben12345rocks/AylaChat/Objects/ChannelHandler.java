@@ -1,5 +1,7 @@
 package com.Ben12345rocks.AylaChat.Objects;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,8 +16,6 @@ import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Commands.Executors.ChannelCommands;
 import com.Ben12345rocks.AylaChat.Config.Config;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 
 public class ChannelHandler {
 
@@ -81,35 +81,47 @@ public class ChannelHandler {
 		}
 	}
 
-	public void onChat(Player player, String channel, String message) {
-		if (channel == null || channel.isEmpty()) {
-			channel = getDefaultChannelName();
-		}
-		Channel ch = getChannel(channel);
-		if (!ch.canTalk(player)) {
-			plugin.debug("Player " + player.getName() + " can't talk in " + ch.getChannelName());
-			return;
-		}
-		String msg = format(message, ch, player);
+	public void forceChat(Player player, Channel ch, String msg) {
 
 		for (Player p : ch.getPlayers(player)) {
 			if (p != null) {
-				if (ch.canHear(p, player.getLocation())) {
+				if (ch.canHear(p, p.getLocation())) {
 					p.sendMessage(msg);
 				}
 			}
 		}
 
 		Bukkit.getConsoleSender().sendMessage(msg);
+	}
+
+	public void onChat(Player player, String channel, String message) {
+		if (channel == null || channel.isEmpty()) {
+			channel = getDefaultChannelName();
+		}
+
+		Channel ch = getChannel(channel);
+		if (!ch.canTalk(player)) {
+			plugin.debug("Player " + player.getName() + " can't talk in " + ch.getChannelName());
+			return;
+		}
+
+		String msg = format(message, ch, player);
 
 		if (ch.isBungeecoord()) {
-			ByteArrayDataOutput out = ByteStreams.newDataOutput();
-			out.writeUTF("Forward");
-			out.writeUTF("ALL");
-			out.writeUTF("aylachat");
-			out.writeUTF(ch.getChannelName() + "%Sep%" + msg);
-
-			player.sendPluginMessage(plugin, "AylaChat", out.toByteArray());
+			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+			DataOutputStream out = new DataOutputStream(byteOutStream);
+			try {
+				out.writeUTF("Chat");
+				out.writeUTF(ch.getChannelName());
+				out.writeUTF(msg);
+				out.writeUTF(player.getName());
+				player.sendPluginMessage(plugin, "AylaChat", byteOutStream.toByteArray());
+				out.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			forceChat(player, ch, msg);
 		}
 	}
 
