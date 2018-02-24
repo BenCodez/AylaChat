@@ -1,7 +1,5 @@
 package com.Ben12345rocks.AylaChat.Objects;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +64,29 @@ public class ChannelHandler {
 				loadChannelCommand(aliases, channel);
 			}
 		}
+
+		plugin.pluginMessages.add(new PluginMessageHandler() {
+
+			@Override
+			public void onRecieve(String subChannel, ArrayList<String> messageData) {
+				if (subChannel.equals("Chat")) {
+					String chatchannel = messageData.get(0);
+					String msg = messageData.get(1);
+
+					Channel ch = ChannelHandler.getInstance().getChannel(chatchannel);
+					if (ch == null) {
+						plugin.debug("Channel doesn't exist: " + chatchannel);
+						return;
+					}
+					if (ch.isBungeecoord()) {
+						ChannelHandler.getInstance().forceChat(null, ch, msg);
+					} else {
+						plugin.debug(ch.getChannelName() + " isn't bungeecoord, error?");
+					}
+
+				}
+			}
+		});
 	}
 
 	private void loadChannelCommand(String cmd, Channel channel) {
@@ -108,18 +129,12 @@ public class ChannelHandler {
 		String msg = format(message, ch, player);
 
 		if (ch.isBungeecoord()) {
-			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-			DataOutputStream out = new DataOutputStream(byteOutStream);
-			try {
-				out.writeUTF("Chat");
-				out.writeUTF(ch.getChannelName());
-				out.writeUTF(msg);
-				out.writeUTF(player.getName());
-				player.sendPluginMessage(plugin, "AylaChat", byteOutStream.toByteArray());
-				out.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			ArrayList<String> messageData = new ArrayList<String>();
+			messageData.add("Chat");
+			messageData.add(ch.getChannelName());
+			messageData.add(msg);
+			messageData.add(player.getName());
+			plugin.sendPluginMessage(messageData);
 		} else {
 			forceChat(player, ch, msg);
 		}

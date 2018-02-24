@@ -1,5 +1,7 @@
 package com.Ben12345rocks.AylaChat;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
@@ -11,14 +13,15 @@ import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.UUID;
 import com.Ben12345rocks.AdvancedCore.Objects.User;
 import com.Ben12345rocks.AdvancedCore.Objects.UserStartup;
+import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.PluginUtils;
 import com.Ben12345rocks.AylaChat.Commands.CommandLoader;
 import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAylaChat;
 import com.Ben12345rocks.AylaChat.Commands.TabComplete.AylaChatTabCompleter;
 import com.Ben12345rocks.AylaChat.Config.Config;
 import com.Ben12345rocks.AylaChat.Listeners.PlayerChatListener;
-import com.Ben12345rocks.AylaChat.Objects.Channel;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
+import com.Ben12345rocks.AylaChat.Objects.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -27,10 +30,12 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 
 	public static Main plugin;
 	public ArrayList<CommandHandler> commands;
+	public ArrayList<PluginMessageHandler> pluginMessages;
 
 	@Override
 	public void onEnable() {
 		plugin = this;
+		pluginMessages = new ArrayList<PluginMessageHandler>();
 
 		Config.getInstance().setup();
 
@@ -71,24 +76,27 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-		//plugin.getLogger().info("Got plugin message " + channel + " : " + message);
+		// plugin.getLogger().info("Got plugin message " + channel + " : " + message);
 		if (!channel.equals("AylaChat")) {
 			return;
 		}
 		ByteArrayDataInput in = ByteStreams.newDataInput(message);
-		String subchannel = in.readUTF();
-		if (subchannel.equals("Chat")) {
-			String chatchannel = in.readUTF();
-			String msg = in.readUTF();
-
-			Channel ch = ChannelHandler.getInstance().getChannel(chatchannel);
-			if (ch.isBungeecoord()) {
-				ChannelHandler.getInstance().forceChat(null, ch, msg);
+		ArrayList<String> list = new ArrayList<String>();
+		String subChannel = in.readUTF();
+		boolean run = true;
+		while (run) {
+			String str = in.readUTF();
+			if (str != null) {
+				list.add(str);
 			} else {
-				plugin.debug(ch.getChannelName() + " isn't bungeecoord, error?");
+				run = false;
 			}
-
 		}
+		for (PluginMessageHandler handle : pluginMessages) {
+			handle.onRecieve(subChannel, list);
+		}
+
+		
 	}
 
 	@Override
@@ -103,7 +111,23 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 	public void reload() {
 		Config.getInstance().reloadData();
 		AdvancedCoreHook.getInstance().setConfigData(Config.getInstance().getData());
-		AdvancedCoreHook.getInstance().reload();
+
 		ChannelHandler.getInstance().load();
+		AdvancedCoreHook.getInstance().reload();
+	}
+
+	public void sendPluginMessage(ArrayList<String> messageData) {
+		ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(byteOutStream);
+		try {
+			for (String message : messageData) {
+				out.writeUTF(message);
+			}
+			plugin.debug("Sending plugin message: " + ArrayUtils.getInstance().makeStringList(messageData));
+			getServer().sendPluginMessage(plugin, "AylaChat", byteOutStream.toByteArray());
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
