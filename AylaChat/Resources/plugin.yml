@@ -6,3 +6,8 @@ author: Ben12345rocks
 commands:
   aylachat:
     description: AylaChat Command
+  aylachatmsg:
+    description: Msg
+    Aliases: 
+    - msg
+    - message

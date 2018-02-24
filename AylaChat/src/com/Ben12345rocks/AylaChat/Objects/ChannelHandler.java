@@ -129,11 +129,7 @@ public class ChannelHandler {
 		String msg = format(message, ch, player);
 
 		if (ch.isBungeecoord()) {
-			ArrayList<String> messageData = new ArrayList<String>();
-			messageData.add(ch.getChannelName());
-			messageData.add(msg);
-			messageData.add(player.getName());
-			plugin.sendPluginMessage("Chat", messageData);
+			plugin.sendPluginMessage("Chat", ch.getChannelName(), msg, player.getName());
 		} else {
 			forceChat(player, ch, msg);
 		}

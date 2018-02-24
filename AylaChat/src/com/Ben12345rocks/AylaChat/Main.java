@@ -13,7 +13,6 @@ import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.UUID;
 import com.Ben12345rocks.AdvancedCore.Objects.User;
 import com.Ben12345rocks.AdvancedCore.Objects.UserStartup;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.PluginUtils;
 import com.Ben12345rocks.AylaChat.Commands.CommandLoader;
 import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAylaChat;
@@ -117,16 +116,16 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		AdvancedCoreHook.getInstance().reload();
 	}
 
-	public void sendPluginMessage(String channel, ArrayList<String> messageData) {
+	public void sendPluginMessage(String channel, String... messageData) {
 		ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(byteOutStream);
 		try {
 			out.writeUTF(channel);
-			out.writeInt(messageData.size());
+			out.writeInt(messageData.length);
 			for (String message : messageData) {
 				out.writeUTF(message);
 			}
-			plugin.debug("Sending plugin message: " + ArrayUtils.getInstance().makeStringList(messageData));
+			//plugin.debug("Sending plugin message: " + ArrayUtils.getInstance().makeStringList(ArrayUtils.getInstance().messageData));
 			getServer().sendPluginMessage(plugin, "AylaChat", byteOutStream.toByteArray());
 			out.close();
 		} catch (Exception e) {

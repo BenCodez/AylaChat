@@ -9,10 +9,12 @@ import org.bukkit.entity.Player;
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandle;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
+import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliases;
 import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasesTabCompleter;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
+import com.Ben12345rocks.AylaChat.Objects.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Objects.User;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
 
@@ -113,6 +115,15 @@ public class CommandLoader {
 			}
 		});
 
+		plugin.commands.add(
+				new CommandHandler(new String[] { "Msg", "(Player)", "(List)" }, "AylaChat.Msg", "Msg other players") {
+
+					@Override
+					public void execute(CommandSender sender, String[] args) {
+						CommandLoader.this.sendMessage(sender, args[1], ArrayUtils.getInstance().makeString(2, args));
+					}
+				});
+
 		TabCompleteHandler.getInstance().addTabCompleteOption(
 				new TabCompleteHandle("(Channel)", ChannelHandler.getInstance().getChannelNames()) {
 
@@ -126,8 +137,25 @@ public class CommandLoader {
 						setReplace(ChannelHandler.getInstance().getChannelNames());
 					}
 				});
-		
+
 		loadAliases();
+
+		plugin.pluginMessages.add(new PluginMessageHandler() {
+
+			@Override
+			public void onRecieve(String subChannel, ArrayList<String> messageData) {
+				if (subChannel.equals("Msg")) {
+					String sender = messageData.get(0);
+					String toSend = messageData.get(1);
+					String msg = messageData.get(2);
+
+					Player p = Bukkit.getPlayer(toSend);
+					if (p != null) {
+						p.sendMessage(sender + " -> You: " + msg);
+					}
+				}
+			}
+		});
 	}
 
 	public void loadAliases() {
@@ -147,6 +175,15 @@ public class CommandLoader {
 
 			}
 		}
-		
+	}
+
+	public void sendMessage(CommandSender player, String toSend, String msg) {
+		String sender = player.getName();
+		if (!(player instanceof Player)) {
+			sender = "CONSOLE";
+		}
+		player.sendMessage("YOU -> " + toSend + ": " + msg);
+
+		plugin.sendPluginMessage("Msg", sender, toSend, msg);
 	}
 }

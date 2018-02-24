@@ -52,8 +52,7 @@ public class CommandAliases implements CommandExecutor {
 		for (CommandHandler cmdHandle : handles) {
 			if (cmdHandle.getArgs().length > args.length) {
 				for (String arg : cmdHandle.getArgs()[0].split("&")) {
-					if (cmd.getName().equalsIgnoreCase("vote" + arg)
-							|| cmd.getName().equalsIgnoreCase("adminvote" + arg)) {
+					if (cmd.getName().equalsIgnoreCase("aylachat" + arg)) {
 						argsNew.set(0, arg);
 
 						boolean argsMatch = true;
