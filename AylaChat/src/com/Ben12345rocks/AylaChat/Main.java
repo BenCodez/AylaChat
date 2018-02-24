@@ -83,20 +83,21 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		ByteArrayDataInput in = ByteStreams.newDataInput(message);
 		ArrayList<String> list = new ArrayList<String>();
 		String subChannel = in.readUTF();
-		boolean run = true;
-		while (run) {
-			String str = in.readUTF();
-			if (str != null) {
-				list.add(str);
-			} else {
-				run = false;
+		int size = in.readInt();
+		for (int i = 0; i < size; i++) {
+			try {
+				String str = in.readUTF();
+				if (str != null) {
+					list.add(str);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		for (PluginMessageHandler handle : pluginMessages) {
 			handle.onRecieve(subChannel, list);
 		}
 
-		
 	}
 
 	@Override
@@ -116,10 +117,12 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		AdvancedCoreHook.getInstance().reload();
 	}
 
-	public void sendPluginMessage(ArrayList<String> messageData) {
+	public void sendPluginMessage(String channel, ArrayList<String> messageData) {
 		ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(byteOutStream);
 		try {
+			out.writeUTF(channel);
+			out.writeInt(messageData.size());
 			for (String message : messageData) {
 				out.writeUTF(message);
 			}
