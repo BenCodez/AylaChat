@@ -63,7 +63,14 @@ Channels:
     Aliases:
     - s
     
-
+Format:
+  # Format for /msg
+  Message:
+    Send: '%sender% -> %toSend%: %message%'
+    Receive: '%fromSender% -> %playername%: %message%'
+    # Use %player% for player name instead
+    # Player name for the player getting message (or the player sender message)
+    PlayerName: 'You'
 
 # Debug
 Debug: false

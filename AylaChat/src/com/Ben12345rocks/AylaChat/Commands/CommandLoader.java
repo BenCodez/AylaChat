@@ -10,9 +10,11 @@ import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandle;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
+import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliases;
 import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasesTabCompleter;
+import com.Ben12345rocks.AylaChat.Config.Config;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
 import com.Ben12345rocks.AylaChat.Objects.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Objects.User;
@@ -150,6 +152,14 @@ public class CommandLoader {
 					String toSend = messageData.get(1);
 					String msg = messageData.get(2);
 
+					String format = Config.getInstance().getFormatMessageReceive();
+					format = StringUtils.getInstance().replacePlaceHolder(format, "playername",
+							Config.getInstance().getFormatMessagePlayerName());
+					format = StringUtils.getInstance().replacePlaceHolder(format, "player", toSend);
+
+					format = StringUtils.getInstance().replacePlaceHolder(format, "fromsender", sender);
+					format = StringUtils.getInstance().replacePlaceHolder(format, "message", msg);
+
 					Player p = Bukkit.getPlayer(toSend);
 					if (p != null) {
 						p.sendMessage(sender + " -> You: " + msg);
@@ -183,7 +193,15 @@ public class CommandLoader {
 		if (!(player instanceof Player)) {
 			sender = "CONSOLE";
 		}
-		player.sendMessage("YOU -> " + toSend + ": " + msg);
+		String format = Config.getInstance().getFormatMessageSend();
+		format = StringUtils.getInstance().replacePlaceHolder(format, "sender",
+				Config.getInstance().getFormatMessagePlayerName());
+		format = StringUtils.getInstance().replacePlaceHolder(format, "player", sender);
+
+		format = StringUtils.getInstance().replacePlaceHolder(format, "toSend", toSend);
+		format = StringUtils.getInstance().replacePlaceHolder(format, "message", msg);
+
+		player.sendMessage(StringUtils.getInstance().colorize(format));
 
 		plugin.sendPluginMessage(Iterables.getFirst(Bukkit.getOnlinePlayers(), null), "Msg", sender, toSend, msg);
 
