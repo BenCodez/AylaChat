@@ -8,6 +8,7 @@ commands:
     description: AylaChat Command
   aylachatmsg:
     description: Msg
-    Aliases: 
-    - msg
+  Msg:
+    description: Msg another player
+    aliases:
     - message

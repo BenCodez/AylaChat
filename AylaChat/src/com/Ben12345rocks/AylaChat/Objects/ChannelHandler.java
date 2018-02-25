@@ -59,11 +59,15 @@ public class ChannelHandler {
 			channels.add(channel);
 
 			if (!ch.equalsIgnoreCase("town") && !ch.equalsIgnoreCase("nation")) {
-				loadChannelCommand(ch, channel);
+				if (channel.isLoadMainChannelCommand()) {
+					loadChannelCommand(ch, channel);
+				}
 			}
 
-			for (String aliases : channel.getAliases()) {
-				loadChannelCommand(aliases, channel);
+			if (channel.isLoadAliasChannelCommands()) {
+				for (String aliases : channel.getAliases()) {
+					loadChannelCommand(aliases, channel);
+				}
 			}
 		}
 
@@ -130,7 +134,7 @@ public class ChannelHandler {
 
 		String msg = format(message, ch, player);
 
-		if (ch.isBungeecoord()) {
+		if (Config.getInstance().useBungeeCoord && ch.isBungeecoord()) {
 			plugin.sendPluginMessage(player, "Chat", ch.getChannelName(), msg, player.getName());
 		} else {
 			forceChat(player, ch, msg);

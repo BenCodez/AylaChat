@@ -1,6 +1,7 @@
 package com.Ben12345rocks.AylaChat.Commands;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -12,7 +13,9 @@ import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AylaChat.Main;
+import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliasHandle;
 import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliases;
+import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasHandleTabCompleter;
 import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasesTabCompleter;
 import com.Ben12345rocks.AylaChat.Config.Config;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
@@ -152,18 +155,7 @@ public class CommandLoader {
 					String toSend = messageData.get(1);
 					String msg = messageData.get(2);
 
-					String format = Config.getInstance().getFormatMessageReceive();
-					format = StringUtils.getInstance().replacePlaceHolder(format, "playername",
-							Config.getInstance().getFormatMessagePlayerName());
-					format = StringUtils.getInstance().replacePlaceHolder(format, "player", toSend);
-
-					format = StringUtils.getInstance().replacePlaceHolder(format, "fromsender", sender);
-					format = StringUtils.getInstance().replacePlaceHolder(format, "message", msg);
-
-					Player p = Bukkit.getPlayer(toSend);
-					if (p != null) {
-						p.sendMessage(sender + " -> You: " + msg);
-					}
+					messageReceived(sender, toSend, msg);
 				}
 			}
 		});
@@ -179,6 +171,12 @@ public class CommandLoader {
 
 						plugin.getCommand("aylachat" + arg)
 								.setTabCompleter(new AliasesTabCompleter().setCMDHandle(cmdHandle));
+
+						if (arg.equalsIgnoreCase("msg")) {
+							plugin.getCommand("msg").setExecutor(new CommandAliasHandle(cmdHandle));
+							plugin.getCommand("msg")
+									.setTabCompleter(new AliasHandleTabCompleter().setCMDHandle(cmdHandle));
+						}
 					} catch (Exception ex) {
 						plugin.debug("Failed to load command and tab completer for /aylachat" + arg);
 					}
@@ -193,17 +191,39 @@ public class CommandLoader {
 		if (!(player instanceof Player)) {
 			sender = "CONSOLE";
 		}
-		String format = Config.getInstance().getFormatMessageSend();
-		format = StringUtils.getInstance().replacePlaceHolder(format, "sender",
-				Config.getInstance().getFormatMessagePlayerName());
-		format = StringUtils.getInstance().replacePlaceHolder(format, "player", sender);
+		toSend = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(toSend);
+		HashMap<String, String> placeholders = new HashMap<String, String>();
+		placeholders.put("sender",
 
-		format = StringUtils.getInstance().replacePlaceHolder(format, "toSend", toSend);
-		format = StringUtils.getInstance().replacePlaceHolder(format, "message", msg);
+				Config.getInstance().formatMessagePlayerName);
+		placeholders.put("player", sender);
+		placeholders.put("toSend", toSend);
+		placeholders.put("message", msg);
+		String format = StringUtils.getInstance().replacePlaceHolder(Config.getInstance().formatMessageSend,
+				placeholders);
 
 		player.sendMessage(StringUtils.getInstance().colorize(format));
 
-		plugin.sendPluginMessage(Iterables.getFirst(Bukkit.getOnlinePlayers(), null), "Msg", sender, toSend, msg);
+		if (Config.getInstance().useBungeeCoord) {
+			plugin.sendPluginMessage(Iterables.getFirst(Bukkit.getOnlinePlayers(), null), "Msg", sender, toSend, msg);
+		} else {
+			messageReceived(sender, toSend, msg);
+		}
 
+	}
+
+	public void messageReceived(String sender, String toSend, String msg) {
+		HashMap<String, String> placeholders = new HashMap<String, String>();
+		placeholders.put("toSend", Config.getInstance().formatMessagePlayerName);
+		placeholders.put("player", toSend);
+		placeholders.put("sender", sender);
+		placeholders.put("message", msg);
+		String format = StringUtils.getInstance().replacePlaceHolder(Config.getInstance().formatMessageReceive,
+				placeholders);
+
+		Player p = Bukkit.getPlayer(toSend);
+		if (p != null) {
+			p.sendMessage(format);
+		}
 	}
 }

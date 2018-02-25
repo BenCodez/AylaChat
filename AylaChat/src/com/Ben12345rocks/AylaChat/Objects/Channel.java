@@ -22,6 +22,8 @@ public class Channel {
 	private boolean autojoin;
 	private boolean defaultChannel;
 	private ArrayList<String> aliases;
+	private boolean loadMainChannelCommand;
+	private boolean loadAliasChannelCommands;
 
 	@SuppressWarnings("unchecked")
 	public Channel(ConfigurationSection data, String channelName) {
@@ -33,6 +35,22 @@ public class Channel {
 		autojoin = data.getBoolean("AutoJoin", true);
 		defaultChannel = data.getBoolean("Default", false);
 		aliases = (ArrayList<String>) data.getList("Aliases", new ArrayList<String>());
+		loadMainChannelCommand = data.getBoolean("LoadMainChannelCommand", true);
+		loadAliasChannelCommands = data.getBoolean("LoadAliasChannelCommands", true);
+	}
+
+	/**
+	 * @return the loadMainChannelCommand
+	 */
+	public boolean isLoadMainChannelCommand() {
+		return loadMainChannelCommand;
+	}
+
+	/**
+	 * @return the loadAliasChannelCommands
+	 */
+	public boolean isLoadAliasChannelCommands() {
+		return loadAliasChannelCommands;
 	}
 
 	/**

@@ -19,6 +19,8 @@ MySQL:
   Prefix: ''
   #UseSSL: true
   
+UseBungeeCoord: false
+  
 DefaultChannel: 'Global'
 
 # Variables:
@@ -44,6 +46,10 @@ Channels:
     # This will also load channel commands for each alias
     Aliases:
     - g
+    # Load main channel command (Channel name)
+    LoadMainChannelCommand: true
+    # Load commands for alaises
+    LoadAliasChannelCommands: true
   Local:
     Format: '&a[L]%group% %player%: %message%'
     Permission: ''
@@ -67,7 +73,7 @@ Format:
   # Format for /msg
   Message:
     Send: '%sender% -> %toSend%: %message%'
-    Receive: '%fromSender% -> %playername%: %message%'
+    Receive: '%fromsender% -> %playername%: %message%'
     # Use %player% for player name instead
     # Player name for the player getting message (or the player sender message)
     PlayerName: 'You'

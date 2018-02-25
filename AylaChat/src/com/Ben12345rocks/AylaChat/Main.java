@@ -37,6 +37,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		pluginMessages = new ArrayList<PluginMessageHandler>();
 
 		Config.getInstance().setup();
+		
 
 		PluginUtils.getInstance().registerEvents(new PlayerChatListener(plugin), plugin);
 
@@ -61,6 +62,8 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		AdvancedCoreHook.getInstance().setConfigData(Config.getInstance().getData());
 
 		AdvancedCoreHook.getInstance().loadHook(plugin);
+		
+		Config.getInstance().loadValues();
 
 		ChannelHandler.getInstance().load();
 
