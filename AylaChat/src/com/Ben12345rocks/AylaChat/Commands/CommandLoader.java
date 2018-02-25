@@ -17,6 +17,7 @@ import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
 import com.Ben12345rocks.AylaChat.Objects.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Objects.User;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
+import com.google.common.collect.Iterables;
 
 public class CommandLoader {
 
@@ -184,6 +185,7 @@ public class CommandLoader {
 		}
 		player.sendMessage("YOU -> " + toSend + ": " + msg);
 
-		plugin.sendPluginMessage("Msg", sender, toSend, msg);
+		plugin.sendPluginMessage(Iterables.getFirst(Bukkit.getOnlinePlayers(), null), "Msg", sender, toSend, msg);
+
 	}
 }

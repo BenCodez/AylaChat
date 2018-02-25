@@ -58,7 +58,9 @@ public class ChannelHandler {
 			Channel channel = new Channel(Config.getInstance().getData().getConfigurationSection("Channels." + ch), ch);
 			channels.add(channel);
 
-			loadChannelCommand(ch, channel);
+			if (!ch.equalsIgnoreCase("town") && !ch.equalsIgnoreCase("nation")) {
+				loadChannelCommand(ch, channel);
+			}
 
 			for (String aliases : channel.getAliases()) {
 				loadChannelCommand(aliases, channel);
@@ -129,7 +131,7 @@ public class ChannelHandler {
 		String msg = format(message, ch, player);
 
 		if (ch.isBungeecoord()) {
-			plugin.sendPluginMessage("Chat", ch.getChannelName(), msg, player.getName());
+			plugin.sendPluginMessage(player, "Chat", ch.getChannelName(), msg, player.getName());
 		} else {
 			forceChat(player, ch, msg);
 		}

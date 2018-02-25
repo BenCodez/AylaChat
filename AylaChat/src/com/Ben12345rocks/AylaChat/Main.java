@@ -116,7 +116,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		AdvancedCoreHook.getInstance().reload();
 	}
 
-	public void sendPluginMessage(String channel, String... messageData) {
+	public void sendPluginMessage(Player p, String channel, String... messageData) {
 		ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(byteOutStream);
 		try {
@@ -126,7 +126,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 				out.writeUTF(message);
 			}
 			//plugin.debug("Sending plugin message: " + ArrayUtils.getInstance().makeStringList(ArrayUtils.getInstance().messageData));
-			getServer().sendPluginMessage(plugin, "AylaChat", byteOutStream.toByteArray());
+			p.sendPluginMessage(plugin, "AylaChat", byteOutStream.toByteArray());
 			out.close();
 		} catch (Exception e) {
 			e.printStackTrace();
