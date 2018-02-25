@@ -18,6 +18,8 @@ MySQL:
   # Table name prefix, for use with mutliple servers
   Prefix: ''
   #UseSSL: true
+  
+DefaultChannel: 'Global'
 
 # Variables:
 # %group%
@@ -39,7 +41,7 @@ Channels:
     # Sett to any other value means local chat (with 200 blocks for example)
     Distance: -1
     AutoJoin: true
-    Default: true
+    # This will also load channel commands for each alias
     Aliases:
     - g
   Local:
@@ -49,7 +51,6 @@ Channels:
     Bungeecoord: false
     Distance: 200
     AutoJoin: true
-    Default: false
     Aliases:
     - l
   Staff:
@@ -59,9 +60,10 @@ Channels:
     Bungeecoord: false
     Distance: -1
     AutoJoin: true
-    Default: false
     Aliases:
     - s
+    
+
 
 # Debug
 Debug: false

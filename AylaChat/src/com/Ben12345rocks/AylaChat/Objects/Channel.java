@@ -194,6 +194,7 @@ public class Channel {
 	/**
 	 * @return the defaultChannel
 	 */
+	@Deprecated
 	public boolean isDefaultChannel() {
 		return defaultChannel;
 	}

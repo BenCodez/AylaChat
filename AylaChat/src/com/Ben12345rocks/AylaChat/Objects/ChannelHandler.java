@@ -153,13 +153,21 @@ public class ChannelHandler {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public String getDefaultChannelName() {
+		String defaultChannel = Config.getInstance().getData().getString("DefaultChanne", "");
+
 		for (Channel ch : getChannels()) {
 			if (ch.isDefaultChannel()) {
-				return ch.getChannelName();
+				defaultChannel = ch.getChannelName();
 			}
 		}
-		return null;
+		if (defaultChannel.isEmpty()) {
+			if (getChannels().size() > 0) {
+				defaultChannel = getChannels().get(0).getChannelName();
+			}
+		}
+		return defaultChannel;
 	}
 
 	public String format(String msg, Channel ch, Player player) {

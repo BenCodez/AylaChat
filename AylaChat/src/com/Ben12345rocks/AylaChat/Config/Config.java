@@ -34,5 +34,4 @@ public class Config extends YMLFile {
 	public Set<String> getChannels() {
 		return getData().getConfigurationSection("Channels").getKeys(false);
 	}
-
 }
