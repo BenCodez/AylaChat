@@ -56,4 +56,7 @@ public class Config extends YMLFile {
 
 	@ConfigDataString(path = "Format.NoOneListening", defaultValue = "&cNo one is listening to you")
 	public String formatNoOneListening;
+
+	@ConfigDataString(path = "Format.Message.NoReply", defaultValue = "&cNo one to reply to")
+	public String formatMessageNoReply;
 }

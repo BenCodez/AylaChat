@@ -12,3 +12,8 @@ commands:
     description: Msg another player
     aliases:
     - message
+    - tell
+  reply:
+    description: Msg another player
+    aliases:
+    - r

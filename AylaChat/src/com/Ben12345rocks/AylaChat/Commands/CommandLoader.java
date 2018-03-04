@@ -130,6 +130,19 @@ public class CommandLoader {
 					}
 				});
 
+		plugin.commands
+				.add(new CommandHandler(new String[] { "Reply", "(List)" }, "AylaChat.Msg", "Reply to last message") {
+
+					@Override
+					public void execute(CommandSender sender, String[] args) {
+						String toSend = "";
+						if (sender instanceof Player) {
+							toSend = UserManager.getInstance().getAylaChatUser(sender.getName()).getlastMessageSender();
+						}
+						CommandLoader.this.sendMessage(sender, toSend, ArrayUtils.getInstance().makeString(1, args));
+					}
+				});
+
 		TabCompleteHandler.getInstance().addTabCompleteOption(
 				new TabCompleteHandle("(Channel)", ChannelHandler.getInstance().getChannelNames()) {
 
@@ -172,9 +185,15 @@ public class CommandLoader {
 						plugin.getCommand("aylachat" + arg)
 								.setTabCompleter(new AliasesTabCompleter().setCMDHandle(cmdHandle));
 
+						// special commands
 						if (arg.equalsIgnoreCase("msg")) {
 							plugin.getCommand("msg").setExecutor(new CommandAliasHandle(cmdHandle));
 							plugin.getCommand("msg")
+									.setTabCompleter(new AliasHandleTabCompleter().setCMDHandle(cmdHandle));
+						}
+						if (arg.equalsIgnoreCase("reply")) {
+							plugin.getCommand("reply").setExecutor(new CommandAliasHandle(cmdHandle));
+							plugin.getCommand("reply")
 									.setTabCompleter(new AliasHandleTabCompleter().setCMDHandle(cmdHandle));
 						}
 					} catch (Exception ex) {
@@ -187,9 +206,16 @@ public class CommandLoader {
 	}
 
 	public void sendMessage(CommandSender player, String toSend, String msg) {
+		if (toSend.equals("")) {
+			player.sendMessage(StringUtils.getInstance().colorize(Config.getInstance().formatMessageNoReply));
+			return;
+		}
+
 		String sender = player.getName();
 		if (!(player instanceof Player)) {
 			sender = "CONSOLE";
+		} else {
+			UserManager.getInstance().getAylaChatUser(player.getName()).setlastMessageSender(toSend);
 		}
 		toSend = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(toSend);
 		HashMap<String, String> placeholders = new HashMap<String, String>();
@@ -224,6 +250,8 @@ public class CommandLoader {
 		Player p = Bukkit.getPlayer(toSend);
 		if (p != null) {
 			p.sendMessage(format);
+			UserManager.getInstance().getAylaChatUser(p).setlastMessageSender(sender);
 		}
+
 	}
 }
