@@ -101,7 +101,8 @@ public class CommandLoader {
 			@Override
 			public void execute(CommandSender sender, String[] args) {
 				UserManager.getInstance().getAylaChatUser((Player) sender).setCurrentChannel(args[1]);
-				sendMessage(sender, "Set channel to " + args[1]);
+				sendMessage(sender, StringUtils.getInstance().replacePlaceHolder(Config.getInstance().formatChannelSet,
+						"channel", ChannelHandler.getInstance().getChannel(args[1]).getChannelName()));
 			}
 		});
 
@@ -110,6 +111,7 @@ public class CommandLoader {
 			@Override
 			public void execute(CommandSender sender, String[] args) {
 				ChannelHandler.getInstance().clearChatAll();
+				sendMessage(sender, "&cChat cleared");
 			}
 		});
 
@@ -118,7 +120,13 @@ public class CommandLoader {
 
 			@Override
 			public void execute(CommandSender sender, String[] args) {
-				ChannelHandler.getInstance().clearChat(Bukkit.getPlayer(args[1]));
+				Player p = Bukkit.getPlayer(args[1]);
+				if (p != null) {
+					ChannelHandler.getInstance().clearChat(p);
+					sendMessage(sender, "&cChat cleared for " + p.getName());
+				} else {
+					sendMessage(sender, "&cPlayer " + args[1] + " not found/online");
+				}
 			}
 		});
 

@@ -63,6 +63,9 @@ public class Config extends YMLFile {
 	@ConfigDataString(path = "Format.Help.Title", defaultValue = "&3AylaChat Help")
 	public String formatHelpTitle;
 
+	@ConfigDataString(path = "Format.ChannelSet", defaultValue = "&cSet channel to %channel%")
+	public String formatChannelSet;
+
 	@ConfigDataBoolean(path = "Format.Help.RequirePermission", defaultValue = true)
 	public boolean formatHelpRequirePermission;
 }

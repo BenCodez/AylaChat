@@ -81,6 +81,8 @@ Format:
     Title: '&3AylaChat Help'
     RequirePermission: true
     
+  ChannelSet: '&cSet channel to %channel%'
+    
   NoOneListening: '&cNo one is listening to you'
   
   NoPerms: '&cYou do not have enough permission!'
