@@ -78,6 +78,13 @@ Format:
     SocialSpy: '[SC] %msg%'
     
   NoOneListening: '&cNo one is listening to you'
+  
+  NoPerms: '&cYou do not have enough permission!'
+  NotNumber: '&cError on &6%arg%&c, number expected!'
+  HelpLine: '&3&l%Command% - &3%HelpMessage%'
+  
+  PrevPage: '&aPrevious Page'
+  NextPage: '&aNext Page'
 
 # Debug
 Debug: false

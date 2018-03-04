@@ -37,7 +37,6 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		pluginMessages = new ArrayList<PluginMessageHandler>();
 
 		Config.getInstance().setup();
-		
 
 		PluginUtils.getInstance().registerEvents(new PlayerChatListener(plugin), plugin);
 
@@ -62,7 +61,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 		AdvancedCoreHook.getInstance().setConfigData(Config.getInstance().getData());
 
 		AdvancedCoreHook.getInstance().loadHook(plugin);
-		
+
 		Config.getInstance().loadValues();
 
 		ChannelHandler.getInstance().load();
@@ -74,6 +73,9 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "AylaChat");
 		this.getServer().getMessenger().registerIncomingPluginChannel(this, "AylaChat", this);
+
+		plugin.getLogger()
+				.info("Enabled " + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion());
 	}
 
 	@Override
@@ -128,7 +130,8 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 			for (String message : messageData) {
 				out.writeUTF(message);
 			}
-			//plugin.debug("Sending plugin message: " + ArrayUtils.getInstance().makeStringList(ArrayUtils.getInstance().messageData));
+			// plugin.debug("Sending plugin message: " +
+			// ArrayUtils.getInstance().makeStringList(ArrayUtils.getInstance().messageData));
 			p.sendPluginMessage(plugin, "AylaChat", byteOutStream.toByteArray());
 			out.close();
 		} catch (Exception e) {
