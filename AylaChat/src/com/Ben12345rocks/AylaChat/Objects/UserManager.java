@@ -1,5 +1,7 @@
 package com.Ben12345rocks.AylaChat.Objects;
 
+import java.util.ArrayList;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -43,5 +45,9 @@ public class UserManager {
 	@SuppressWarnings("deprecation")
 	public User getAylaChatUser(UUID uuid) {
 		return new User(uuid);
+	}
+
+	public ArrayList<String> getAllUUIDs() {
+		return com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getAllUUIDs();
 	}
 }

@@ -221,4 +221,15 @@ public class ChannelHandler {
 		return names;
 	}
 
+	public void socialSpyMessage(String msg) {
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			User user = UserManager.getInstance().getAylaChatUser(p);
+			if (user.getSocialSpyEnabled()) {
+				String format = Config.getInstance().formatMessageSocialSpy;
+				format = StringUtils.getInstance().replacePlaceHolder(format, "msg", msg);
+				user.sendMessage(format);
+			}
+		}
+	}
+
 }

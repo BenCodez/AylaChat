@@ -219,9 +219,6 @@ public class CommandLoader {
 		}
 		toSend = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(toSend);
 		HashMap<String, String> placeholders = new HashMap<String, String>();
-		placeholders.put("sender",
-
-				Config.getInstance().formatMessagePlayerName);
 		placeholders.put("player", sender);
 		placeholders.put("toSend", toSend);
 		placeholders.put("message", msg);
@@ -240,7 +237,6 @@ public class CommandLoader {
 
 	public void messageReceived(String sender, String toSend, String msg) {
 		HashMap<String, String> placeholders = new HashMap<String, String>();
-		placeholders.put("toSend", Config.getInstance().formatMessagePlayerName);
 		placeholders.put("player", toSend);
 		placeholders.put("sender", sender);
 		placeholders.put("message", msg);
@@ -252,6 +248,8 @@ public class CommandLoader {
 			p.sendMessage(format);
 			UserManager.getInstance().getAylaChatUser(p).setlastMessageSender(sender);
 		}
+		
+		ChannelHandler.getInstance().socialSpyMessage(format);
 
 	}
 }

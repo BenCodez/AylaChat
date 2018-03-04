@@ -72,12 +72,10 @@ Channels:
 Format:
   # Format for /msg
   Message:
-    Send: '%sender% -> %toSend%: %message%'
-    Receive: '%fromsender% -> %playername%: %message%'
-    # Use %player% for player name instead
-    # Player name for the player getting message (or the player sender message)
-    PlayerName: 'You'
+    Send: '%player% -> %toSend%: %message%'
+    Receive: '%fromsender% -> %player%: %message%'
     NoReply: '&cNo one to reply to'
+    SocialSpy: '[SC] %msg%'
     
   NoOneListening: '&cNo one is listening to you'
 

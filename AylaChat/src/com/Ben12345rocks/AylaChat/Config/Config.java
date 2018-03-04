@@ -42,14 +42,11 @@ public class Config extends YMLFile {
 		return getData().getConfigurationSection("Channels").getKeys(false);
 	}
 
-	@ConfigDataString(path = "Format.Message.Send", defaultValue = "%sender% -> %toSend%: %message%")
+	@ConfigDataString(path = "Format.Message.Send", defaultValue = "%player% -> %toSend%: %message%")
 	public String formatMessageSend = "";
 
-	@ConfigDataString(path = "Format.Message.Receive", defaultValue = "%sender% -> %toSend%: %message%")
+	@ConfigDataString(path = "Format.Message.Receive", defaultValue = "%fromsender% -> %player%: %message%")
 	public String formatMessageReceive = "";
-
-	@ConfigDataString(path = "Format.Message.PlayerName", defaultValue = "You")
-	public String formatMessagePlayerName = "";
 
 	@ConfigDataBoolean(path = "UseBungeeCoord", defaultValue = false)
 	public boolean useBungeeCoord = false;
@@ -59,4 +56,7 @@ public class Config extends YMLFile {
 
 	@ConfigDataString(path = "Format.Message.NoReply", defaultValue = "&cNo one to reply to")
 	public String formatMessageNoReply;
+
+	@ConfigDataString(path = "Format.Message.SocialSpy", defaultValue = "[SC] %msg%")
+	public String formatMessageSocialSpy;
 }
