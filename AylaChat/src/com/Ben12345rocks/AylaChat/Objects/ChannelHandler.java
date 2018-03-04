@@ -120,7 +120,9 @@ public class ChannelHandler {
 				}
 			}
 		} else {
-			player.sendMessage(StringUtils.getInstance().colorize(Config.getInstance().formatNoOneListening));
+			if (player != null) {
+				player.sendMessage(StringUtils.getInstance().colorize(Config.getInstance().formatNoOneListening));
+			}
 		}
 
 		Bukkit.getConsoleSender().sendMessage(msg);
