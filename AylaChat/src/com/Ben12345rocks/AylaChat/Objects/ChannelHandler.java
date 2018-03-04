@@ -190,7 +190,7 @@ public class ChannelHandler {
 		}
 		placeholders.put("message", msg);
 
-		String message = StringUtils.getInstance().replacePlaceHolder(ch.getFormat(), placeholders);
+		String message = StringUtils.getInstance().replacePlaceHolder(ch.getFormat(), placeholders, false);
 		message = StringUtils.getInstance().replaceJavascript(message);
 		message = StringUtils.getInstance().replacePlaceHolders(player, message);
 		message = StringUtils.getInstance().colorize(message);
