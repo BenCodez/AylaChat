@@ -59,4 +59,10 @@ public class Config extends YMLFile {
 
 	@ConfigDataString(path = "Format.Message.SocialSpy", defaultValue = "[SC] %msg%")
 	public String formatMessageSocialSpy;
+
+	@ConfigDataString(path = "Format.Help.Title", defaultValue = "&3AylaChat Help")
+	public String formatHelpTitle;
+
+	@ConfigDataBoolean(path = "Format.Help.RequirePermission", defaultValue = true)
+	public boolean formatHelpRequirePermission;
 }

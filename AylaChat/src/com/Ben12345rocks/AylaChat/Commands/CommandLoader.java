@@ -1,6 +1,7 @@
 package com.Ben12345rocks.AylaChat.Commands;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -23,6 +24,8 @@ import com.Ben12345rocks.AylaChat.Objects.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Objects.User;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
 import com.google.common.collect.Iterables;
+
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandLoader {
 
@@ -59,7 +62,27 @@ public class CommandLoader {
 
 			@Override
 			public void execute(CommandSender sender, String[] args) {
-				sendMessage(sender, "No help available yet");
+				ArrayList<TextComponent> texts = new ArrayList<TextComponent>();
+				HashMap<String, TextComponent> unsorted = new HashMap<String, TextComponent>();
+				texts.add(StringUtils.getInstance().stringToComp(Config.getInstance().formatHelpTitle));
+
+				boolean requirePerms = Config.getInstance().formatHelpRequirePermission;
+
+				for (CommandHandler cmdHandle : plugin.commands) {
+					if (cmdHandle.hasPerm(sender)) {
+						unsorted.put(cmdHandle.getHelpLineCommand("/aylachat"), cmdHandle.getHelpLine("/aylachat"));
+					} else if (!requirePerms) {
+						unsorted.put(cmdHandle.getHelpLineCommand("/aylachat"), cmdHandle.getHelpLine("/aylachat"));
+					}
+				}
+
+				ArrayList<String> unsortedList = new ArrayList<String>();
+				unsortedList.addAll(unsorted.keySet());
+				Collections.sort(unsortedList, String.CASE_INSENSITIVE_ORDER);
+				for (String cmd : unsortedList) {
+					texts.add(unsorted.get(cmd));
+				}
+				sendMessageJson(sender, texts);
 			}
 		});
 
@@ -248,7 +271,7 @@ public class CommandLoader {
 			p.sendMessage(format);
 			UserManager.getInstance().getAylaChatUser(p).setlastMessageSender(sender);
 		}
-		
+
 		ChannelHandler.getInstance().socialSpyMessage(format);
 
 	}

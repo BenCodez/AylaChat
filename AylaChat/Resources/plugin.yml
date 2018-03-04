@@ -6,8 +6,9 @@ author: Ben12345rocks
 commands:
   aylachat:
     description: AylaChat Command
-  aylachatmsg:
-    description: Msg
+    aliases:
+    - aylac
+    - ach
   Msg:
     description: Msg another player
     aliases:

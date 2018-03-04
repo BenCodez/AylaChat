@@ -77,6 +77,10 @@ Format:
     NoReply: '&cNo one to reply to'
     SocialSpy: '[SC] %msg%'
     
+  Help:
+    Title: '&3AylaChat Help'
+    RequirePermission: true
+    
   NoOneListening: '&cNo one is listening to you'
   
   NoPerms: '&cYou do not have enough permission!'
