@@ -110,12 +110,17 @@ public class ChannelHandler {
 
 	public void forceChat(Player player, Channel ch, String msg) {
 
-		for (Player p : ch.getPlayers(player)) {
-			if (p != null) {
-				if (ch.canHear(p, p.getLocation())) {
-					p.sendMessage(msg);
+		ArrayList<Player> players = ch.getPlayers(player);
+		if (players != null && !players.isEmpty()) {
+			for (Player p : players) {
+				if (p != null) {
+					if (ch.canHear(p, p.getLocation())) {
+						p.sendMessage(msg);
+					}
 				}
 			}
+		} else {
+			player.sendMessage(StringUtils.getInstance().colorize(Config.getInstance().formatNoOneListening));
 		}
 
 		Bukkit.getConsoleSender().sendMessage(msg);

@@ -77,6 +77,8 @@ Format:
     # Use %player% for player name instead
     # Player name for the player getting message (or the player sender message)
     PlayerName: 'You'
+    
+  NoOneListening: '&cNo one is listening to you'
 
 # Debug
 Debug: false

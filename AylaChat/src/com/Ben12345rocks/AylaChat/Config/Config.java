@@ -53,4 +53,7 @@ public class Config extends YMLFile {
 
 	@ConfigDataBoolean(path = "UseBungeeCoord", defaultValue = false)
 	public boolean useBungeeCoord = false;
+
+	@ConfigDataString(path = "Format.NoOneListening", defaultValue = "&cNo one is listening to you")
+	public String formatNoOneListening;
 }
