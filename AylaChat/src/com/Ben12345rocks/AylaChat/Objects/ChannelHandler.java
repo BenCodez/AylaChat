@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
+import com.Ben12345rocks.AdvancedCore.Util.Misc.PlayerUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Commands.Executors.ChannelCommands;
@@ -88,6 +89,22 @@ public class ChannelHandler {
 						ChannelHandler.getInstance().forceChat(null, ch, msg);
 					} else {
 						plugin.debug(ch.getChannelName() + " isn't bungeecoord, error?");
+					}
+
+				}
+			}
+		});
+
+		plugin.pluginMessages.add(new PluginMessageHandler() {
+
+			@Override
+			public void onRecieve(String subChannel, ArrayList<String> messageData) {
+				if (subChannel.equals("ClearChat")) {
+					String players = messageData.get(0);
+					if (players.equals("All")) {
+						ChannelHandler.getInstance().clearChatAll();
+					} else {
+						ChannelHandler.getInstance().clearChat(Bukkit.getPlayer(players));
 					}
 
 				}

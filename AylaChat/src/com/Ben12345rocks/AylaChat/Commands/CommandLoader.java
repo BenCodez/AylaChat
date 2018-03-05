@@ -12,6 +12,7 @@ import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandle;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
+import com.Ben12345rocks.AdvancedCore.Util.Misc.PlayerUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliasHandle;
@@ -111,6 +112,7 @@ public class CommandLoader {
 			@Override
 			public void execute(CommandSender sender, String[] args) {
 				ChannelHandler.getInstance().clearChatAll();
+				plugin.sendPluginMessage(PlayerUtils.getInstance().getRandomPlayer(), "ClearChat", "All");
 				sendMessage(sender, "&cChat cleared");
 			}
 		});
@@ -125,6 +127,11 @@ public class CommandLoader {
 					ChannelHandler.getInstance().clearChat(p);
 					sendMessage(sender, "&cChat cleared for " + p.getName());
 				} else {
+					if (Config.getInstance().useBungeeCoord) {
+						plugin.sendPluginMessage(PlayerUtils.getInstance().getRandomPlayer(), "ClearChat", args[1]);
+						sendMessage(sender, "&cChat cleared for " + args[1]);
+						return;
+					}
 					sendMessage(sender, "&cPlayer " + args[1] + " not found/online");
 				}
 			}
@@ -225,6 +232,17 @@ public class CommandLoader {
 						if (arg.equalsIgnoreCase("reply")) {
 							plugin.getCommand("reply").setExecutor(new CommandAliasHandle(cmdHandle));
 							plugin.getCommand("reply")
+									.setTabCompleter(new AliasHandleTabCompleter().setCMDHandle(cmdHandle));
+						}
+						if (arg.equalsIgnoreCase("socialspy")) {
+							plugin.getCommand("socialspy").setExecutor(new CommandAliasHandle(cmdHandle));
+							plugin.getCommand("socialspy")
+									.setTabCompleter(new AliasHandleTabCompleter().setCMDHandle(cmdHandle));
+						}
+
+						if (arg.equalsIgnoreCase("clearchat")) {
+							plugin.getCommand("clearchat").setExecutor(new CommandAliasHandle(cmdHandle));
+							plugin.getCommand("clearchat")
 									.setTabCompleter(new AliasHandleTabCompleter().setCMDHandle(cmdHandle));
 						}
 					} catch (Exception ex) {

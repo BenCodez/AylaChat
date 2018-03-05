@@ -18,3 +18,9 @@ commands:
     description: Msg another player
     aliases:
     - r
+  socialspy:
+    description: Social spy
+  clearchat:
+    description: Clear chat
+    aliases:
+    - cc
