@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
+import com.massivecraft.factions.entity.MPlayer;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Resident;
 
@@ -261,6 +262,21 @@ public class Channel {
 					}
 				} else {
 					players.add(player);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (getChannelName().equalsIgnoreCase("Factions")) {
+			try {
+				MPlayer mplayer = MPlayer.get(player.getUniqueId().toString());
+				if (mplayer.hasFaction()) {
+					for (MPlayer mp : mplayer.getFaction().getMPlayers()) {
+						Player p = mp.getPlayer().getPlayer();
+						if (p != null) {
+							players.add(p);
+						}
+					}
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
