@@ -15,6 +15,8 @@ import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.PlayerUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
+import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessage;
+import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliasHandle;
 import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliases;
@@ -22,7 +24,6 @@ import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasHandleTabCompleter;
 import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasesTabCompleter;
 import com.Ben12345rocks.AylaChat.Config.Config;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
-import com.Ben12345rocks.AylaChat.Objects.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Objects.User;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
 import com.google.common.collect.Iterables;
@@ -198,7 +199,7 @@ public class CommandLoader {
 
 		loadAliases();
 
-		plugin.pluginMessages.add(new PluginMessageHandler("Msg") {
+		PluginMessage.getInstance().add(new PluginMessageHandler("Msg") {
 
 			@Override
 			public void onRecieve(String subChannel, ArrayList<String> messageData) {

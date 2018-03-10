@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
+import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessage;
+import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Commands.Executors.ChannelCommands;
 import com.Ben12345rocks.AylaChat.Config.Config;
@@ -71,7 +73,7 @@ public class ChannelHandler {
 			}
 		}
 
-		plugin.pluginMessages.add(new PluginMessageHandler("Chat") {
+		PluginMessage.getInstance().add(new PluginMessageHandler("Chat") {
 
 			@Override
 			public void onRecieve(String subChannel, ArrayList<String> messageData) {
@@ -94,7 +96,7 @@ public class ChannelHandler {
 
 		});
 
-		plugin.pluginMessages.add(new PluginMessageHandler("ClearChat") {
+		PluginMessage.getInstance().add(new PluginMessageHandler("ClearChat") {
 
 			@Override
 			public void onRecieve(String subChannel, ArrayList<String> messageData) {
