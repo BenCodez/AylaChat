@@ -99,7 +99,9 @@ public class Main extends JavaPlugin implements PluginMessageListener {
 			}
 		}
 		for (PluginMessageHandler handle : pluginMessages) {
-			handle.onRecieve(subChannel, list);
+			if (handle.getSubChannel().equalsIgnoreCase(subChannel)) {
+				handle.onRecieve(subChannel, list);
+			}
 		}
 
 	}

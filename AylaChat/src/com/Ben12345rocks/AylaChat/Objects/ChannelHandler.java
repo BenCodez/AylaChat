@@ -71,41 +71,38 @@ public class ChannelHandler {
 			}
 		}
 
-		plugin.pluginMessages.add(new PluginMessageHandler() {
+		plugin.pluginMessages.add(new PluginMessageHandler("Chat") {
 
 			@Override
 			public void onRecieve(String subChannel, ArrayList<String> messageData) {
-				if (subChannel.equals("Chat")) {
-					String chatchannel = messageData.get(0);
-					String msg = messageData.get(1);
 
-					Channel ch = ChannelHandler.getInstance().getChannel(chatchannel);
-					if (ch == null) {
-						plugin.debug("Channel doesn't exist: " + chatchannel);
-						return;
-					}
-					if (ch.isBungeecoord()) {
-						ChannelHandler.getInstance().forceChat(null, ch, msg);
-					} else {
-						plugin.debug(ch.getChannelName() + " isn't bungeecoord, error?");
-					}
+				String chatchannel = messageData.get(0);
+				String msg = messageData.get(1);
 
+				Channel ch = ChannelHandler.getInstance().getChannel(chatchannel);
+				if (ch == null) {
+					plugin.debug("Channel doesn't exist: " + chatchannel);
+					return;
 				}
+				if (ch.isBungeecoord()) {
+					ChannelHandler.getInstance().forceChat(null, ch, msg);
+				} else {
+					plugin.debug(ch.getChannelName() + " isn't bungeecoord, error?");
+				}
+
 			}
+
 		});
 
-		plugin.pluginMessages.add(new PluginMessageHandler() {
+		plugin.pluginMessages.add(new PluginMessageHandler("ClearChat") {
 
 			@Override
 			public void onRecieve(String subChannel, ArrayList<String> messageData) {
-				if (subChannel.equals("ClearChat")) {
-					String players = messageData.get(0);
-					if (players.equals("All")) {
-						ChannelHandler.getInstance().clearChatAll();
-					} else {
-						ChannelHandler.getInstance().clearChat(Bukkit.getPlayer(players));
-					}
-
+				String players = messageData.get(0);
+				if (players.equals("All")) {
+					ChannelHandler.getInstance().clearChatAll();
+				} else {
+					ChannelHandler.getInstance().clearChat(Bukkit.getPlayer(players));
 				}
 			}
 		});

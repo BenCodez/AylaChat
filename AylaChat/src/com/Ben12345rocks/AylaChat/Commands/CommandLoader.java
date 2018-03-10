@@ -198,17 +198,15 @@ public class CommandLoader {
 
 		loadAliases();
 
-		plugin.pluginMessages.add(new PluginMessageHandler() {
+		plugin.pluginMessages.add(new PluginMessageHandler("Msg") {
 
 			@Override
 			public void onRecieve(String subChannel, ArrayList<String> messageData) {
-				if (subChannel.equals("Msg")) {
-					String sender = messageData.get(0);
-					String toSend = messageData.get(1);
-					String msg = messageData.get(2);
+				String sender = messageData.get(0);
+				String toSend = messageData.get(1);
+				String msg = messageData.get(2);
 
-					messageReceived(sender, toSend, msg);
-				}
+				messageReceived(sender, toSend, msg);
 			}
 		});
 	}
