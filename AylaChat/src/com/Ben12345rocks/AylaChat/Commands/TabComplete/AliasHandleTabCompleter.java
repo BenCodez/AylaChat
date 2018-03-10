@@ -26,7 +26,7 @@ public class AliasHandleTabCompleter implements TabCompleter {
 	Main plugin = Main.plugin;
 
 	/** The cmd handle. */
-	public CommandHandler cmdHandle;
+	public ArrayList<CommandHandler> cmdHandles = new ArrayList<CommandHandler>();
 
 	/*
 	 * (non-Javadoc)
@@ -51,28 +51,31 @@ public class AliasHandleTabCompleter implements TabCompleter {
 
 		ConcurrentHashMap<String, ArrayList<String>> tabCompletes = TabCompleteHandler.getInstance()
 				.getTabCompleteOptions();
-		if (cmdHandle.getArgs().length >= argsIn.length) {
-			for (String arg : cmdHandle.getArgs()[0].split("&")) {
-				if (cmd.getName().equalsIgnoreCase("vote" + arg) || cmd.getName().equalsIgnoreCase("adminvote" + arg)) {
-					// plugin.debug("Found cmd... attempting to get tab
-					// complete");
-					args[0] = arg;
-					boolean argsMatch = true;
-					for (int i = 0; i < argsIn.length; i++) {
-						if (args.length >= i) {
-							if (!cmdHandle.argsMatch(args[i], i)) {
-								argsMatch = false;
+		for (CommandHandler cmdHandle : cmdHandles) {
+			if (cmdHandle.getArgs().length >= argsIn.length) {
+				for (String arg : cmdHandle.getArgs()[0].split("&")) {
+					if (cmd.getName().equalsIgnoreCase("vote" + arg)
+							|| cmd.getName().equalsIgnoreCase("adminvote" + arg)) {
+						// plugin.debug("Found cmd... attempting to get tab
+						// complete");
+						args[0] = arg;
+						boolean argsMatch = true;
+						for (int i = 0; i < argsIn.length; i++) {
+							if (args.length >= i) {
+								if (!cmdHandle.argsMatch(args[i], i)) {
+									argsMatch = false;
+								}
 							}
 						}
-					}
 
-					if (argsMatch) {
+						if (argsMatch) {
 
-						cmds.addAll(cmdHandle.getTabCompleteOptions(sender, args, argsIn.length, tabCompletes));
+							cmds.addAll(cmdHandle.getTabCompleteOptions(sender, args, argsIn.length, tabCompletes));
+						}
+
 					}
 
 				}
-
 			}
 		}
 
@@ -87,8 +90,8 @@ public class AliasHandleTabCompleter implements TabCompleter {
 		return tab;
 	}
 
-	public AliasHandleTabCompleter setCMDHandle(CommandHandler cmd) {
-		cmdHandle = cmd;
+	public AliasHandleTabCompleter add(CommandHandler cmd) {
+		cmdHandles.add(cmd);
 		return this;
 	}
 

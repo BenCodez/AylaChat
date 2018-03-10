@@ -73,7 +73,7 @@ public class Channel {
 		if (p == null) {
 			return false;
 		}
-		if (p.hasPermission(permission) || permission.isEmpty()) {
+		if (permission.isEmpty() || p.hasPermission(permission)) {
 			return true;
 		} else {
 			// no permission

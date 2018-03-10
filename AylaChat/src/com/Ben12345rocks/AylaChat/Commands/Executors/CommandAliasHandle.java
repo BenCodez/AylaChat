@@ -22,10 +22,11 @@ public class CommandAliasHandle implements CommandExecutor {
 	private Main plugin = Main.plugin;
 
 	/** The cmd handle. */
-	private CommandHandler cmdHandle;
+	private ArrayList<CommandHandler> cmdHandles;
 
 	public CommandAliasHandle(CommandHandler cmdHandle) {
-		this.cmdHandle = cmdHandle;
+		this.cmdHandles = new ArrayList<CommandHandler>();
+		this.cmdHandles.add(cmdHandle);
 	}
 
 	/*
@@ -39,13 +40,15 @@ public class CommandAliasHandle implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
 		ArrayList<String> argsNew = new ArrayList<String>();
-		argsNew.add(cmdHandle.getArgs()[0]);
+		argsNew.add(cmdHandles.get(0).getArgs()[0]);
 		for (String arg : args) {
 			argsNew.add(arg);
 		}
 
-		if (cmdHandle.runCommand(sender, ArrayUtils.getInstance().convert(argsNew))) {
-			return true;
+		for (CommandHandler cmdHandle : cmdHandles) {
+			if (cmdHandle.runCommand(sender, ArrayUtils.getInstance().convert(argsNew))) {
+				return true;
+			}
 		}
 
 		// invalid command
@@ -53,5 +56,9 @@ public class CommandAliasHandle implements CommandExecutor {
 		sender.sendMessage(ChatColor.RED + "No valid arguments, see /alyachat help!");
 
 		return true;
+	}
+
+	public void add(CommandHandler cmdHandle) {
+		cmdHandles.add(cmdHandle);
 	}
 }

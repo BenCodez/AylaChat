@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -225,26 +226,15 @@ public class CommandLoader {
 
 						// special commands
 						if (arg.equalsIgnoreCase("msg")) {
-							plugin.getCommand("msg").setExecutor(new CommandAliasHandle(cmdHandle));
-							plugin.getCommand("msg")
-									.setTabCompleter(new AliasHandleTabCompleter().setCMDHandle(cmdHandle));
-						}
-						if (arg.equalsIgnoreCase("reply")) {
-							plugin.getCommand("reply").setExecutor(new CommandAliasHandle(cmdHandle));
-							plugin.getCommand("reply")
-									.setTabCompleter(new AliasHandleTabCompleter().setCMDHandle(cmdHandle));
-						}
-						if (arg.equalsIgnoreCase("socialspy")) {
-							plugin.getCommand("socialspy").setExecutor(new CommandAliasHandle(cmdHandle));
-							plugin.getCommand("socialspy")
-									.setTabCompleter(new AliasHandleTabCompleter().setCMDHandle(cmdHandle));
+							setCommand("msg", cmdHandle);
+						} else if (arg.equalsIgnoreCase("reply")) {
+							setCommand("reply", cmdHandle);
+						} else if (arg.equalsIgnoreCase("socialspy")) {
+							setCommand("socialspy", cmdHandle);
+						} else if (arg.equalsIgnoreCase("clearchat")) {
+							setCommand("clearchat", cmdHandle);
 						}
 
-						if (arg.equalsIgnoreCase("clearchat")) {
-							plugin.getCommand("clearchat").setExecutor(new CommandAliasHandle(cmdHandle));
-							plugin.getCommand("clearchat")
-									.setTabCompleter(new AliasHandleTabCompleter().setCMDHandle(cmdHandle));
-						}
 					} catch (Exception ex) {
 						plugin.debug("Failed to load command and tab completer for /aylachat" + arg);
 					}
@@ -252,6 +242,20 @@ public class CommandLoader {
 
 			}
 		}
+	}
+
+	private void setCommand(String command, CommandHandler cmdHandle) {
+		CommandExecutor handle = plugin.getCommand(command).getExecutor();
+		if (handle == null) {
+			plugin.getCommand(command).setExecutor(new CommandAliasHandle(cmdHandle));
+			plugin.getCommand(command).setTabCompleter(new AliasHandleTabCompleter().add(cmdHandle));
+		} else {
+			CommandAliasHandle exec = (CommandAliasHandle) plugin.getCommand(command).getExecutor();
+			exec.add(cmdHandle);
+			AliasHandleTabCompleter tab = (AliasHandleTabCompleter) plugin.getCommand(command).getTabCompleter();
+			tab.add(cmdHandle);
+		}
+
 	}
 
 	public void sendMessage(CommandSender player, String toSend, String msg) {
