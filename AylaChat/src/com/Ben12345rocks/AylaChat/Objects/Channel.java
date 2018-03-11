@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
+import com.Ben12345rocks.AylaChat.Config.Config;
 import com.massivecraft.factions.entity.MPlayer;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -81,8 +82,8 @@ public class Channel {
 		}
 
 		User user = UserManager.getInstance().getAylaChatUser(p);
-		if (user.getMuted()) {
-			p.sendMessage("Muted");
+		if (user.isMuted()) {
+			user.sendMessage(Config.getInstance().formatMuted);
 			return false;
 		}
 

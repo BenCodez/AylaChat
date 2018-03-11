@@ -79,13 +79,13 @@ public class User extends com.Ben12345rocks.AdvancedCore.Objects.User {
 	public ArrayList<String> getChannelsLeft() {
 		return getData().getStringList("ChannelsLeft");
 	}
-	
+
 	public String getlastMessageSender() {
 		return getData().getString("LastMessageSender");
 	}
-	
+
 	public void setlastMessageSender(String value) {
-		getData().setString("LastMessageSender",value);
+		getData().setString("LastMessageSender", value);
 	}
 
 	public void checkChannels() {
@@ -123,12 +123,24 @@ public class User extends com.Ben12345rocks.AdvancedCore.Objects.User {
 		return Boolean.valueOf(getData().getString("SocialSpy"));
 	}
 
-	public void setMuted(boolean value) {
+	private void setMuted(boolean value) {
 		getData().setString("Muted", "" + value);
 	}
 
-	public boolean getMuted() {
+	private boolean getMuted() {
 		return Boolean.valueOf(getData().getString("Muted"));
+	}
+
+	public void mute() {
+		setMuted(true);
+	}
+
+	public void unMute() {
+		setMuted(false);
+	}
+
+	public boolean isMuted() {
+		return getMuted();
 	}
 
 }

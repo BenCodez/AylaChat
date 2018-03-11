@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
+import com.Ben12345rocks.AdvancedCore.Objects.RewardBuilder;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandle;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
@@ -72,10 +73,12 @@ public class CommandLoader {
 				boolean requirePerms = Config.getInstance().formatHelpRequirePermission;
 
 				for (CommandHandler cmdHandle : plugin.commands) {
-					if (cmdHandle.hasPerm(sender)) {
-						unsorted.put(cmdHandle.getHelpLineCommand("/aylachat"), cmdHandle.getHelpLine("/aylachat"));
-					} else if (!requirePerms) {
-						unsorted.put(cmdHandle.getHelpLineCommand("/aylachat"), cmdHandle.getHelpLine("/aylachat"));
+					if (!cmdHandle.isAdvancedCoreCommand()) {
+						if (cmdHandle.hasPerm(sender)) {
+							unsorted.put(cmdHandle.getHelpLineCommand("/aylachat"), cmdHandle.getHelpLine("/aylachat"));
+						} else if (!requirePerms) {
+							unsorted.put(cmdHandle.getHelpLineCommand("/aylachat"), cmdHandle.getHelpLine("/aylachat"));
+						}
 					}
 				}
 
@@ -88,6 +91,39 @@ public class CommandLoader {
 				sendMessageJson(sender, texts);
 			}
 		});
+
+		plugin.commands
+				.add(new CommandHandler(new String[] { "AdvancedCoreHelp" }, "AylaChat.Help", "View help information") {
+
+					@Override
+					public void execute(CommandSender sender, String[] args) {
+						ArrayList<TextComponent> texts = new ArrayList<TextComponent>();
+						HashMap<String, TextComponent> unsorted = new HashMap<String, TextComponent>();
+						texts.add(StringUtils.getInstance().stringToComp(Config.getInstance().formatHelpTitle));
+
+						boolean requirePerms = Config.getInstance().formatHelpRequirePermission;
+
+						for (CommandHandler cmdHandle : plugin.commands) {
+							if (cmdHandle.isAdvancedCoreCommand()) {
+								if (cmdHandle.hasPerm(sender)) {
+									unsorted.put(cmdHandle.getHelpLineCommand("/aylachat"),
+											cmdHandle.getHelpLine("/aylachat"));
+								} else if (!requirePerms) {
+									unsorted.put(cmdHandle.getHelpLineCommand("/aylachat"),
+											cmdHandle.getHelpLine("/aylachat"));
+								}
+							}
+						}
+
+						ArrayList<String> unsortedList = new ArrayList<String>();
+						unsortedList.addAll(unsorted.keySet());
+						Collections.sort(unsortedList, String.CASE_INSENSITIVE_ORDER);
+						for (String cmd : unsortedList) {
+							texts.add(unsorted.get(cmd));
+						}
+						sendMessageJson(sender, texts);
+					}
+				});
 
 		plugin.commands.add(new CommandHandler(new String[] { "Reload" }, "AylaChat.Reload", "Reload the plugin") {
 
@@ -144,9 +180,28 @@ public class CommandLoader {
 
 			@Override
 			public void execute(CommandSender sender, String[] args) {
-				UserManager.getInstance().getAylaChatUser((Player) sender)
-						.setSocialSpyEnabled(Boolean.valueOf(args[1]));
-				sendMessage(sender, "Set Socialspy to " + args[1]);
+				User user = UserManager.getInstance().getAylaChatUser((Player) sender);
+				user.setSocialSpyEnabled(Boolean.valueOf(args[1]));
+				if (user.getSocialSpyEnabled()) {
+					sendMessage(sender, "&cEnabled socialspy");
+				} else {
+					sendMessage(sender, "&cDisabled socialspy");
+				}
+			}
+		});
+
+		plugin.commands.add(new CommandHandler(new String[] { "SocialSpy" }, "AylaChat.SocialSpy",
+				"Set whether or not social spy is enabled", false) {
+
+			@Override
+			public void execute(CommandSender sender, String[] args) {
+				User user = UserManager.getInstance().getAylaChatUser((Player) sender);
+				user.setSocialSpyEnabled(!user.getSocialSpyEnabled());
+				if (user.getSocialSpyEnabled()) {
+					sendMessage(sender, "&cEnabled socialspy");
+				} else {
+					sendMessage(sender, "&cDisabled socialspy");
+				}
 			}
 		});
 
@@ -155,9 +210,14 @@ public class CommandLoader {
 			@Override
 			public void execute(CommandSender sender, String[] args) {
 				User user = UserManager.getInstance().getAylaChatUser(args[1]);
-				boolean muted = !user.getMuted();
-				user.setMuted(muted);
-				sendMessage(sender, "&cSet muted for " + args[1] + " to " + muted);
+				if (user.isMuted()) {
+					user.unMute();
+					sendMessage(sender, "&cUnmuted " + user.getPlayerName());
+				} else {
+					user.mute();
+					sendMessage(sender, "&cMuted " + user.getPlayerName());
+				}
+				plugin.sendPluginMessage(user.getPlayer(), "Mute", user.getPlayerName(), "" + user.isMuted());
 			}
 		});
 
@@ -210,6 +270,22 @@ public class CommandLoader {
 				messageReceived(sender, toSend, msg);
 			}
 		});
+
+		PluginMessage.getInstance().add(new PluginMessageHandler("Mute") {
+
+			@Override
+			public void onRecieve(String subChannel, ArrayList<String> messageData) {
+				String player = messageData.get(0);
+				String muted = messageData.get(1);
+
+				User user = UserManager.getInstance().getAylaChatUser(player);
+				if (Boolean.valueOf(muted)) {
+					user.mute();
+				} else {
+					user.unMute();
+				}
+			}
+		});
 	}
 
 	public void loadAliases() {
@@ -235,6 +311,8 @@ public class CommandLoader {
 						setCommand("socialspy", cmdHandle);
 					} else if (arg.equalsIgnoreCase("clearchat")) {
 						setCommand("clearchat", cmdHandle);
+					} else if (arg.equalsIgnoreCase("mute")) {
+						setCommand("mute", cmdHandle);
 					}
 
 				}
@@ -310,6 +388,8 @@ public class CommandLoader {
 			p.sendMessage(format);
 			UserManager.getInstance().getAylaChatUser(p).setlastMessageSender(sender);
 		}
+
+		new RewardBuilder(Config.getInstance().getData(), Config.getInstance().formatMessageRewards).send(p);
 
 		ChannelHandler.getInstance().socialSpyMessage(format);
 

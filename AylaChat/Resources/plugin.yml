@@ -24,3 +24,5 @@ commands:
     description: Clear chat
     aliases:
     - cc
+  mute:
+    description: Mute commands

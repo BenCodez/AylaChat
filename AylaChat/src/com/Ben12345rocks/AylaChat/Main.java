@@ -55,7 +55,9 @@ public class Main extends JavaPlugin {
 
 		AdvancedCoreHook.getInstance().loadHook(plugin);
 
-		AdvancedCoreHook.getInstance().registerBungeeChannels();
+		if (Config.getInstance().useBungeeCoord) {
+			AdvancedCoreHook.getInstance().registerBungeeChannels();
+		}
 
 		Config.getInstance().loadValues();
 
@@ -88,6 +90,8 @@ public class Main extends JavaPlugin {
 	}
 
 	public void sendPluginMessage(Player player, String channel, String... args) {
-		PluginMessage.getInstance().sendPluginMessage(player, channel, args);
+		if (Config.getInstance().useBungeeCoord) {
+			PluginMessage.getInstance().sendPluginMessage(player, channel, args);
+		}
 	}
 }

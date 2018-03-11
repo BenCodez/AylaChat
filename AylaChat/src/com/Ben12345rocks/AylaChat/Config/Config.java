@@ -68,4 +68,9 @@ public class Config extends YMLFile {
 
 	@ConfigDataBoolean(path = "Format.Help.RequirePermission", defaultValue = true)
 	public boolean formatHelpRequirePermission;
+
+	@ConfigDataString(path = "Format.Muted", defaultValue = "&cYou are currently muted")
+	public String formatMuted;
+
+	public String formatMessageRewards = "Format.Message.Rewards";
 }

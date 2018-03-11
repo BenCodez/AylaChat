@@ -19,6 +19,7 @@ MySQL:
   Prefix: ''
   #UseSSL: true
   
+# Requires a restart to take affect
 UseBungeeCoord: false
   
 DefaultChannel: 'Global'
@@ -76,10 +77,29 @@ Format:
     Receive: '%fromsender% -> %player%: %message%'
     NoReply: '&cNo one to reply to'
     SocialSpy: '[SC] %msg%'
+    # Rewards from 
+    # https://github.com/Ben12345rocks/AdvancedCore/wiki/Rewards
+    # Can be an actionbar, and way more!
+    Rewards:
+      Sound:
+        # Enable or Disable Sound
+        Enabled: true
+        # Sound to play
+        # Sounds: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+        Sound: 'BLOCK_ANVIL_USE'
+        # Volume
+        # Range: 0.0 to 1.0
+        Volume: 1.0
+        # Pitch
+        # Range: 0.0 to 1.0
+        Pitch: 1.0
     
   Help:
     Title: '&3AylaChat Help'
     RequirePermission: true
+    # AdvancedCore Commands can be viewed with /aylachat advancedcorehelp regardless of this option
+    # Would recommend to have to this set to false to avoid showing unneeded commands
+    ShowAdvancedCoreCommands: false
     
   ChannelSet: '&cSet channel to %channel%'
     
@@ -91,6 +111,8 @@ Format:
   
   PrevPage: '&aPrevious Page'
   NextPage: '&aNext Page'
+  
+  Muted: '&cYou are currently muted'
 
 # Debug
 Debug: false

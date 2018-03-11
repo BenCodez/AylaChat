@@ -150,7 +150,7 @@ public class ChannelHandler {
 
 		Channel ch = getChannel(channel);
 		if (!ch.canTalk(player)) {
-			plugin.debug("Player " + player.getName() + " can't talk in " + ch.getChannelName());
+			plugin.debug("Player " + player.getName() + " can't talk in " + ch.getChannelName() + ": " + message);
 			return;
 		}
 
