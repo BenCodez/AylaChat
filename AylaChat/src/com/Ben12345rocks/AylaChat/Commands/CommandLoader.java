@@ -222,21 +222,21 @@ public class CommandLoader {
 
 						plugin.getCommand("aylachat" + arg)
 								.setTabCompleter(new AliasesTabCompleter().setCMDHandle(cmdHandle));
-
-						// special commands
-						if (arg.equalsIgnoreCase("msg")) {
-							setCommand("msg", cmdHandle);
-						} else if (arg.equalsIgnoreCase("reply")) {
-							setCommand("reply", cmdHandle);
-						} else if (arg.equalsIgnoreCase("socialspy")) {
-							setCommand("socialspy", cmdHandle);
-						} else if (arg.equalsIgnoreCase("clearchat")) {
-							setCommand("clearchat", cmdHandle);
-						}
-
 					} catch (Exception ex) {
 						plugin.debug("Failed to load command and tab completer for /aylachat" + arg);
 					}
+
+					// special commands
+					if (arg.equalsIgnoreCase("msg")) {
+						setCommand("msg", cmdHandle);
+					} else if (arg.equalsIgnoreCase("reply")) {
+						setCommand("reply", cmdHandle);
+					} else if (arg.equalsIgnoreCase("socialspy")) {
+						setCommand("socialspy", cmdHandle);
+					} else if (arg.equalsIgnoreCase("clearchat")) {
+						setCommand("clearchat", cmdHandle);
+					}
+
 				}
 
 			}
@@ -244,15 +244,23 @@ public class CommandLoader {
 	}
 
 	private void setCommand(String command, CommandHandler cmdHandle) {
-		CommandExecutor handle = plugin.getCommand(command).getExecutor();
-		if (handle == null) {
-			plugin.getCommand(command).setExecutor(new CommandAliasHandle(cmdHandle));
-			plugin.getCommand(command).setTabCompleter(new AliasHandleTabCompleter().add(cmdHandle));
-		} else {
-			CommandAliasHandle exec = (CommandAliasHandle) plugin.getCommand(command).getExecutor();
-			exec.add(cmdHandle);
-			AliasHandleTabCompleter tab = (AliasHandleTabCompleter) plugin.getCommand(command).getTabCompleter();
-			tab.add(cmdHandle);
+		try {
+			CommandExecutor handle = plugin.getCommand(command).getExecutor();
+			if (handle != null) {
+				if (handle instanceof CommandAliasHandle) {
+					CommandAliasHandle exec = (CommandAliasHandle) plugin.getCommand(command).getExecutor();
+					exec.add(cmdHandle);
+					AliasHandleTabCompleter tab = (AliasHandleTabCompleter) plugin.getCommand(command)
+							.getTabCompleter();
+					tab.add(cmdHandle);
+				} else {
+					plugin.getCommand(command).setExecutor(new CommandAliasHandle(cmdHandle));
+					plugin.getCommand(command).setTabCompleter(new AliasHandleTabCompleter().add(cmdHandle));
+
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
