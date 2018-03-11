@@ -54,25 +54,19 @@ public class AliasHandleTabCompleter implements TabCompleter {
 		for (CommandHandler cmdHandle : cmdHandles) {
 			if (cmdHandle.getArgs().length >= argsIn.length) {
 				for (String arg : cmdHandle.getArgs()[0].split("&")) {
-					if (cmd.getName().equalsIgnoreCase("vote" + arg)
-							|| cmd.getName().equalsIgnoreCase("adminvote" + arg)) {
-						// plugin.debug("Found cmd... attempting to get tab
-						// complete");
-						args[0] = arg;
-						boolean argsMatch = true;
-						for (int i = 0; i < argsIn.length; i++) {
-							if (args.length >= i) {
-								if (!cmdHandle.argsMatch(args[i], i)) {
-									argsMatch = false;
-								}
+					args[0] = arg;
+					boolean argsMatch = true;
+					for (int i = 0; i < argsIn.length; i++) {
+						if (args.length >= i) {
+							if (!cmdHandle.argsMatch(args[i], i)) {
+								argsMatch = false;
 							}
 						}
+					}
 
-						if (argsMatch) {
+					if (argsMatch) {
 
-							cmds.addAll(cmdHandle.getTabCompleteOptions(sender, args, argsIn.length, tabCompletes));
-						}
-
+						cmds.addAll(cmdHandle.getTabCompleteOptions(sender, args, argsIn.length, tabCompletes));
 					}
 
 				}

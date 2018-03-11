@@ -296,9 +296,11 @@ public class CommandLoader {
 	}
 
 	public void messageReceived(String sender, String toSend, String msg) {
+		toSend = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(toSend);
+		sender = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(sender);
 		HashMap<String, String> placeholders = new HashMap<String, String>();
 		placeholders.put("player", toSend);
-		placeholders.put("sender", sender);
+		placeholders.put("fromsender", sender);
 		placeholders.put("message", msg);
 		String format = StringUtils.getInstance().replacePlaceHolder(Config.getInstance().formatMessageReceive,
 				placeholders);
