@@ -74,17 +74,17 @@ public class Channel {
 		if (p == null) {
 			return false;
 		}
+		User user = UserManager.getInstance().getAylaChatUser(p);
+		if (user.isMuted()) {
+			user.sendMessage(Config.getInstance().formatMuted);
+			return false;
+		}
+
 		if (permission.isEmpty() || p.hasPermission(permission)) {
 			return true;
 		} else {
 			// no permission
 			p.sendMessage(StringUtils.getInstance().colorize(AdvancedCoreHook.getInstance().getFormatNoPerms()));
-		}
-
-		User user = UserManager.getInstance().getAylaChatUser(p);
-		if (user.isMuted()) {
-			user.sendMessage(Config.getInstance().formatMuted);
-			return false;
 		}
 
 		return false;
