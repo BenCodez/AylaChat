@@ -55,11 +55,11 @@ public class Main extends JavaPlugin {
 
 		AdvancedCoreHook.getInstance().loadHook(plugin);
 
+		Config.getInstance().loadValues();
+
 		if (Config.getInstance().useBungeeCoord) {
 			AdvancedCoreHook.getInstance().registerBungeeChannels();
 		}
-
-		Config.getInstance().loadValues();
 
 		ChannelHandler.getInstance().load();
 
