@@ -1,6 +1,7 @@
 # Options: FLAT, SQLITE, MYSQL
 DataStorage: SQLITE
 
+# No need to use this for bungeecoord (it actually probably won't work with bungee, just use sqlite instead)
 # Information for mysql
 MySQL:
   Host: ''
