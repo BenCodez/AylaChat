@@ -71,6 +71,9 @@ public class Config extends YMLFile {
 
 	@ConfigDataString(path = "Format.Muted", defaultValue = "&cYou are currently muted")
 	public String formatMuted;
+	
+	@ConfigDataString(path = "Format.JsonButton", defaultValue = "&c[x]")
+	public String formatJsonButton;
 
 	public String formatMessageRewards = "Format.Message.Rewards";
 }

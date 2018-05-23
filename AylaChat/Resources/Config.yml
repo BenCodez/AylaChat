@@ -114,6 +114,8 @@ Format:
   NextPage: '&aNext Page'
   
   Muted: '&cYou are currently muted'
+  
+  JsonButton: '&c[x]'
 
 # Debug
 Debug: false

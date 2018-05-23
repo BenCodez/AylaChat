@@ -13,6 +13,7 @@ import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.Objects.RewardBuilder;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandle;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
+import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.PlayerUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
@@ -242,6 +243,17 @@ public class CommandLoader {
 						CommandLoader.this.sendMessage(sender, toSend, ArrayUtils.getInstance().makeString(1, args));
 					}
 				});
+
+		plugin.commands.add(new CommandHandler(new String[] { "button", "(Number)" }, "AylaChat.Button",
+				"Command to access Json Button", false) {
+
+			@Override
+			public void execute(CommandSender sender, String[] args) {
+				BInventory inv = new BInventory("Hash: " + args[1]);
+				
+				inv.openInventory((Player) sender);
+			}
+		});
 
 		TabCompleteHandler.getInstance().addTabCompleteOption(
 				new TabCompleteHandle("(Channel)", ChannelHandler.getInstance().getChannelNames()) {

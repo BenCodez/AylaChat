@@ -3,6 +3,8 @@ package com.Ben12345rocks.AylaChat.Objects;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
@@ -16,6 +18,8 @@ import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Commands.Executors.ChannelCommands;
 import com.Ben12345rocks.AylaChat.Config.Config;
+
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class ChannelHandler {
 
@@ -80,6 +84,8 @@ public class ChannelHandler {
 
 				String chatchannel = messageData.get(0);
 				String msg = messageData.get(1);
+				String h = messageData.get(3);
+				int hash = Integer.parseInt(h);
 
 				Channel ch = ChannelHandler.getInstance().getChannel(chatchannel);
 				if (ch == null) {
@@ -87,7 +93,7 @@ public class ChannelHandler {
 					return;
 				}
 				if (ch.isBungeecoord()) {
-					ChannelHandler.getInstance().forceChat(null, ch, msg);
+					ChannelHandler.getInstance().forceChat(null, ch, msg, hash);
 				} else {
 					plugin.debug(ch.getChannelName() + " isn't bungeecoord, error?");
 				}
@@ -123,14 +129,21 @@ public class ChannelHandler {
 		}
 	}
 
-	public void forceChat(Player player, Channel ch, String msg) {
+	private Object ob = new Object();
 
+	public void forceChat(Player player, Channel ch, String msg, int hash) {
+		synchronized (ob) {
+			messageHistory.put(hash, new MessageData(player.getName(), ch.getChannelName(), msg));
+			if (messageHistory.size() > 300) {
+				messageHistory.remove(messageHistory.keySet().iterator().next());
+			}
+		}
 		ArrayList<Player> players = ch.getPlayers(player);
 		if (players != null && !players.isEmpty()) {
 			for (Player p : players) {
 				if (p != null) {
 					if (ch.canHear(p, p.getLocation())) {
-						p.sendMessage(msg);
+						AdvancedCoreHook.getInstance().getServerHandle().sendMessage(p, addJsonButton(p, msg, hash));
 					}
 				}
 			}
@@ -143,6 +156,18 @@ public class ChannelHandler {
 		Bukkit.getConsoleSender().sendMessage(msg);
 	}
 
+	private int generateHash() {
+		int i = ThreadLocalRandom.current().nextInt(400);
+
+		if (messageHistory.containsKey(i)) {
+			return generateHash();
+		}
+
+		return i;
+	}
+
+	private LinkedHashMap<Integer, MessageData> messageHistory = new LinkedHashMap<Integer, MessageData>();
+
 	public void onChat(Player player, String channel, String message) {
 		if (channel == null || channel.isEmpty()) {
 			channel = getDefaultChannelName();
@@ -154,12 +179,15 @@ public class ChannelHandler {
 			return;
 		}
 
-		String msg = format(message, ch, player);
+		int h = generateHash();
+
+		String msg = format(message, ch, player, h);
 
 		if (Config.getInstance().useBungeeCoord && ch.isBungeecoord()) {
-			plugin.sendPluginMessage(player, "Chat", ch.getChannelName(), msg, player.getName());
+			plugin.sendPluginMessage(player, "Chat", ch.getChannelName(), msg, player.getName(), "" + h);
+			messageHistory.put(h, new MessageData(player.getName(), ch.getChannelName(), msg));
 		} else {
-			forceChat(player, ch, msg);
+			forceChat(player, ch, msg, h);
 		}
 	}
 
@@ -196,7 +224,7 @@ public class ChannelHandler {
 		return defaultChannel;
 	}
 
-	public String format(String msg, Channel ch, Player player) {
+	public String format(String msg, Channel ch, Player player, int hash) {
 		HashMap<String, String> placeholders = new HashMap<String, String>();
 		if (player != null) {
 			placeholders.put("player", player.getName());
@@ -206,12 +234,22 @@ public class ChannelHandler {
 		placeholders.put("message", msg);
 
 		String message = StringUtils.getInstance().replacePlaceHolder(ch.getFormat(), placeholders, false);
+
 		message = StringUtils.getInstance().replaceJavascript(message);
 		message = StringUtils.getInstance().replacePlaceHolders(player, message);
 		message = StringUtils.getInstance().colorize(message);
 
 		return message;
 
+	}
+
+	public TextComponent addJsonButton(Player p, String message, int hash) {
+		if (p.hasPermission("AylaChat.Button")) {
+			return StringUtils.getInstance().parseJson(message += "[Text=\"" + Config.getInstance().formatJsonButton
+					+ "\",command=\"aylachat button " + hash + "\"]");
+		} else {
+			return new TextComponent(message);
+		}
 	}
 
 	public Channel getChannel(String channel) {
