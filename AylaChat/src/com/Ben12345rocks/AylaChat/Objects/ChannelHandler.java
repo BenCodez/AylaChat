@@ -57,6 +57,8 @@ public class ChannelHandler {
 	}
 
 	public void load() {
+		messageHistory = new LinkedHashMap<Integer, MessageData>();
+
 		// implement channel load
 		channels = new ArrayList<Channel>();
 
@@ -84,6 +86,7 @@ public class ChannelHandler {
 
 				String chatchannel = messageData.get(0);
 				String msg = messageData.get(1);
+				String name = messageData.get(2);
 				String h = messageData.get(3);
 				int hash = Integer.parseInt(h);
 
@@ -93,7 +96,7 @@ public class ChannelHandler {
 					return;
 				}
 				if (ch.isBungeecoord()) {
-					ChannelHandler.getInstance().forceChat(null, ch, msg, hash);
+					ChannelHandler.getInstance().forceChat(name, ch, msg, hash);
 				} else {
 					plugin.debug(ch.getChannelName() + " isn't bungeecoord, error?");
 				}
@@ -131,9 +134,10 @@ public class ChannelHandler {
 
 	private Object ob = new Object();
 
-	public void forceChat(Player player, Channel ch, String msg, int hash) {
+	public void forceChat(String playerName, Channel ch, String msg, int hash) {
+		Player player = Bukkit.getPlayer(playerName);
 		synchronized (ob) {
-			messageHistory.put(hash, new MessageData(player.getName(), ch.getChannelName(), msg));
+			messageHistory.put(hash, new MessageData(playerName, ch.getChannelName(), msg));
 			if (messageHistory.size() > 300) {
 				messageHistory.remove(messageHistory.keySet().iterator().next());
 			}
@@ -187,7 +191,7 @@ public class ChannelHandler {
 			plugin.sendPluginMessage(player, "Chat", ch.getChannelName(), msg, player.getName(), "" + h);
 			messageHistory.put(h, new MessageData(player.getName(), ch.getChannelName(), msg));
 		} else {
-			forceChat(player, ch, msg, h);
+			forceChat(player.getName(), ch, msg, h);
 		}
 	}
 
@@ -245,8 +249,10 @@ public class ChannelHandler {
 
 	public TextComponent addJsonButton(Player p, String message, int hash) {
 		if (p.hasPermission("AylaChat.Button")) {
-			return StringUtils.getInstance().parseJson(message += "[Text=\"" + Config.getInstance().formatJsonButton
-					+ "\",command=\"aylachat button " + hash + "\"]");
+			return StringUtils.getInstance()
+					.parseJson(message += " [Text=\""
+							+ StringUtils.getInstance().colorize(Config.getInstance().formatJsonButton)
+							+ "\",command=\"/aylachat button " + hash + "\"]");
 		} else {
 			return new TextComponent(message);
 		}
