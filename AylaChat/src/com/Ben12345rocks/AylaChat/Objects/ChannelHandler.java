@@ -258,6 +258,10 @@ public class ChannelHandler {
 		}
 	}
 
+	public LinkedHashMap<Integer, MessageData> getMessageHistory() {
+		return messageHistory;
+	}
+
 	public Channel getChannel(String channel) {
 		for (Channel ch : getChannels()) {
 			if (ch.getChannelName().equalsIgnoreCase(channel)) {

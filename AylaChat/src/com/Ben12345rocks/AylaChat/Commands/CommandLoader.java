@@ -14,7 +14,11 @@ import com.Ben12345rocks.AdvancedCore.Objects.RewardBuilder;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandle;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
+import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
+import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
+import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
+import com.Ben12345rocks.AdvancedCore.Util.Misc.MiscUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.PlayerUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessage;
@@ -26,6 +30,7 @@ import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasHandleTabCompleter;
 import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasesTabCompleter;
 import com.Ben12345rocks.AylaChat.Config.Config;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
+import com.Ben12345rocks.AylaChat.Objects.MessageData;
 import com.Ben12345rocks.AylaChat.Objects.User;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
 import com.google.common.collect.Iterables;
@@ -249,8 +254,25 @@ public class CommandLoader {
 
 			@Override
 			public void execute(CommandSender sender, String[] args) {
-				BInventory inv = new BInventory("Hash: " + args[1]);
-				
+				MessageData data = ChannelHandler.getInstance().getMessageHistory().get(Integer.parseInt(args[1]));
+				HashMap<String, String> placeholders = new HashMap<String, String>();
+				placeholders.put("Message", data.getMessage());
+				placeholders.put("Channel", data.getChannel());
+				placeholders.put("player", data.getPlayer());
+				BInventory inv = new BInventory("Player: " + data.getPlayer() + " (" + args[1] + ")");
+				for (final String key : Config.getInstance().JsonButtonGUI()) {
+					inv.addButton(new BInventoryButton(new ItemBuilder(
+							Config.getInstance().getData().getConfigurationSection("JsonButtonGUI." + key))
+									.setPlaceholders(placeholders)) {
+
+						@Override
+						public void onClick(ClickEvent event) {
+							MiscUtils.getInstance().executeConsoleCommands(Bukkit.getPlayer(data.getPlayer()),
+									Config.getInstance().getJsonButtonGUIKeyCommands(key), placeholders);
+						}
+					});
+				}
+
 				inv.openInventory((Player) sender);
 			}
 		});

@@ -1,6 +1,7 @@
 package com.Ben12345rocks.AylaChat.Config;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Set;
 
 import com.Ben12345rocks.AdvancedCore.Util.Annotation.AnnotationHandler;
@@ -71,9 +72,18 @@ public class Config extends YMLFile {
 
 	@ConfigDataString(path = "Format.Muted", defaultValue = "&cYou are currently muted")
 	public String formatMuted;
-	
+
 	@ConfigDataString(path = "Format.JsonButton", defaultValue = "&c[x]")
 	public String formatJsonButton;
+
+	public Set<String> JsonButtonGUI() {
+		return getData().getConfigurationSection("JsonButtonGUI").getKeys(false);
+	}
+
+	@SuppressWarnings("unchecked")
+	public ArrayList<String> getJsonButtonGUIKeyCommands(String key) {
+		return (ArrayList<String>) getData().getList("JsonButtonGUI." + key + ".Commands", new ArrayList<String>());
+	}
 
 	public String formatMessageRewards = "Format.Message.Rewards";
 }

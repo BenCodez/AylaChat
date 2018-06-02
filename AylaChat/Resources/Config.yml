@@ -116,6 +116,27 @@ Format:
   Muted: '&cYou are currently muted'
   
   JsonButton: '&c[x]'
+  
+JsonButtonGUI:
+  MessageInfo:
+    Material: SIGN
+    Amount: 1
+    Name: '&cMessage Info'
+    Lore:
+    - '&cMessage: &l%Message%'
+    - '&cChannel: &l%Channel%'
+  Kick:
+    Material: 'DIAMOND_BOOTS'
+    Amount: 1
+    Name: '&cKick %player%'
+    Commands:
+    - 'kick %player%'
+  Mute:
+    Material: 'DIAMOND_BOOTS'
+    Amount: 1
+    Name: '&cMute %player%'
+    Commands:
+    - 'mute %player%'
 
 # Debug
 Debug: false
