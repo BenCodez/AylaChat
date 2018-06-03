@@ -55,6 +55,7 @@ public class Main extends JavaPlugin {
 			}
 		});
 
+		AdvancedCoreHook.getInstance().setJenkinsSite("ben12345rocks.com");
 		AdvancedCoreHook.getInstance().setConfigData(Config.getInstance().getData());
 
 		AdvancedCoreHook.getInstance().loadHook(plugin);

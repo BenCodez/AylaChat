@@ -129,6 +129,8 @@ JsonButtonGUI:
     Material: 'DIAMOND_BOOTS'
     Amount: 1
     Name: '&cKick %player%'
+    # Commands get sent to other servers if player is not on current server (on bungee mode)
+    # Required to be set on other servers
     Commands:
     - 'kick %player%'
   Mute:
