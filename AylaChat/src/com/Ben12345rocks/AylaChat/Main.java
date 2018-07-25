@@ -34,6 +34,9 @@ public class Main extends JavaPlugin {
 		plugin = this;
 
 		Config.getInstance().setup();
+		Config.getInstance().loadValues();
+
+		ChannelHandler.getInstance().load();
 
 		PluginUtils.getInstance().registerEvents(new PlayerChatListener(plugin), plugin);
 
@@ -60,13 +63,9 @@ public class Main extends JavaPlugin {
 
 		AdvancedCoreHook.getInstance().loadHook(plugin);
 
-		Config.getInstance().loadValues();
-
 		if (Config.getInstance().useBungeeCoord) {
 			AdvancedCoreHook.getInstance().registerBungeeChannels();
 		}
-
-		ChannelHandler.getInstance().load();
 
 		CommandLoader.getInstance().load();
 
