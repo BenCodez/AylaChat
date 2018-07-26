@@ -14,7 +14,7 @@ public class Bungee extends Plugin implements net.md_5.bungee.api.plugin.Listene
 	@Override
 	public void onEnable() {
 		getProxy().getPluginManager().registerListener(this, this);
-		this.getProxy().registerChannel("AylaChat");
+		this.getProxy().registerChannel("AylaChat:AylaChat");
 	}
 
 	@EventHandler
@@ -36,7 +36,7 @@ public class Bungee extends Plugin implements net.md_5.bungee.api.plugin.Listene
 			}
 			for (String send : getProxy().getServers().keySet()) {
 				if (getProxy().getServers().get(send).getPlayers().size() > 0) {
-					getProxy().getServers().get(send).sendData("AylaChat", outstream.toByteArray());
+					getProxy().getServers().get(send).sendData("AylaChat:AylaChat", outstream.toByteArray());
 				}
 			}
 		} catch (Exception e) {
