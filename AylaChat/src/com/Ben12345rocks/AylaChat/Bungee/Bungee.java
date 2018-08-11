@@ -14,12 +14,12 @@ public class Bungee extends Plugin implements net.md_5.bungee.api.plugin.Listene
 	@Override
 	public void onEnable() {
 		getProxy().getPluginManager().registerListener(this, this);
-		this.getProxy().registerChannel("AylaChat:AylaChat");
+		this.getProxy().registerChannel("AylaChat:AylaChat".toLowerCase());
 	}
 
 	@EventHandler
 	public void onPluginMessage(PluginMessageEvent ev) {
-		if (!ev.getTag().equals("AylaChat")) {
+		if (!ev.getTag().equals("AylaChat:AylaChat".toLowerCase())) {
 			return;
 		}
 		ByteArrayInputStream instream = new ByteArrayInputStream(ev.getData());
@@ -36,7 +36,8 @@ public class Bungee extends Plugin implements net.md_5.bungee.api.plugin.Listene
 			}
 			for (String send : getProxy().getServers().keySet()) {
 				if (getProxy().getServers().get(send).getPlayers().size() > 0) {
-					getProxy().getServers().get(send).sendData("AylaChat:AylaChat", outstream.toByteArray());
+					getProxy().getServers().get(send).sendData("AylaChat:AylaChat".toLowerCase(),
+							outstream.toByteArray());
 				}
 			}
 		} catch (Exception e) {
