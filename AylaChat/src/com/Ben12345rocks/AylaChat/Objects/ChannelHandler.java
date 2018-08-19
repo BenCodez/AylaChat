@@ -25,20 +25,6 @@ public class ChannelHandler {
 
 	private static ChannelHandler instance = new ChannelHandler();
 
-	@SuppressWarnings("unused")
-	private Main plugin = Main.plugin;
-
-	private ArrayList<String> socialSpyPlayers = new ArrayList<String>();
-
-	/**
-	 * @return the socialSpyPlayers
-	 */
-	public ArrayList<String> getSocialSpyPlayers() {
-		return socialSpyPlayers;
-	}
-
-	private ArrayList<Channel> channels;
-
 	/**
 	 * @return the instance
 	 */
@@ -46,7 +32,122 @@ public class ChannelHandler {
 		return instance;
 	}
 
+	@SuppressWarnings("unused")
+	private Main plugin = Main.plugin;
+
+	private ArrayList<String> socialSpyPlayers = new ArrayList<String>();
+
+	private ArrayList<Channel> channels;
+
+	private Object ob = new Object();
+
+	private LinkedHashMap<Integer, MessageData> messageHistory = new LinkedHashMap<Integer, MessageData>();
+
 	public ChannelHandler() {
+	}
+
+	public TextComponent addJsonButton(Player p, String message, int hash) {
+		if (p.hasPermission("AylaChat.Button")) {
+			return StringUtils.getInstance()
+					.parseJson(message += " [Text=\""
+							+ StringUtils.getInstance().colorize(Config.getInstance().formatJsonButton)
+							+ "\",command=\"/aylachat button " + hash + "\"]");
+		} else {
+			return new TextComponent(message);
+		}
+	}
+
+	public void clearChat(Player player) {
+		if (player != null) {
+			ArrayList<String> blank = new ArrayList<String>();
+			for (int i = 0; i < 200; i++) {
+				blank.add("");
+			}
+			player.sendMessage(ArrayUtils.getInstance().convert(blank));
+		}
+	}
+
+	public void clearChatAll() {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			clearChat(player);
+		}
+	}
+
+	public void forceChat(String playerName, Channel ch, String msg, int hash) {
+		Player player = Bukkit.getPlayer(playerName);
+		synchronized (ob) {
+			messageHistory.put(hash, new MessageData(playerName, ch.getChannelName(), msg));
+			if (messageHistory.size() > 300) {
+				messageHistory.remove(messageHistory.keySet().iterator().next());
+			}
+		}
+		ArrayList<Player> players = ch.getPlayers(player);
+		if (players != null && !players.isEmpty()) {
+			for (Player p : players) {
+				if (p != null) {
+					if (ch.canHear(p, p.getLocation())) {
+						AdvancedCoreHook.getInstance().getServerHandle().sendMessage(p, addJsonButton(p, msg, hash));
+					}
+				}
+			}
+		} else {
+			if (player != null) {
+				player.sendMessage(StringUtils.getInstance().colorize(Config.getInstance().formatNoOneListening));
+			}
+		}
+
+		Bukkit.getConsoleSender().sendMessage(msg);
+	}
+
+	public String format(String msg, Channel ch, Player player, int hash) {
+		HashMap<String, String> placeholders = new HashMap<String, String>();
+		if (player != null) {
+			placeholders.put("player", player.getName());
+			placeholders.put("nickname", player.getDisplayName());
+			placeholders.put("group", AdvancedCoreHook.getInstance().getPerms().getPrimaryGroup(player));
+		}
+		placeholders.put("message", msg);
+
+		String message = StringUtils.getInstance().replacePlaceHolder(ch.getFormat(), placeholders, false);
+
+		message = StringUtils.getInstance().replaceJavascript(message);
+		message = StringUtils.getInstance().replacePlaceHolders(player, message);
+		message = StringUtils.getInstance().colorize(message);
+
+		return message;
+
+	}
+
+	private int generateHash() {
+		int i = ThreadLocalRandom.current().nextInt(400);
+
+		if (messageHistory.containsKey(i)) {
+			return generateHash();
+		}
+
+		return i;
+	}
+
+	public Channel getChannel(String channel) {
+		for (Channel ch : getChannels()) {
+			if (ch.getChannelName().equalsIgnoreCase(channel)) {
+				return ch;
+			}
+			for (String aliases : ch.getAliases()) {
+				if (aliases.equalsIgnoreCase(channel)) {
+					return ch;
+				}
+			}
+		}
+		return null;
+	}
+
+	public ArrayList<String> getChannelNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for (Channel ch : getChannels()) {
+			names.add(ch.getChannelName());
+		}
+		return names;
 	}
 
 	/**
@@ -54,6 +155,34 @@ public class ChannelHandler {
 	 */
 	public ArrayList<Channel> getChannels() {
 		return channels;
+	}
+
+	@SuppressWarnings("deprecation")
+	public String getDefaultChannelName() {
+		String defaultChannel = Config.getInstance().getData().getString("DefaultChanne", "");
+
+		for (Channel ch : getChannels()) {
+			if (ch.isDefaultChannel()) {
+				defaultChannel = ch.getChannelName();
+			}
+		}
+		if (defaultChannel.isEmpty()) {
+			if (getChannels().size() > 0) {
+				defaultChannel = getChannels().get(0).getChannelName();
+			}
+		}
+		return defaultChannel;
+	}
+
+	public LinkedHashMap<Integer, MessageData> getMessageHistory() {
+		return messageHistory;
+	}
+
+	/**
+	 * @return the socialSpyPlayers
+	 */
+	public ArrayList<String> getSocialSpyPlayers() {
+		return socialSpyPlayers;
 	}
 
 	public void load() {
@@ -132,46 +261,6 @@ public class ChannelHandler {
 		}
 	}
 
-	private Object ob = new Object();
-
-	public void forceChat(String playerName, Channel ch, String msg, int hash) {
-		Player player = Bukkit.getPlayer(playerName);
-		synchronized (ob) {
-			messageHistory.put(hash, new MessageData(playerName, ch.getChannelName(), msg));
-			if (messageHistory.size() > 300) {
-				messageHistory.remove(messageHistory.keySet().iterator().next());
-			}
-		}
-		ArrayList<Player> players = ch.getPlayers(player);
-		if (players != null && !players.isEmpty()) {
-			for (Player p : players) {
-				if (p != null) {
-					if (ch.canHear(p, p.getLocation())) {
-						AdvancedCoreHook.getInstance().getServerHandle().sendMessage(p, addJsonButton(p, msg, hash));
-					}
-				}
-			}
-		} else {
-			if (player != null) {
-				player.sendMessage(StringUtils.getInstance().colorize(Config.getInstance().formatNoOneListening));
-			}
-		}
-
-		Bukkit.getConsoleSender().sendMessage(msg);
-	}
-
-	private int generateHash() {
-		int i = ThreadLocalRandom.current().nextInt(400);
-
-		if (messageHistory.containsKey(i)) {
-			return generateHash();
-		}
-
-		return i;
-	}
-
-	private LinkedHashMap<Integer, MessageData> messageHistory = new LinkedHashMap<Integer, MessageData>();
-
 	public void onChat(Player player, String channel, String message) {
 		if (channel == null || channel.isEmpty()) {
 			channel = getDefaultChannelName();
@@ -193,95 +282,6 @@ public class ChannelHandler {
 		} else {
 			forceChat(player.getName(), ch, msg, h);
 		}
-	}
-
-	public void clearChat(Player player) {
-		if (player != null) {
-			ArrayList<String> blank = new ArrayList<String>();
-			for (int i = 0; i < 200; i++) {
-				blank.add("");
-			}
-			player.sendMessage(ArrayUtils.getInstance().convert(blank));
-		}
-	}
-
-	public void clearChatAll() {
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			clearChat(player);
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	public String getDefaultChannelName() {
-		String defaultChannel = Config.getInstance().getData().getString("DefaultChanne", "");
-
-		for (Channel ch : getChannels()) {
-			if (ch.isDefaultChannel()) {
-				defaultChannel = ch.getChannelName();
-			}
-		}
-		if (defaultChannel.isEmpty()) {
-			if (getChannels().size() > 0) {
-				defaultChannel = getChannels().get(0).getChannelName();
-			}
-		}
-		return defaultChannel;
-	}
-
-	public String format(String msg, Channel ch, Player player, int hash) {
-		HashMap<String, String> placeholders = new HashMap<String, String>();
-		if (player != null) {
-			placeholders.put("player", player.getName());
-			placeholders.put("nickname", player.getDisplayName());
-			placeholders.put("group", AdvancedCoreHook.getInstance().getPerms().getPrimaryGroup(player));
-		}
-		placeholders.put("message", msg);
-
-		String message = StringUtils.getInstance().replacePlaceHolder(ch.getFormat(), placeholders, false);
-
-		message = StringUtils.getInstance().replaceJavascript(message);
-		message = StringUtils.getInstance().replacePlaceHolders(player, message);
-		message = StringUtils.getInstance().colorize(message);
-
-		return message;
-
-	}
-
-	public TextComponent addJsonButton(Player p, String message, int hash) {
-		if (p.hasPermission("AylaChat.Button")) {
-			return StringUtils.getInstance()
-					.parseJson(message += " [Text=\""
-							+ StringUtils.getInstance().colorize(Config.getInstance().formatJsonButton)
-							+ "\",command=\"/aylachat button " + hash + "\"]");
-		} else {
-			return new TextComponent(message);
-		}
-	}
-
-	public LinkedHashMap<Integer, MessageData> getMessageHistory() {
-		return messageHistory;
-	}
-
-	public Channel getChannel(String channel) {
-		for (Channel ch : getChannels()) {
-			if (ch.getChannelName().equalsIgnoreCase(channel)) {
-				return ch;
-			}
-			for (String aliases : ch.getAliases()) {
-				if (aliases.equalsIgnoreCase(channel)) {
-					return ch;
-				}
-			}
-		}
-		return null;
-	}
-
-	public ArrayList<String> getChannelNames() {
-		ArrayList<String> names = new ArrayList<String>();
-		for (Channel ch : getChannels()) {
-			names.add(ch.getChannelName());
-		}
-		return names;
 	}
 
 	public void socialSpyMessage(String msg) {

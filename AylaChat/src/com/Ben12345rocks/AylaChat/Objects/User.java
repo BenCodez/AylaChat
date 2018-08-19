@@ -64,30 +64,6 @@ public class User extends com.Ben12345rocks.AdvancedCore.Objects.User {
 		super(Main.plugin, uuid, loadName);
 	}
 
-	public void setCurrentChannel(String channel) {
-		getData().setString("Channel", channel);
-	}
-
-	public String getCurrentChannel() {
-		return getData().getString("Channel");
-	}
-
-	public void setChannelsLeft(ArrayList<String> channels) {
-		getData().setStringList("ChannelsLeft", channels);
-	}
-
-	public ArrayList<String> getChannelsLeft() {
-		return getData().getStringList("ChannelsLeft");
-	}
-
-	public String getlastMessageSender() {
-		return getData().getString("LastMessageSender");
-	}
-
-	public void setlastMessageSender(String value) {
-		getData().setString("LastMessageSender", value);
-	}
-
 	public void checkChannels() {
 		if (getCurrentChannel().isEmpty()) {
 			Channel d = ChannelHandler.getInstance().getChannel(ChannelHandler.getInstance().getDefaultChannelName());
@@ -114,33 +90,57 @@ public class User extends com.Ben12345rocks.AdvancedCore.Objects.User {
 		}
 	}
 
-	public void setSocialSpyEnabled(boolean value) {
-		getData().setString("SocialSpy", "" + value);
-		checkChannels();
+	public ArrayList<String> getChannelsLeft() {
+		return getData().getStringList("ChannelsLeft");
 	}
 
-	public boolean getSocialSpyEnabled() {
-		return Boolean.valueOf(getData().getString("SocialSpy"));
+	public String getCurrentChannel() {
+		return getData().getString("Channel");
 	}
 
-	private void setMuted(boolean value) {
-		getData().setString("Muted", "" + value);
+	public String getlastMessageSender() {
+		return getData().getString("LastMessageSender");
 	}
 
 	private boolean getMuted() {
 		return Boolean.valueOf(getData().getString("Muted"));
 	}
 
-	public void mute() {
-		setMuted(true);
-	}
-
-	public void unMute() {
-		setMuted(false);
+	public boolean getSocialSpyEnabled() {
+		return Boolean.valueOf(getData().getString("SocialSpy"));
 	}
 
 	public boolean isMuted() {
 		return getMuted();
+	}
+
+	public void mute() {
+		setMuted(true);
+	}
+
+	public void setChannelsLeft(ArrayList<String> channels) {
+		getData().setStringList("ChannelsLeft", channels);
+	}
+
+	public void setCurrentChannel(String channel) {
+		getData().setString("Channel", channel);
+	}
+
+	public void setlastMessageSender(String value) {
+		getData().setString("LastMessageSender", value);
+	}
+
+	private void setMuted(boolean value) {
+		getData().setString("Muted", "" + value);
+	}
+
+	public void setSocialSpyEnabled(boolean value) {
+		getData().setString("SocialSpy", "" + value);
+		checkChannels();
+	}
+
+	public void unMute() {
+		setMuted(false);
 	}
 
 }

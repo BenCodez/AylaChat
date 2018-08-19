@@ -29,6 +29,38 @@ public class Main extends JavaPlugin {
 	public ArrayList<CommandHandler> commands;
 	private Updater updater;
 
+	public void checkUpdate() {
+		plugin.updater = new Updater(plugin, 55101, false);
+		final Updater.UpdateResult result = plugin.updater.getResult();
+		switch (result) {
+		case FAIL_SPIGOT: {
+			plugin.getLogger().info("Failed to check for update for " + plugin.getName() + "!");
+			break;
+		}
+		case NO_UPDATE: {
+			plugin.getLogger().info(plugin.getName() + " is up to date! Version: " + plugin.updater.getVersion());
+			break;
+		}
+		case UPDATE_AVAILABLE: {
+			plugin.getLogger().info(plugin.getName() + " has an update available! Your Version: "
+					+ plugin.getDescription().getVersion() + " New Version: " + plugin.updater.getVersion());
+			break;
+		}
+		default: {
+			break;
+		}
+		}
+	}
+
+	public void debug(String msg) {
+		AdvancedCoreHook.getInstance().debug(msg);
+	}
+
+	@Override
+	public void onDisable() {
+		plugin = null;
+	}
+
 	@Override
 	public void onEnable() {
 		plugin = this;
@@ -43,8 +75,8 @@ public class Main extends JavaPlugin {
 		AdvancedCoreHook.getInstance().addUserStartup(new UserStartup() {
 
 			@Override
-			public void onStartUp(User user) {
-				UserManager.getInstance().getAylaChatUser(new UUID(user.getUUID())).checkChannels();
+			public void onFinish() {
+				plugin.debug("Finished checking channels and socialspy");
 			}
 
 			@Override
@@ -53,8 +85,8 @@ public class Main extends JavaPlugin {
 			}
 
 			@Override
-			public void onFinish() {
-				plugin.debug("Finished checking channels and socialspy");
+			public void onStartUp(User user) {
+				UserManager.getInstance().getAylaChatUser(new UUID(user.getUUID())).checkChannels();
 			}
 		});
 
@@ -91,38 +123,6 @@ public class Main extends JavaPlugin {
 
 		plugin.getLogger()
 				.info("Enabled " + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion());
-	}
-
-	public void checkUpdate() {
-		plugin.updater = new Updater(plugin, 55101, false);
-		final Updater.UpdateResult result = plugin.updater.getResult();
-		switch (result) {
-		case FAIL_SPIGOT: {
-			plugin.getLogger().info("Failed to check for update for " + plugin.getName() + "!");
-			break;
-		}
-		case NO_UPDATE: {
-			plugin.getLogger().info(plugin.getName() + " is up to date! Version: " + plugin.updater.getVersion());
-			break;
-		}
-		case UPDATE_AVAILABLE: {
-			plugin.getLogger().info(plugin.getName() + " has an update available! Your Version: "
-					+ plugin.getDescription().getVersion() + " New Version: " + plugin.updater.getVersion());
-			break;
-		}
-		default: {
-			break;
-		}
-		}
-	}
-
-	@Override
-	public void onDisable() {
-		plugin = null;
-	}
-
-	public void debug(String msg) {
-		AdvancedCoreHook.getInstance().debug(msg);
 	}
 
 	public void reload() {

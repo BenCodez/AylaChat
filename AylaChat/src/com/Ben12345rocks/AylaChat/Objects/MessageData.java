@@ -15,24 +15,24 @@ public class MessageData {
 		return channel;
 	}
 
-	public void setChannel(String channel) {
-		this.channel = channel;
+	public String getMessage() {
+		return message;
 	}
 
 	public String getPlayer() {
 		return player;
 	}
 
-	public void setPlayer(String player) {
-		this.player = player;
-	}
-
-	public String getMessage() {
-		return message;
+	public void setChannel(String channel) {
+		this.channel = channel;
 	}
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public void setPlayer(String player) {
+		this.player = player;
 	}
 
 }

@@ -26,23 +26,6 @@ public class Config extends YMLFile {
 		return instance;
 	}
 
-	public Config() {
-		super(new File(Main.plugin.getDataFolder(), "Config.yml"));
-	}
-
-	public void loadValues() {
-		new AnnotationHandler().load(getData(), this);
-	}
-
-	@Override
-	public void onFileCreation() {
-		Main.plugin.saveResource("Config.yml", true);
-	}
-
-	public Set<String> getChannels() {
-		return getData().getConfigurationSection("Channels").getKeys(false);
-	}
-
 	@ConfigDataString(path = "Format.Message.Send", defaultValue = "%player% -> %toSend%: %message%")
 	public String formatMessageSend = "";
 
@@ -76,8 +59,14 @@ public class Config extends YMLFile {
 	@ConfigDataString(path = "Format.JsonButton", defaultValue = "&c[x]")
 	public String formatJsonButton;
 
-	public Set<String> JsonButtonGUI() {
-		return getData().getConfigurationSection("JsonButtonGUI").getKeys(false);
+	public String formatMessageRewards = "Format.Message.Rewards";
+
+	public Config() {
+		super(new File(Main.plugin.getDataFolder(), "Config.yml"));
+	}
+
+	public Set<String> getChannels() {
+		return getData().getConfigurationSection("Channels").getKeys(false);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -85,5 +74,16 @@ public class Config extends YMLFile {
 		return (ArrayList<String>) getData().getList("JsonButtonGUI." + key + ".Commands", new ArrayList<String>());
 	}
 
-	public String formatMessageRewards = "Format.Message.Rewards";
+	public Set<String> JsonButtonGUI() {
+		return getData().getConfigurationSection("JsonButtonGUI").getKeys(false);
+	}
+
+	public void loadValues() {
+		new AnnotationHandler().load(getData(), this);
+	}
+
+	@Override
+	public void onFileCreation() {
+		Main.plugin.saveResource("Config.yml", true);
+	}
 }

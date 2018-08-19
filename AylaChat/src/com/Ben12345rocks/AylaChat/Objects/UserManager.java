@@ -25,6 +25,10 @@ public class UserManager {
 		super();
 	}
 
+	public ArrayList<String> getAllUUIDs() {
+		return com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getAllUUIDs();
+	}
+
 	public User getAylaChatUser(java.util.UUID uuid) {
 		return getAylaChatUser(new UUID(uuid.toString()));
 
@@ -45,9 +49,5 @@ public class UserManager {
 	@SuppressWarnings("deprecation")
 	public User getAylaChatUser(UUID uuid) {
 		return new User(uuid);
-	}
-
-	public ArrayList<String> getAllUUIDs() {
-		return com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getAllUUIDs();
 	}
 }

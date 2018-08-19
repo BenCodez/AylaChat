@@ -42,57 +42,8 @@ public class Channel {
 	}
 
 	/**
-	 * @return the loadMainChannelCommand
-	 */
-	public boolean isLoadMainChannelCommand() {
-		return loadMainChannelCommand;
-	}
-
-	/**
-	 * @return the loadAliasChannelCommands
-	 */
-	public boolean isLoadAliasChannelCommands() {
-		return loadAliasChannelCommands;
-	}
-
-	/**
-	 * @return the aliases
-	 */
-	public ArrayList<String> getAliases() {
-		return aliases;
-	}
-
-	/**
-	 * @param aliases
-	 *            the aliases to set
-	 */
-	public void setAliases(ArrayList<String> aliases) {
-		this.aliases = aliases;
-	}
-
-	public boolean canTalk(Player p) {
-		if (p == null) {
-			return false;
-		}
-		User user = UserManager.getInstance().getAylaChatUser(p);
-		if (user.isMuted()) {
-			user.sendMessage(Config.getInstance().formatMuted);
-			return false;
-		}
-
-		if (permission.isEmpty() || p.hasPermission(permission)) {
-			return true;
-		} else {
-			// no permission
-			p.sendMessage(StringUtils.getInstance().colorize(AdvancedCoreHook.getInstance().getFormatNoPerms()));
-		}
-
-		return false;
-	}
-
-	/**
 	 * See if player can listen to channel
-	 * 
+	 *
 	 * @param reciever
 	 * @param loc
 	 * @return
@@ -121,64 +72,38 @@ public class Channel {
 		return false;
 	}
 
+	public boolean canTalk(Player p) {
+		if (p == null) {
+			return false;
+		}
+		User user = UserManager.getInstance().getAylaChatUser(p);
+		if (user.isMuted()) {
+			user.sendMessage(Config.getInstance().formatMuted);
+			return false;
+		}
+
+		if (permission.isEmpty() || p.hasPermission(permission)) {
+			return true;
+		} else {
+			// no permission
+			p.sendMessage(StringUtils.getInstance().colorize(AdvancedCoreHook.getInstance().getFormatNoPerms()));
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return the aliases
+	 */
+	public ArrayList<String> getAliases() {
+		return aliases;
+	}
+
 	/**
 	 * @return the channelName
 	 */
 	public String getChannelName() {
 		return channelName;
-	}
-
-	/**
-	 * @param channelName
-	 *            the channelName to set
-	 */
-	public void setChannelName(String channelName) {
-		this.channelName = channelName;
-	}
-
-	/**
-	 * @return the format
-	 */
-	public String getFormat() {
-		return format;
-	}
-
-	/**
-	 * @param format
-	 *            the format to set
-	 */
-	public void setFormat(String format) {
-		this.format = format;
-	}
-
-	/**
-	 * @return the permission
-	 */
-	public String getPermission() {
-		return permission;
-	}
-
-	/**
-	 * @param permission
-	 *            the permission to set
-	 */
-	public void setPermission(String permission) {
-		this.permission = permission;
-	}
-
-	/**
-	 * @return the bungeecoord
-	 */
-	public boolean isBungeecoord() {
-		return bungeecoord;
-	}
-
-	/**
-	 * @param bungeecoord
-	 *            the bungeecoord to set
-	 */
-	public void setBungeecoord(boolean bungeecoord) {
-		this.bungeecoord = bungeecoord;
 	}
 
 	/**
@@ -189,42 +114,17 @@ public class Channel {
 	}
 
 	/**
-	 * @param distance
-	 *            the distance to set
+	 * @return the format
 	 */
-	public void setDistance(int distance) {
-		this.distance = distance;
+	public String getFormat() {
+		return format;
 	}
 
 	/**
-	 * @return the autojoin
+	 * @return the permission
 	 */
-	public boolean isAutojoin() {
-		return autojoin;
-	}
-
-	/**
-	 * @param autojoin
-	 *            the autojoin to set
-	 */
-	public void setAutojoin(boolean autojoin) {
-		this.autojoin = autojoin;
-	}
-
-	/**
-	 * @return the defaultChannel
-	 */
-	@Deprecated
-	public boolean isDefaultChannel() {
-		return defaultChannel;
-	}
-
-	/**
-	 * @param defaultChannel
-	 *            the defaultChannel to set
-	 */
-	public void setDefaultChannel(boolean defaultChannel) {
-		this.defaultChannel = defaultChannel;
+	public String getPermission() {
+		return permission;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -288,5 +188,105 @@ public class Channel {
 			}
 		}
 		return players;
+	}
+
+	/**
+	 * @return the autojoin
+	 */
+	public boolean isAutojoin() {
+		return autojoin;
+	}
+
+	/**
+	 * @return the bungeecoord
+	 */
+	public boolean isBungeecoord() {
+		return bungeecoord;
+	}
+
+	/**
+	 * @return the defaultChannel
+	 */
+	@Deprecated
+	public boolean isDefaultChannel() {
+		return defaultChannel;
+	}
+
+	/**
+	 * @return the loadAliasChannelCommands
+	 */
+	public boolean isLoadAliasChannelCommands() {
+		return loadAliasChannelCommands;
+	}
+
+	/**
+	 * @return the loadMainChannelCommand
+	 */
+	public boolean isLoadMainChannelCommand() {
+		return loadMainChannelCommand;
+	}
+
+	/**
+	 * @param aliases
+	 *            the aliases to set
+	 */
+	public void setAliases(ArrayList<String> aliases) {
+		this.aliases = aliases;
+	}
+
+	/**
+	 * @param autojoin
+	 *            the autojoin to set
+	 */
+	public void setAutojoin(boolean autojoin) {
+		this.autojoin = autojoin;
+	}
+
+	/**
+	 * @param bungeecoord
+	 *            the bungeecoord to set
+	 */
+	public void setBungeecoord(boolean bungeecoord) {
+		this.bungeecoord = bungeecoord;
+	}
+
+	/**
+	 * @param channelName
+	 *            the channelName to set
+	 */
+	public void setChannelName(String channelName) {
+		this.channelName = channelName;
+	}
+
+	/**
+	 * @param defaultChannel
+	 *            the defaultChannel to set
+	 */
+	public void setDefaultChannel(boolean defaultChannel) {
+		this.defaultChannel = defaultChannel;
+	}
+
+	/**
+	 * @param distance
+	 *            the distance to set
+	 */
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
+
+	/**
+	 * @param format
+	 *            the format to set
+	 */
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	/**
+	 * @param permission
+	 *            the permission to set
+	 */
+	public void setPermission(String permission) {
+		this.permission = permission;
 	}
 }

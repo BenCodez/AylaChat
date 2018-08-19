@@ -10,9 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Ben12345rocks.AdvancedCore.Objects.CommandHandler;
-import com.Ben12345rocks.AdvancedCore.Objects.RewardBuilder;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandle;
 import com.Ben12345rocks.AdvancedCore.Objects.TabCompleteHandler;
+import com.Ben12345rocks.AdvancedCore.Rewards.RewardBuilder;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
@@ -288,13 +288,13 @@ public class CommandLoader {
 				new TabCompleteHandle("(Channel)", ChannelHandler.getInstance().getChannelNames()) {
 
 					@Override
-					public void updateReplacements() {
-
+					public void reload() {
+						setReplace(ChannelHandler.getInstance().getChannelNames());
 					}
 
 					@Override
-					public void reload() {
-						setReplace(ChannelHandler.getInstance().getChannelNames());
+					public void updateReplacements() {
+
 					}
 				});
 
@@ -384,25 +384,25 @@ public class CommandLoader {
 		}
 	}
 
-	private void setCommand(String command, CommandHandler cmdHandle) {
-		try {
-			CommandExecutor handle = plugin.getCommand(command).getExecutor();
-			if (handle != null) {
-				if (handle instanceof CommandAliasHandle) {
-					CommandAliasHandle exec = (CommandAliasHandle) plugin.getCommand(command).getExecutor();
-					exec.add(cmdHandle);
-					AliasHandleTabCompleter tab = (AliasHandleTabCompleter) plugin.getCommand(command)
-							.getTabCompleter();
-					tab.add(cmdHandle);
-				} else {
-					plugin.getCommand(command).setExecutor(new CommandAliasHandle(cmdHandle));
-					plugin.getCommand(command).setTabCompleter(new AliasHandleTabCompleter().add(cmdHandle));
+	public void messageReceived(String sender, String toSend, String msg) {
+		toSend = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(toSend);
+		sender = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(sender);
+		HashMap<String, String> placeholders = new HashMap<String, String>();
+		placeholders.put("player", toSend);
+		placeholders.put("fromsender", sender);
+		placeholders.put("message", msg);
+		String format = StringUtils.getInstance().replacePlaceHolder(Config.getInstance().formatMessageReceive,
+				placeholders);
 
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		Player p = Bukkit.getPlayer(toSend);
+		if (p != null) {
+			p.sendMessage(format);
+			UserManager.getInstance().getAylaChatUser(p).setlastMessageSender(sender);
 		}
+
+		new RewardBuilder(Config.getInstance().getData(), Config.getInstance().formatMessageRewards).send(p);
+
+		ChannelHandler.getInstance().socialSpyMessage(format);
 
 	}
 
@@ -436,25 +436,25 @@ public class CommandLoader {
 
 	}
 
-	public void messageReceived(String sender, String toSend, String msg) {
-		toSend = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(toSend);
-		sender = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(sender);
-		HashMap<String, String> placeholders = new HashMap<String, String>();
-		placeholders.put("player", toSend);
-		placeholders.put("fromsender", sender);
-		placeholders.put("message", msg);
-		String format = StringUtils.getInstance().replacePlaceHolder(Config.getInstance().formatMessageReceive,
-				placeholders);
+	private void setCommand(String command, CommandHandler cmdHandle) {
+		try {
+			CommandExecutor handle = plugin.getCommand(command).getExecutor();
+			if (handle != null) {
+				if (handle instanceof CommandAliasHandle) {
+					CommandAliasHandle exec = (CommandAliasHandle) plugin.getCommand(command).getExecutor();
+					exec.add(cmdHandle);
+					AliasHandleTabCompleter tab = (AliasHandleTabCompleter) plugin.getCommand(command)
+							.getTabCompleter();
+					tab.add(cmdHandle);
+				} else {
+					plugin.getCommand(command).setExecutor(new CommandAliasHandle(cmdHandle));
+					plugin.getCommand(command).setTabCompleter(new AliasHandleTabCompleter().add(cmdHandle));
 
-		Player p = Bukkit.getPlayer(toSend);
-		if (p != null) {
-			p.sendMessage(format);
-			UserManager.getInstance().getAylaChatUser(p).setlastMessageSender(sender);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		new RewardBuilder(Config.getInstance().getData(), Config.getInstance().formatMessageRewards).send(p);
-
-		ChannelHandler.getInstance().socialSpyMessage(format);
 
 	}
 }

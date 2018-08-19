@@ -29,6 +29,10 @@ public class CommandAliasHandle implements CommandExecutor {
 		this.cmdHandles.add(cmdHandle);
 	}
 
+	public void add(CommandHandler cmdHandle) {
+		cmdHandles.add(cmdHandle);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -56,9 +60,5 @@ public class CommandAliasHandle implements CommandExecutor {
 		sender.sendMessage(ChatColor.RED + "No valid arguments, see /alyachat help!");
 
 		return true;
-	}
-
-	public void add(CommandHandler cmdHandle) {
-		cmdHandles.add(cmdHandle);
 	}
 }

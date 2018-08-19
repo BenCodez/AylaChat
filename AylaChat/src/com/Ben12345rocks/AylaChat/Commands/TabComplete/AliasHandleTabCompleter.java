@@ -28,6 +28,11 @@ public class AliasHandleTabCompleter implements TabCompleter {
 	/** The cmd handle. */
 	public ArrayList<CommandHandler> cmdHandles = new ArrayList<CommandHandler>();
 
+	public AliasHandleTabCompleter add(CommandHandler cmd) {
+		cmdHandles.add(cmd);
+		return this;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -82,11 +87,6 @@ public class AliasHandleTabCompleter implements TabCompleter {
 		Collections.sort(tab, String.CASE_INSENSITIVE_ORDER);
 
 		return tab;
-	}
-
-	public AliasHandleTabCompleter add(CommandHandler cmd) {
-		cmdHandles.add(cmd);
-		return this;
 	}
 
 }
