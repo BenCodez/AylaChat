@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
 
-import com.Ben12345rocks.AdvancedCore.Objects.UUID;
+import com.Ben12345rocks.AdvancedCore.UserManager.UUID;
 import com.Ben12345rocks.AylaChat.Main;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class User.
  */
-public class User extends com.Ben12345rocks.AdvancedCore.Objects.User {
+public class User extends com.Ben12345rocks.AdvancedCore.UserManager.User {
 
 	/** The plugin. */
 	static Main plugin = Main.plugin;
