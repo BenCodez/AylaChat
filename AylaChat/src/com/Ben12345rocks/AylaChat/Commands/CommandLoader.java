@@ -26,6 +26,7 @@ import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Main;
 import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliasHandle;
 import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliases;
+import com.Ben12345rocks.AylaChat.Commands.GUI.EditingGUI;
 import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasHandleTabCompleter;
 import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasesTabCompleter;
 import com.Ben12345rocks.AylaChat.Config.Config;
@@ -247,6 +248,15 @@ public class CommandLoader {
 							toSend = UserManager.getInstance().getAylaChatUser(sender.getName()).getlastMessageSender();
 						}
 						CommandLoader.this.sendMessage(sender, toSend, ArrayUtils.getInstance().makeString(1, args));
+					}
+				});
+
+		plugin.commands.add(
+				new CommandHandler(new String[] { "ChannelEdit" }, "AylaChat.ChannelEdit", "Edit channels", false) {
+
+					@Override
+					public void execute(CommandSender sender, String[] args) {
+						EditingGUI.getInstance().openGUI((Player) sender);
 					}
 				});
 

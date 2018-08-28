@@ -295,4 +295,14 @@ public class ChannelHandler {
 		}
 	}
 
+	public void create(String value) {
+		Config.getInstance().getData().createSection("Channels." + value);
+		Config.getInstance().saveData();
+	}
+
+	public void setValue(String channelName, String key, Object value) {
+		Config.getInstance().getData().set("Channels." + channelName + "." + key, value);
+		Config.getInstance().saveData();
+	}
+
 }

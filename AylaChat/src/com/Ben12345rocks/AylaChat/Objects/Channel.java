@@ -26,9 +26,11 @@ public class Channel {
 	private ArrayList<String> aliases;
 	private boolean loadMainChannelCommand;
 	private boolean loadAliasChannelCommands;
+	private ConfigurationSection data;
 
 	@SuppressWarnings("unchecked")
 	public Channel(ConfigurationSection data, String channelName) {
+		this.data = data;
 		this.channelName = channelName;
 		format = data.getString("Format");
 		permission = data.getString("Permission");
@@ -39,6 +41,13 @@ public class Channel {
 		aliases = (ArrayList<String>) data.getList("Aliases", new ArrayList<String>());
 		loadMainChannelCommand = data.getBoolean("LoadMainChannelCommand", true);
 		loadAliasChannelCommands = data.getBoolean("LoadAliasChannelCommands", true);
+	}
+
+	/**
+	 * @return the data
+	 */
+	public ConfigurationSection getData() {
+		return data;
 	}
 
 	/**
@@ -288,5 +297,9 @@ public class Channel {
 	 */
 	public void setPermission(String permission) {
 		this.permission = permission;
+	}
+
+	public void setValue(String key, Object value) {
+		ChannelHandler.getInstance().setValue(channelName, key, value);
 	}
 }
