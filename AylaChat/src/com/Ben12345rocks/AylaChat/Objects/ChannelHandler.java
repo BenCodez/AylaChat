@@ -32,7 +32,6 @@ public class ChannelHandler {
 		return instance;
 	}
 
-	@SuppressWarnings("unused")
 	private Main plugin = Main.plugin;
 
 	private ArrayList<String> socialSpyPlayers = new ArrayList<String>();
@@ -73,6 +72,22 @@ public class ChannelHandler {
 		}
 	}
 
+	public void clearChatAll(Player player, Channel channel) {
+		for (Player p : channel.getPlayers(player)) {
+			clearChat(p);
+		}
+	}
+
+	/*
+	 * public void removedMessage(Player player, Channel channel) {
+	 * clearChatAll(player, channel); ArrayList<String> messages = new
+	 * ArrayList<String>(); for (Entry<Integer, MessageData> entry :
+	 * messageHistory.entrySet()) { for (Player p : channel.getPlayers(player)) {
+	 * p.sendMessage(entry.getValue().getMessage()); } }
+	 * 
+	 * }
+	 */
+
 	public void forceChat(String playerName, Channel ch, String msg, int hash) {
 		Player player = Bukkit.getPlayer(playerName);
 		synchronized (ob) {
@@ -102,8 +117,8 @@ public class ChannelHandler {
 	public String format(String msg, Channel ch, Player player, int hash) {
 		HashMap<String, String> placeholders = new HashMap<String, String>();
 		if (player != null) {
-			placeholders.put("player", player.getName());
-			placeholders.put("nickname", player.getDisplayName());
+			placeholders.put("player", getPlayerJson(player.getName()));
+			placeholders.put("nickname", getPlayerJson(player.getDisplayName()));
 			placeholders.put("group", AdvancedCoreHook.getInstance().getPerms().getPrimaryGroup(player));
 		}
 		placeholders.put("message", msg);
@@ -115,7 +130,10 @@ public class ChannelHandler {
 		message = StringUtils.getInstance().colorize(message);
 
 		return message;
+	}
 
+	private String getPlayerJson(String name) {
+		return "[Text=\"" + name + "\",suggest_command=\"/msg " + name + "\"]";
 	}
 
 	private int generateHash() {

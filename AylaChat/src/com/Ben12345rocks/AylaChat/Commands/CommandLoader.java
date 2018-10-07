@@ -280,8 +280,10 @@ public class CommandLoader {
 						public void onClick(ClickEvent event) {
 							Player player = Bukkit.getPlayer(data.getPlayer());
 							if (player != null) {
-								MiscUtils.getInstance().executeConsoleCommands(player,
-										Config.getInstance().getJsonButtonGUIKeyCommands(key), placeholders);
+								ArrayList<String> cmds = Config.getInstance().getJsonButtonGUIKeyCommands(key);
+								if (!cmds.isEmpty()) {
+									MiscUtils.getInstance().executeConsoleCommands(player, cmds, placeholders);
+								}
 							} else {
 								plugin.sendPluginMessage(event.getPlayer(), "GUICommand", data.getPlayer(), key,
 										data.getChannel(), data.getMessage());
@@ -293,6 +295,18 @@ public class CommandLoader {
 				inv.openInventory((Player) sender);
 			}
 		});
+
+		/*
+		 * plugin.commands.add(new CommandHandler(new String[] { "RemoveMessage",
+		 * "(Number)" }, "AylaChat.RemoveMessage", "Remove Message", false) {
+		 * 
+		 * @Override public void execute(CommandSender sender, String[] args) {
+		 * MessageData data =
+		 * ChannelHandler.getInstance().getMessageHistory().get(Integer.parseInt(args[1]
+		 * )); data.setMessage("&cMessage removed");
+		 * ChannelHandler.getInstance().removedMessage(Bukkit.getPlayer(data.getPlayer()
+		 * ), ChannelHandler.getInstance().getChannel(data.getChannel())); } });
+		 */
 
 		TabCompleteHandler.getInstance().addTabCompleteOption(
 				new TabCompleteHandle("(Channel)", ChannelHandler.getInstance().getChannelNames()) {
