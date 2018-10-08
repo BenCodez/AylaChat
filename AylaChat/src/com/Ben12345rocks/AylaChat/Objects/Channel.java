@@ -95,7 +95,8 @@ public class Channel {
 			return true;
 		} else {
 			// no permission
-			p.sendMessage(StringUtils.getInstance().colorize(AdvancedCoreHook.getInstance().getFormatNoPerms()));
+			p.sendMessage(
+					StringUtils.getInstance().colorize(AdvancedCoreHook.getInstance().getOptions().getFormatNoPerms()));
 		}
 
 		return false;
