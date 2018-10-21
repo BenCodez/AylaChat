@@ -55,7 +55,7 @@ public class CommandAylaChat implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-		for (CommandHandler commandHandler : plugin.commands) {
+		for (CommandHandler commandHandler : plugin.getCommands()) {
 			if (commandHandler.runCommand(sender, args)) {
 				return true;
 			}

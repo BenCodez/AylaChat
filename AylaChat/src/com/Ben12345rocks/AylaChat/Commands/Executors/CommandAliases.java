@@ -29,7 +29,6 @@ public class CommandAliases implements CommandExecutor {
 
 	/*
 	 * (non-Javadoc)
-	 *
 	 * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.
 	 * CommandSender , org.bukkit.command.Command, java.lang.String,
 	 * java.lang.String[])
@@ -47,7 +46,7 @@ public class CommandAliases implements CommandExecutor {
 
 		ArrayList<CommandHandler> handles = new ArrayList<CommandHandler>();
 
-		handles.addAll(plugin.commands);
+		handles.addAll(plugin.getCommands());
 
 		for (CommandHandler cmdHandle : handles) {
 			if (cmdHandle.getArgs().length > args.length) {

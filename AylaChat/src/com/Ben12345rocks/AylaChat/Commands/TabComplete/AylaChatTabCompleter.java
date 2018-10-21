@@ -25,7 +25,6 @@ public class AylaChatTabCompleter implements TabCompleter {
 
 	/*
 	 * (non-Javadoc)
-	 *
 	 * @see org.bukkit.command.TabCompleter#onTabComplete(org.bukkit.command.
 	 * CommandSender, org.bukkit.command.Command, java.lang.String,
 	 * java.lang.String[])
@@ -37,8 +36,8 @@ public class AylaChatTabCompleter implements TabCompleter {
 
 		Set<String> cmds = new HashSet<String>();
 
-		cmds.addAll(
-				TabCompleteHandler.getInstance().getTabCompleteOptions(plugin.commands, sender, args, args.length - 1));
+		cmds.addAll(TabCompleteHandler.getInstance().getTabCompleteOptions(plugin.getCommands(), sender, args,
+				args.length - 1));
 
 		for (String str : cmds) {
 			if (StringUtils.getInstance().startsWithIgnoreCase(str, args[args.length - 1])) {

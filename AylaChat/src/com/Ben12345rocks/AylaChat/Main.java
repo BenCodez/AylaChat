@@ -23,10 +23,15 @@ import com.Ben12345rocks.AylaChat.Listeners.PlayerChatListener;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Main extends JavaPlugin {
 
 	public static Main plugin;
-	public ArrayList<CommandHandler> commands;
+	@Getter
+	@Setter
+	private ArrayList<CommandHandler> commands;
 	private Updater updater;
 
 	public void checkUpdate() {

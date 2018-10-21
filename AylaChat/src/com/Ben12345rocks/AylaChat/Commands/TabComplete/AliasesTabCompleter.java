@@ -51,7 +51,7 @@ public class AliasesTabCompleter implements TabCompleter {
 
 		ArrayList<CommandHandler> cmdHandlers = new ArrayList<CommandHandler>();
 
-		cmdHandlers.addAll(plugin.commands);
+		cmdHandlers.addAll(plugin.getCommands());
 
 		ConcurrentHashMap<String, ArrayList<String>> tabCompletes = TabCompleteHandler.getInstance()
 				.getTabCompleteOptions();
