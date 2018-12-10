@@ -7,7 +7,10 @@ import org.bukkit.entity.Player;
 
 import com.Ben12345rocks.AdvancedCore.Util.EditGUI.EditGUI;
 import com.Ben12345rocks.AdvancedCore.Util.EditGUI.EditGUIButton;
-import com.Ben12345rocks.AdvancedCore.Util.EditGUI.EditGUIValueType;
+import com.Ben12345rocks.AdvancedCore.Util.EditGUI.ValueTypes.EditGUIValueBoolean;
+import com.Ben12345rocks.AdvancedCore.Util.EditGUI.ValueTypes.EditGUIValueList;
+import com.Ben12345rocks.AdvancedCore.Util.EditGUI.ValueTypes.EditGUIValueNumber;
+import com.Ben12345rocks.AdvancedCore.Util.EditGUI.ValueTypes.EditGUIValueString;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
@@ -45,16 +48,15 @@ public class EditingGUI {
 		EditGUI inv = new EditGUI("Channel: " + channel.getChannelName());
 
 		for (final String str : new String[] { "Format", "Permission" }) {
-			inv.addButton(new EditGUIButton(new ItemBuilder(Material.PAPER), str, channel.getData().getString(str, ""),
-					EditGUIValueType.STRING) {
+			inv.addButton(new EditGUIButton(new EditGUIValueString(str, channel.getData().getString(str, "")) {
 
 				@Override
-				public void setValue(Player player, Object value) {
+				public void setValue(Player player, String value) {
 					channel.setValue(str, value);
 					player.sendMessage(StringUtils.getInstance().colorize("&cSetting " + str + " to " + value));
 					plugin.reload();
 				}
-			});
+			}));
 		}
 
 		for (final String str : new String[] { "Bungeecoord", "AutoJoin", "LoadMainChannelCommand",
@@ -64,42 +66,40 @@ public class EditingGUI {
 				material = Material.EMERALD_BLOCK;
 			}
 
-			inv.addButton(new EditGUIButton(new ItemBuilder(material), str, channel.getData().getBoolean(str),
-					EditGUIValueType.BOOLEAN) {
+			inv.addButton(new EditGUIButton(new ItemBuilder(material),
+					new EditGUIValueBoolean(str, channel.getData().getBoolean(str)) {
 
-				@Override
-				public void setValue(Player player, Object value) {
-					channel.setValue(str, value);
-					player.sendMessage(StringUtils.getInstance().colorize("&cSetting " + str + " to " + value));
-					plugin.reload();
-				}
-			});
+						@Override
+						public void setValue(Player player, boolean value) {
+							channel.setValue(str, value);
+							player.sendMessage(StringUtils.getInstance().colorize("&cSetting " + str + " to " + value));
+							plugin.reload();
+						}
+					}));
 		}
 
 		for (final String str : new String[] { "Distance" }) {
-
-			inv.addButton(new EditGUIButton(new ItemBuilder(Material.STONE), str, channel.getData().getInt(str),
-					EditGUIValueType.NUMBER) {
+			inv.addButton(new EditGUIButton(new EditGUIValueNumber(str, channel.getData().getInt(str)) {
 
 				@Override
-				public void setValue(Player player, Object value) {
-					channel.setValue(str, (int) value);
-					player.sendMessage(StringUtils.getInstance().colorize("&cSetting " + str + " to " + value));
+				public void setValue(Player player, Number num) {
+					channel.setValue(str, num.intValue());
+					player.sendMessage(
+							StringUtils.getInstance().colorize("&cSetting " + str + " to " + num.intValue()));
 					plugin.reload();
 				}
-			});
+			}));
 		}
 
-		inv.addButton(new EditGUIButton(new ItemBuilder(Material.BOOK), "Aliases", channel.getAliases(),
-				EditGUIValueType.LIST) {
+		inv.addButton(new EditGUIButton(new ItemBuilder(Material.BOOK),
+				new EditGUIValueList("Aliases", channel.getAliases()) {
 
-			@SuppressWarnings("unchecked")
-			@Override
-			public void setValue(Player player, Object value) {
-				channel.setValue("Aliases", (ArrayList<String>) value);
-				player.sendMessage("&cSetting aliases");
-			}
-		});
+					@Override
+					public void setValue(Player player, ArrayList<String> value) {
+						channel.setValue("Aliases", (ArrayList<String>) value);
+						player.sendMessage("&cSetting aliases");
+					}
+				}));
 
 		inv.openInventory(player);
 
