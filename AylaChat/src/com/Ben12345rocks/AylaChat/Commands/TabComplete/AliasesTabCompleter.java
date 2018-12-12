@@ -30,7 +30,6 @@ public class AliasesTabCompleter implements TabCompleter {
 
 	/*
 	 * (non-Javadoc)
-	 *
 	 * @see org.bukkit.command.TabCompleter#onTabComplete(org.bukkit.command.
 	 * CommandSender, org.bukkit.command.Command, java.lang.String,
 	 * java.lang.String[])

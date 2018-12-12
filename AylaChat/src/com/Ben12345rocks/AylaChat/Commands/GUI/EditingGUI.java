@@ -96,7 +96,7 @@ public class EditingGUI {
 
 					@Override
 					public void setValue(Player player, ArrayList<String> value) {
-						channel.setValue("Aliases", (ArrayList<String>) value);
+						channel.setValue("Aliases", value);
 						player.sendMessage("&cSetting aliases");
 					}
 				}));

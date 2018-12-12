@@ -44,13 +44,6 @@ public class Channel {
 	}
 
 	/**
-	 * @return the data
-	 */
-	public ConfigurationSection getData() {
-		return data;
-	}
-
-	/**
 	 * See if player can listen to channel
 	 *
 	 * @param reciever
@@ -114,6 +107,13 @@ public class Channel {
 	 */
 	public String getChannelName() {
 		return channelName;
+	}
+
+	/**
+	 * @return the data
+	 */
+	public ConfigurationSection getData() {
+		return data;
 	}
 
 	/**

@@ -38,22 +38,22 @@ public class Main extends JavaPlugin {
 		plugin.updater = new Updater(plugin, 55101, false);
 		final Updater.UpdateResult result = plugin.updater.getResult();
 		switch (result) {
-		case FAIL_SPIGOT: {
-			plugin.getLogger().info("Failed to check for update for " + plugin.getName() + "!");
-			break;
-		}
-		case NO_UPDATE: {
-			plugin.getLogger().info(plugin.getName() + " is up to date! Version: " + plugin.updater.getVersion());
-			break;
-		}
-		case UPDATE_AVAILABLE: {
-			plugin.getLogger().info(plugin.getName() + " has an update available! Your Version: "
-					+ plugin.getDescription().getVersion() + " New Version: " + plugin.updater.getVersion());
-			break;
-		}
-		default: {
-			break;
-		}
+			case FAIL_SPIGOT: {
+				plugin.getLogger().info("Failed to check for update for " + plugin.getName() + "!");
+				break;
+			}
+			case NO_UPDATE: {
+				plugin.getLogger().info(plugin.getName() + " is up to date! Version: " + plugin.updater.getVersion());
+				break;
+			}
+			case UPDATE_AVAILABLE: {
+				plugin.getLogger().info(plugin.getName() + " has an update available! Your Version: "
+						+ plugin.getDescription().getVersion() + " New Version: " + plugin.updater.getVersion());
+				break;
+			}
+			default: {
+				break;
+			}
 		}
 	}
 

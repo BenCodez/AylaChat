@@ -174,8 +174,8 @@ public class CommandLoader {
 			}
 		});
 
-		plugin.getCommands().add(new CommandHandler(new String[] { "ClearChat", "(Player)" }, "AylaChat.ClearChat.Player",
-				"Clear Chat for a specific player") {
+		plugin.getCommands().add(new CommandHandler(new String[] { "ClearChat", "(Player)" },
+				"AylaChat.ClearChat.Player", "Clear Chat for a specific player") {
 
 			@Override
 			public void execute(CommandSender sender, String[] args) {
@@ -224,21 +224,22 @@ public class CommandLoader {
 			}
 		});
 
-		plugin.getCommands().add(new CommandHandler(new String[] { "Mute", "(Player)" }, "AylaChat.Mute", "Mute player") {
+		plugin.getCommands()
+				.add(new CommandHandler(new String[] { "Mute", "(Player)" }, "AylaChat.Mute", "Mute player") {
 
-			@Override
-			public void execute(CommandSender sender, String[] args) {
-				User user = UserManager.getInstance().getAylaChatUser(args[1]);
-				if (user.isMuted()) {
-					user.unMute();
-					sendMessage(sender, "&cUnmuted " + user.getPlayerName());
-				} else {
-					user.mute();
-					sendMessage(sender, "&cMuted " + user.getPlayerName());
-				}
-				plugin.sendPluginMessage(user.getPlayer(), "Mute", user.getPlayerName(), "" + user.isMuted());
-			}
-		});
+					@Override
+					public void execute(CommandSender sender, String[] args) {
+						User user = UserManager.getInstance().getAylaChatUser(args[1]);
+						if (user.isMuted()) {
+							user.unMute();
+							sendMessage(sender, "&cUnmuted " + user.getPlayerName());
+						} else {
+							user.mute();
+							sendMessage(sender, "&cMuted " + user.getPlayerName());
+						}
+						plugin.sendPluginMessage(user.getPlayer(), "Mute", user.getPlayerName(), "" + user.isMuted());
+					}
+				});
 
 		plugin.getCommands().add(
 				new CommandHandler(new String[] { "Msg", "(Player)", "(List)" }, "AylaChat.Msg", "Msg other players") {

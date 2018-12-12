@@ -84,9 +84,13 @@ public class ChannelHandler {
 	 * ArrayList<String>(); for (Entry<Integer, MessageData> entry :
 	 * messageHistory.entrySet()) { for (Player p : channel.getPlayers(player)) {
 	 * p.sendMessage(entry.getValue().getMessage()); } }
-	 * 
 	 * }
 	 */
+
+	public void create(String value) {
+		Config.getInstance().getData().createSection("Channels." + value);
+		Config.getInstance().saveData();
+	}
 
 	public void forceChat(String playerName, Channel ch, String msg, int hash) {
 		Player player = Bukkit.getPlayer(playerName);
@@ -130,10 +134,6 @@ public class ChannelHandler {
 		message = StringUtils.getInstance().colorize(message);
 
 		return message;
-	}
-
-	private String getPlayerJson(String name) {
-		return "[Text=\"" + name + "\",suggest_command=\"/msg " + name + "\"]";
 	}
 
 	private int generateHash() {
@@ -194,6 +194,10 @@ public class ChannelHandler {
 
 	public LinkedHashMap<Integer, MessageData> getMessageHistory() {
 		return messageHistory;
+	}
+
+	private String getPlayerJson(String name) {
+		return "[Text=\"" + name + "\",suggest_command=\"/msg " + name + "\"]";
 	}
 
 	/**
@@ -302,6 +306,11 @@ public class ChannelHandler {
 		}
 	}
 
+	public void setValue(String channelName, String key, Object value) {
+		Config.getInstance().getData().set("Channels." + channelName + "." + key, value);
+		Config.getInstance().saveData();
+	}
+
 	public void socialSpyMessage(String msg) {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			User user = UserManager.getInstance().getAylaChatUser(p);
@@ -311,16 +320,6 @@ public class ChannelHandler {
 				user.sendMessage(format);
 			}
 		}
-	}
-
-	public void create(String value) {
-		Config.getInstance().getData().createSection("Channels." + value);
-		Config.getInstance().saveData();
-	}
-
-	public void setValue(String channelName, String key, Object value) {
-		Config.getInstance().getData().set("Channels." + channelName + "." + key, value);
-		Config.getInstance().saveData();
 	}
 
 }
