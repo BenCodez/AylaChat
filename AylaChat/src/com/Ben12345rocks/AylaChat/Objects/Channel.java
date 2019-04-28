@@ -48,7 +48,7 @@ public class Channel {
 	 *
 	 * @param reciever
 	 * @param loc
-	 * @return
+	 * @return true if the player can hear
 	 */
 	public boolean canHear(Player reciever, Location loc) {
 
