@@ -66,6 +66,8 @@ public class Main extends AdvancedCorePlugin {
 		if (Config.getInstance().useBungeeCoord) {
 			registerBungeeChannels();
 		}
+		
+		PluginUtils.getInstance().registerEvents(new PlayerChatListener(plugin), plugin);
 
 		CommandLoader.getInstance().load();
 
@@ -94,15 +96,13 @@ public class Main extends AdvancedCorePlugin {
 	}
 
 	@Override
-	public void onLoad() {
+	public void onPreLoad() {
 		plugin = this;
 
 		Config.getInstance().setup();
 		Config.getInstance().loadValues();
 
 		ChannelHandler.getInstance().load();
-
-		PluginUtils.getInstance().registerEvents(new PlayerChatListener(plugin), plugin);
 
 		addUserStartup(new UserStartup() {
 
