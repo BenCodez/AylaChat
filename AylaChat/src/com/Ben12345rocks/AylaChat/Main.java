@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
+import com.Ben12345rocks.AdvancedCore.AdvancedCorePlugin;
 import com.Ben12345rocks.AdvancedCore.CommandAPI.CommandHandler;
 import com.Ben12345rocks.AdvancedCore.UserManager.UUID;
 import com.Ben12345rocks.AdvancedCore.UserManager.User;
@@ -26,7 +25,7 @@ import com.Ben12345rocks.AylaChat.Objects.UserManager;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Main extends JavaPlugin {
+public class Main extends AdvancedCorePlugin {
 
 	public static Main plugin;
 	@Getter
@@ -57,51 +56,15 @@ public class Main extends JavaPlugin {
 		}
 	}
 
-	public void debug(String msg) {
-		AdvancedCoreHook.getInstance().debug(msg);
-	}
-
 	@Override
-	public void onDisable() {
+	public void onUnLoad() {
 		plugin = null;
 	}
 
 	@Override
-	public void onEnable() {
-		plugin = this;
-
-		Config.getInstance().setup();
-		Config.getInstance().loadValues();
-
-		ChannelHandler.getInstance().load();
-
-		PluginUtils.getInstance().registerEvents(new PlayerChatListener(plugin), plugin);
-
-		AdvancedCoreHook.getInstance().addUserStartup(new UserStartup() {
-
-			@Override
-			public void onFinish() {
-				plugin.debug("Finished checking channels and socialspy");
-			}
-
-			@Override
-			public void onStart() {
-				plugin.debug("Checking channels and socialspy");
-			}
-
-			@Override
-			public void onStartUp(User user) {
-				UserManager.getInstance().getAylaChatUser(new UUID(user.getUUID())).checkChannels();
-			}
-		});
-
-		AdvancedCoreHook.getInstance().setJenkinsSite("ben12345rocks.com");
-		AdvancedCoreHook.getInstance().setConfigData(Config.getInstance().getData());
-
-		AdvancedCoreHook.getInstance().loadHook(plugin);
-
+	public void onPostLoad() {
 		if (Config.getInstance().useBungeeCoord) {
-			AdvancedCoreHook.getInstance().registerBungeeChannels();
+			registerBungeeChannels();
 		}
 
 		CommandLoader.getInstance().load();
@@ -130,12 +93,45 @@ public class Main extends JavaPlugin {
 				.info("Enabled " + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion());
 	}
 
-	public void reload() {
-		Config.getInstance().reloadData();
-		AdvancedCoreHook.getInstance().setConfigData(Config.getInstance().getData());
+	@Override
+	public void onLoad() {
+		plugin = this;
+
+		Config.getInstance().setup();
+		Config.getInstance().loadValues();
 
 		ChannelHandler.getInstance().load();
-		AdvancedCoreHook.getInstance().reload();
+
+		PluginUtils.getInstance().registerEvents(new PlayerChatListener(plugin), plugin);
+
+		addUserStartup(new UserStartup() {
+
+			@Override
+			public void onFinish() {
+				plugin.debug("Finished checking channels and socialspy");
+			}
+
+			@Override
+			public void onStart() {
+				plugin.debug("Checking channels and socialspy");
+			}
+
+			@Override
+			public void onStartUp(User user) {
+				UserManager.getInstance().getAylaChatUser(new UUID(user.getUUID())).checkChannels();
+			}
+		});
+
+		setJenkinsSite("ben12345rocks.com");
+		setConfigData(Config.getInstance().getData());
+	}
+
+	public void reload() {
+		Config.getInstance().reloadData();
+		setConfigData(Config.getInstance().getData());
+
+		ChannelHandler.getInstance().load();
+		super.reload();
 	}
 
 	public void sendPluginMessage(Player player, String channel, String... args) {

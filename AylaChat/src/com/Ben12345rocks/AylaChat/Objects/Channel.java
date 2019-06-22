@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
+import com.Ben12345rocks.AdvancedCore.AdvancedCorePlugin;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AylaChat.Config.Config;
 import com.massivecraft.factions.entity.MPlayer;
@@ -89,7 +89,7 @@ public class Channel {
 		} else {
 			// no permission
 			p.sendMessage(
-					StringUtils.getInstance().colorize(AdvancedCoreHook.getInstance().getOptions().getFormatNoPerms()));
+					StringUtils.getInstance().colorize(AdvancedCorePlugin.getInstance().getOptions().getFormatNoPerms()));
 		}
 
 		return false;

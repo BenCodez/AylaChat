@@ -10,7 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
 
-import com.Ben12345rocks.AdvancedCore.AdvancedCoreHook;
+import com.Ben12345rocks.AdvancedCore.AdvancedCorePlugin;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessage;
@@ -105,7 +105,7 @@ public class ChannelHandler {
 			for (Player p : players) {
 				if (p != null) {
 					if (ch.canHear(p, p.getLocation())) {
-						AdvancedCoreHook.getInstance().getServerHandle().sendMessage(p, addJsonButton(p, msg, hash));
+						AdvancedCorePlugin.getInstance().getServerHandle().sendMessage(p, addJsonButton(p, msg, hash));
 					}
 				}
 			}
@@ -123,7 +123,7 @@ public class ChannelHandler {
 		if (player != null) {
 			placeholders.put("player", getPlayerJson(player.getName()));
 			placeholders.put("nickname", getPlayerJson(player.getDisplayName()));
-			placeholders.put("group", AdvancedCoreHook.getInstance().getPerms().getPrimaryGroup(player));
+			placeholders.put("group", AdvancedCorePlugin.getInstance().getPerms().getPrimaryGroup(player));
 		}
 		placeholders.put("message", msg);
 
