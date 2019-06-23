@@ -19,6 +19,7 @@ import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAylaChat;
 import com.Ben12345rocks.AylaChat.Commands.TabComplete.AylaChatTabCompleter;
 import com.Ben12345rocks.AylaChat.Config.Config;
 import com.Ben12345rocks.AylaChat.Listeners.PlayerChatListener;
+import com.Ben12345rocks.AylaChat.Listeners.PlayerJoinListener;
 import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
 import com.Ben12345rocks.AylaChat.Objects.UserManager;
 
@@ -66,8 +67,9 @@ public class Main extends AdvancedCorePlugin {
 		if (Config.getInstance().useBungeeCoord) {
 			registerBungeeChannels();
 		}
-		
+
 		PluginUtils.getInstance().registerEvents(new PlayerChatListener(plugin), plugin);
+		PluginUtils.getInstance().registerEvents(new PlayerJoinListener(), plugin);
 
 		CommandLoader.getInstance().load();
 
@@ -126,6 +128,7 @@ public class Main extends AdvancedCorePlugin {
 		setConfigData(Config.getInstance().getData());
 	}
 
+	@Override
 	public void reload() {
 		Config.getInstance().reloadData();
 		setConfigData(Config.getInstance().getData());
