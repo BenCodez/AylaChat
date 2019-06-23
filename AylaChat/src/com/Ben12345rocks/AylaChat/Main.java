@@ -134,7 +134,7 @@ public class Main extends AdvancedCorePlugin {
 		setConfigData(Config.getInstance().getData());
 
 		ChannelHandler.getInstance().load();
-		super.reload();
+		reloadAdvancedCore();
 	}
 
 	public void sendPluginMessage(Player player, String channel, String... args) {
