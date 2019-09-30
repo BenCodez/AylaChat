@@ -15,7 +15,7 @@ import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
 import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
+import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.InputMethod;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.ValueRequestBuilder;
 import com.Ben12345rocks.AdvancedCore.Util.ValueRequest.Listeners.StringListener;
@@ -53,7 +53,7 @@ public class EditingGUI {
 				@Override
 				public void setValue(Player player, String value) {
 					channel.setValue(str, value);
-					player.sendMessage(StringUtils.getInstance().colorize("&cSetting " + str + " to " + value));
+					player.sendMessage(StringParser.getInstance().colorize("&cSetting " + str + " to " + value));
 					plugin.reload();
 				}
 			}));
@@ -72,7 +72,7 @@ public class EditingGUI {
 						@Override
 						public void setValue(Player player, boolean value) {
 							channel.setValue(str, value);
-							player.sendMessage(StringUtils.getInstance().colorize("&cSetting " + str + " to " + value));
+							player.sendMessage(StringParser.getInstance().colorize("&cSetting " + str + " to " + value));
 							plugin.reload();
 						}
 					}));
@@ -85,7 +85,7 @@ public class EditingGUI {
 				public void setValue(Player player, Number num) {
 					channel.setValue(str, num.intValue());
 					player.sendMessage(
-							StringUtils.getInstance().colorize("&cSetting " + str + " to " + num.intValue()));
+							StringParser.getInstance().colorize("&cSetting " + str + " to " + num.intValue()));
 					plugin.reload();
 				}
 			}));

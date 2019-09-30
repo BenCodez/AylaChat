@@ -8,7 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCorePlugin;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
+import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
 import com.Ben12345rocks.AylaChat.Config.Config;
 import com.massivecraft.factions.entity.MPlayer;
 import com.palmergames.bukkit.towny.Towny;
@@ -47,7 +47,9 @@ public class Channel {
 	 * See if player can listen to channel
 	 *
 	 * @param reciever
+	 *            player
 	 * @param loc
+	 *            loc
 	 * @return true if the player can hear
 	 */
 	public boolean canHear(Player reciever, Location loc) {
@@ -88,8 +90,8 @@ public class Channel {
 			return true;
 		} else {
 			// no permission
-			p.sendMessage(
-					StringUtils.getInstance().colorize(AdvancedCorePlugin.getInstance().getOptions().getFormatNoPerms()));
+			p.sendMessage(StringParser.getInstance()
+					.colorize(AdvancedCorePlugin.getInstance().getOptions().getFormatNoPerms()));
 		}
 
 		return false;

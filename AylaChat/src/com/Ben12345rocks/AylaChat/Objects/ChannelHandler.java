@@ -11,8 +11,8 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
 
 import com.Ben12345rocks.AdvancedCore.AdvancedCorePlugin;
+import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessage;
 import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Main;
@@ -47,9 +47,9 @@ public class ChannelHandler {
 
 	public TextComponent addJsonButton(Player p, String message, int hash) {
 		if (p.hasPermission("AylaChat.Button")) {
-			return StringUtils.getInstance()
+			return StringParser.getInstance()
 					.parseJson(message += " [Text=\""
-							+ StringUtils.getInstance().colorize(Config.getInstance().formatJsonButton)
+							+ StringParser.getInstance().colorize(Config.getInstance().formatJsonButton)
 							+ "\",command=\"/aylachat button " + hash + "\"]");
 		} else {
 			return new TextComponent(message);
@@ -111,7 +111,7 @@ public class ChannelHandler {
 			}
 		} else {
 			if (player != null) {
-				player.sendMessage(StringUtils.getInstance().colorize(Config.getInstance().formatNoOneListening));
+				player.sendMessage(StringParser.getInstance().colorize(Config.getInstance().formatNoOneListening));
 			}
 		}
 
@@ -127,11 +127,11 @@ public class ChannelHandler {
 		}
 		placeholders.put("message", msg);
 
-		String message = StringUtils.getInstance().replacePlaceHolder(ch.getFormat(), placeholders, false);
+		String message = StringParser.getInstance().replacePlaceHolder(ch.getFormat(), placeholders, false);
 
-		message = StringUtils.getInstance().replaceJavascript(message);
-		message = StringUtils.getInstance().replacePlaceHolders(player, message);
-		message = StringUtils.getInstance().colorize(message);
+		message = StringParser.getInstance().replaceJavascript(message);
+		message = StringParser.getInstance().replacePlaceHolders(player, message);
+		message = StringParser.getInstance().colorize(message);
 
 		return message;
 	}
@@ -316,7 +316,7 @@ public class ChannelHandler {
 			User user = UserManager.getInstance().getAylaChatUser(p);
 			if (user.getSocialSpyEnabled()) {
 				String format = Config.getInstance().formatMessageSocialSpy;
-				format = StringUtils.getInstance().replacePlaceHolder(format, "msg", msg);
+				format = StringParser.getInstance().replacePlaceHolder(format, "msg", msg);
 				user.sendMessage(format);
 			}
 		}

@@ -17,10 +17,10 @@ import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
 import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
 import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
+import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.MiscUtils;
 import com.Ben12345rocks.AdvancedCore.Util.Misc.PlayerUtils;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.StringUtils;
 import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessage;
 import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessageHandler;
 import com.Ben12345rocks.AylaChat.Main;
@@ -87,7 +87,7 @@ public class CommandLoader {
 			public void execute(CommandSender sender, String[] args) {
 				ArrayList<TextComponent> texts = new ArrayList<TextComponent>();
 				HashMap<String, TextComponent> unsorted = new HashMap<String, TextComponent>();
-				texts.add(StringUtils.getInstance().stringToComp(Config.getInstance().formatHelpTitle));
+				texts.add(StringParser.getInstance().stringToComp(Config.getInstance().formatHelpTitle));
 
 				boolean requirePerms = Config.getInstance().formatHelpRequirePermission;
 
@@ -118,7 +118,7 @@ public class CommandLoader {
 					public void execute(CommandSender sender, String[] args) {
 						ArrayList<TextComponent> texts = new ArrayList<TextComponent>();
 						HashMap<String, TextComponent> unsorted = new HashMap<String, TextComponent>();
-						texts.add(StringUtils.getInstance().stringToComp(Config.getInstance().formatHelpTitle));
+						texts.add(StringParser.getInstance().stringToComp(Config.getInstance().formatHelpTitle));
 
 						boolean requirePerms = Config.getInstance().formatHelpRequirePermission;
 
@@ -159,7 +159,7 @@ public class CommandLoader {
 			@Override
 			public void execute(CommandSender sender, String[] args) {
 				UserManager.getInstance().getAylaChatUser((Player) sender).setCurrentChannel(args[1]);
-				sendMessage(sender, StringUtils.getInstance().replacePlaceHolder(Config.getInstance().formatChannelSet,
+				sendMessage(sender, StringParser.getInstance().replacePlaceHolder(Config.getInstance().formatChannelSet,
 						"channel", ChannelHandler.getInstance().getChannel(args[1]).getChannelName()));
 			}
 		});
@@ -426,7 +426,7 @@ public class CommandLoader {
 		placeholders.put("player", toSend);
 		placeholders.put("fromsender", sender);
 		placeholders.put("message", msg);
-		String format = StringUtils.getInstance().replacePlaceHolder(Config.getInstance().formatMessageReceive,
+		String format = StringParser.getInstance().replacePlaceHolder(Config.getInstance().formatMessageReceive,
 				placeholders);
 
 		Player p = Bukkit.getPlayer(toSend);
@@ -443,7 +443,7 @@ public class CommandLoader {
 
 	public void sendMessage(CommandSender player, String toSend, String msg) {
 		if (toSend.equals("")) {
-			player.sendMessage(StringUtils.getInstance().colorize(Config.getInstance().formatMessageNoReply));
+			player.sendMessage(StringParser.getInstance().colorize(Config.getInstance().formatMessageNoReply));
 			return;
 		}
 
@@ -458,10 +458,10 @@ public class CommandLoader {
 		placeholders.put("player", sender);
 		placeholders.put("toSend", toSend);
 		placeholders.put("message", msg);
-		String format = StringUtils.getInstance().replacePlaceHolder(Config.getInstance().formatMessageSend,
+		String format = StringParser.getInstance().replacePlaceHolder(Config.getInstance().formatMessageSend,
 				placeholders);
 
-		player.sendMessage(StringUtils.getInstance().colorize(format));
+		player.sendMessage(StringParser.getInstance().colorize(format));
 
 		if (Config.getInstance().useBungeeCoord) {
 			plugin.sendPluginMessage(Iterables.getFirst(Bukkit.getOnlinePlayers(), null), "Msg", sender, toSend, msg);
