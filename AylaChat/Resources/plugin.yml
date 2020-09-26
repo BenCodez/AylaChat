@@ -2,7 +2,7 @@ name: ${project.name}
 version: ${project.version}
 main: com.Ben12345rocks.AylaChat.Main
 description: Highly Customizable Chat Plugin
-author: Ben12345rocks
+author: BenCodez
 api-version: 1.13
 commands:
   aylachat:
