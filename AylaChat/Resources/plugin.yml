@@ -4,6 +4,8 @@ main: com.Ben12345rocks.AylaChat.Main
 description: Highly Customizable Chat Plugin
 author: BenCodez
 api-version: 1.13
+libraries:
+  - org.openjdk.nashorn:nashorn-core:15.2
 commands:
   aylachat:
     description: AylaChat Command
