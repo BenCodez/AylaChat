@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AylaChat.Commands.TabComplete;
+package com.bencodez.aylachat.commands.tabcomplete;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,22 +11,27 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import com.Ben12345rocks.AdvancedCore.CommandAPI.CommandHandler;
-import com.Ben12345rocks.AdvancedCore.CommandAPI.TabCompleteHandler;
-import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
-import com.Ben12345rocks.AylaChat.Main;
+import com.bencodez.advancedcore.api.command.CommandHandler;
+import com.bencodez.advancedcore.api.command.TabCompleteHandler;
+import com.bencodez.advancedcore.api.messages.StringParser;
+import com.bencodez.advancedcore.api.misc.ArrayUtils;
+import com.bencodez.aylachat.AylaChatMain;
 
 /**
  * The Class AliasesTabCompleter.
  */
-public class AliasesTabCompleter implements TabCompleter {
+public class AliasHandleTabCompleter implements TabCompleter {
 
 	/** The plugin. */
-	Main plugin = Main.plugin;
+	AylaChatMain plugin = AylaChatMain.plugin;
 
 	/** The cmd handle. */
-	public CommandHandler cmdHandle;
+	public ArrayList<CommandHandler> cmdHandles = new ArrayList<CommandHandler>();
+
+	public AliasHandleTabCompleter add(CommandHandler cmd) {
+		cmdHandles.add(cmd);
+		return this;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -48,35 +53,26 @@ public class AliasesTabCompleter implements TabCompleter {
 
 		Set<String> cmds = new HashSet<String>();
 
-		ArrayList<CommandHandler> cmdHandlers = new ArrayList<CommandHandler>();
-
-		cmdHandlers.addAll(plugin.getCommands());
-
 		ConcurrentHashMap<String, ArrayList<String>> tabCompletes = TabCompleteHandler.getInstance()
 				.getTabCompleteOptions();
-		for (CommandHandler cmdHandle : cmdHandlers) {
+		for (CommandHandler cmdHandle : cmdHandles) {
 			if (cmdHandle.getArgs().length >= argsIn.length) {
 				for (String arg : cmdHandle.getArgs()[0].split("&")) {
-					if (cmd.getName().equalsIgnoreCase("vote" + arg)
-							|| cmd.getName().equalsIgnoreCase("adminvote" + arg)) {
-						// plugin.debug("Found cmd... attempting to get tab
-						// complete");
-						args[0] = arg;
-						boolean argsMatch = true;
-						for (int i = 0; i < argsIn.length; i++) {
-							if (args.length >= i) {
-								if (!cmdHandle.argsMatch(args[i], i)) {
-									argsMatch = false;
-								}
+					args[0] = arg;
+					boolean argsMatch = true;
+					for (int i = 0; i < argsIn.length; i++) {
+						if (args.length >= i) {
+							if (!cmdHandle.argsMatch(args[i], i)) {
+								argsMatch = false;
 							}
 						}
-
-						if (argsMatch) {
-
-							cmds.addAll(cmdHandle.getTabCompleteOptions(sender, args, argsIn.length, tabCompletes));
-						}
-
 					}
+
+					if (argsMatch) {
+
+						cmds.addAll(cmdHandle.getTabCompleteOptions(sender, args, argsIn.length, tabCompletes));
+					}
+
 				}
 			}
 		}
@@ -90,11 +86,6 @@ public class AliasesTabCompleter implements TabCompleter {
 		Collections.sort(tab, String.CASE_INSENSITIVE_ORDER);
 
 		return tab;
-	}
-
-	public AliasesTabCompleter setCMDHandle(CommandHandler cmd) {
-		cmdHandle = cmd;
-		return this;
 	}
 
 }

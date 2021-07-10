@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AylaChat.Bungee;
+package com.bencodez.aylachat.bungee;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,12 +14,12 @@ public class Bungee extends Plugin implements net.md_5.bungee.api.plugin.Listene
 	@Override
 	public void onEnable() {
 		getProxy().getPluginManager().registerListener(this, this);
-		this.getProxy().registerChannel("AylaChat:AylaChat".toLowerCase());
+		this.getProxy().registerChannel("aylachat:aylachat".toLowerCase());
 	}
 
 	@EventHandler
 	public void onPluginMessage(PluginMessageEvent ev) {
-		if (!ev.getTag().equals("AylaChat:AylaChat".toLowerCase())) {
+		if (!ev.getTag().equals("aylachat:aylachat".toLowerCase())) {
 			return;
 		}
 		ByteArrayInputStream instream = new ByteArrayInputStream(ev.getData());

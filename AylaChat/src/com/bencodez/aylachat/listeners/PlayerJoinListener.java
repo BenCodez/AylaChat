@@ -1,13 +1,13 @@
-package com.Ben12345rocks.AylaChat.Listeners;
+package com.bencodez.aylachat.listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import com.Ben12345rocks.AdvancedCore.Listeners.AdvancedCoreLoginEvent;
-import com.Ben12345rocks.AylaChat.Objects.User;
-import com.Ben12345rocks.AylaChat.Objects.UserManager;
+import com.bencodez.advancedcore.listeners.AdvancedCoreLoginEvent;
+import com.bencodez.aylachat.objects.AylaChatUser;
+import com.bencodez.aylachat.objects.UserManager;
 
 public class PlayerJoinListener implements Listener {
 
@@ -19,7 +19,7 @@ public class PlayerJoinListener implements Listener {
 		final Player p = event.getPlayer();
 
 		if (p != null) {
-			User user = UserManager.getInstance().getAylaChatUser(p);
+			AylaChatUser user = UserManager.getInstance().getAylaChatUser(p);
 			user.checkChannels();
 		}
 

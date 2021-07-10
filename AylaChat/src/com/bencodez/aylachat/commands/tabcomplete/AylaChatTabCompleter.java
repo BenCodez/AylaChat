@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AylaChat.Commands.TabComplete;
+package com.bencodez.aylachat.commands.tabcomplete;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,9 +10,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import com.Ben12345rocks.AdvancedCore.CommandAPI.TabCompleteHandler;
-import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
-import com.Ben12345rocks.AylaChat.Main;
+import com.bencodez.advancedcore.api.command.TabCompleteHandler;
+import com.bencodez.advancedcore.api.messages.StringParser;
+import com.bencodez.aylachat.AylaChatMain;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -21,7 +21,7 @@ import com.Ben12345rocks.AylaChat.Main;
 public class AylaChatTabCompleter implements TabCompleter {
 
 	/** The plugin. */
-	com.Ben12345rocks.AylaChat.Main plugin = Main.plugin;
+	com.bencodez.aylachat.AylaChatMain plugin = AylaChatMain.plugin;
 
 	/*
 	 * (non-Javadoc)

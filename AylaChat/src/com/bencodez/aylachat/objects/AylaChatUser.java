@@ -1,67 +1,62 @@
-package com.Ben12345rocks.AylaChat.Objects;
+package com.bencodez.aylachat.objects;
 
 import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
 
-import com.Ben12345rocks.AdvancedCore.UserManager.UUID;
-import com.Ben12345rocks.AylaChat.Main;
+import com.bencodez.advancedcore.api.user.UUID;
+import com.bencodez.aylachat.AylaChatMain;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class User.
  */
-public class User extends com.Ben12345rocks.AdvancedCore.UserManager.User {
+public class AylaChatUser extends com.bencodez.advancedcore.api.user.AdvancedCoreUser {
 
 	/** The plugin. */
-	static Main plugin = Main.plugin;
+	static AylaChatMain plugin = AylaChatMain.plugin;
 
 	/**
 	 * Instantiates a new user.
 	 *
-	 * @param player
-	 *            the player
+	 * @param player the player
 	 */
 	@Deprecated
-	public User(Player player) {
-		super(Main.plugin, player);
+	public AylaChatUser(Player player) {
+		super(AylaChatMain.plugin, player);
 	}
 
 	/**
 	 * Instantiates a new user.
 	 *
-	 * @param playerName
-	 *            the player name
+	 * @param playerName the player name
 	 */
 	@Deprecated
-	public User(String playerName) {
-		super(Main.plugin, playerName);
-
-	}
-
-	/**
-	 * Instantiates a new user.
-	 *
-	 * @param uuid
-	 *            the uuid
-	 */
-	@Deprecated
-	public User(UUID uuid) {
-		super(Main.plugin, uuid);
+	public AylaChatUser(String playerName) {
+		super(AylaChatMain.plugin, playerName);
 
 	}
 
 	/**
 	 * Instantiates a new user.
 	 *
-	 * @param uuid
-	 *            the uuid
-	 * @param loadName
-	 *            the load name
+	 * @param uuid the uuid
 	 */
 	@Deprecated
-	public User(UUID uuid, boolean loadName) {
-		super(Main.plugin, uuid, loadName);
+	public AylaChatUser(UUID uuid) {
+		super(AylaChatMain.plugin, uuid);
+
+	}
+
+	/**
+	 * Instantiates a new user.
+	 *
+	 * @param uuid     the uuid
+	 * @param loadName the load name
+	 */
+	@Deprecated
+	public AylaChatUser(UUID uuid, boolean loadName) {
+		super(AylaChatMain.plugin, uuid, loadName);
 	}
 
 	public void checkChannels() {
@@ -95,19 +90,19 @@ public class User extends com.Ben12345rocks.AdvancedCore.UserManager.User {
 	}
 
 	public String getCurrentChannel() {
-		return getData().getString("Channel");
+		return getData().getString("Channel", true);
 	}
 
 	public String getlastMessageSender() {
-		return getData().getString("LastMessageSender");
+		return getData().getString("LastMessageSender", true);
 	}
 
 	private boolean getMuted() {
-		return Boolean.valueOf(getData().getString("Muted"));
+		return Boolean.valueOf(getData().getString("Muted", true));
 	}
 
 	public boolean getSocialSpyEnabled() {
-		return Boolean.valueOf(getData().getString("SocialSpy"));
+		return Boolean.valueOf(getData().getString("SocialSpy", true));
 	}
 
 	public boolean isMuted() {

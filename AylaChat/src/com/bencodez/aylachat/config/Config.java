@@ -1,30 +1,19 @@
-package com.Ben12345rocks.AylaChat.Config;
+package com.bencodez.aylachat.config;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
 
-import com.Ben12345rocks.AdvancedCore.Util.Annotation.AnnotationHandler;
-import com.Ben12345rocks.AdvancedCore.Util.Annotation.ConfigDataBoolean;
-import com.Ben12345rocks.AdvancedCore.Util.Annotation.ConfigDataString;
-import com.Ben12345rocks.AdvancedCore.YML.YMLFile;
-import com.Ben12345rocks.AylaChat.Main;
+import com.bencodez.advancedcore.api.yml.YMLFile;
+import com.bencodez.advancedcore.api.yml.annotation.AnnotationHandler;
+import com.bencodez.advancedcore.api.yml.annotation.ConfigDataBoolean;
+import com.bencodez.advancedcore.api.yml.annotation.ConfigDataString;
+import com.bencodez.aylachat.AylaChatMain;
 
 public class Config extends YMLFile {
 
-	static Config instance = new Config();
-
 	/** The plugin. */
-	static Main plugin = Main.plugin;
-
-	/**
-	 * Gets the single instance of Config.
-	 *
-	 * @return single instance of Config
-	 */
-	public static Config getInstance() {
-		return instance;
-	}
+	private AylaChatMain plugin;
 
 	@ConfigDataString(path = "Format.Message.Send", defaultValue = "%player% -> %toSend%: %message%")
 	public String formatMessageSend = "";
@@ -61,8 +50,9 @@ public class Config extends YMLFile {
 
 	public String formatMessageRewards = "Format.Message.Rewards";
 
-	public Config() {
-		super(new File(Main.plugin.getDataFolder(), "Config.yml"));
+	public Config(AylaChatMain plugin) {
+		super(plugin, new File(plugin.getDataFolder(), "Config.yml"), true);
+		this.plugin = plugin;
 	}
 
 	public Set<String> getChannels() {
@@ -84,6 +74,6 @@ public class Config extends YMLFile {
 
 	@Override
 	public void onFileCreation() {
-		Main.plugin.saveResource("Config.yml", true);
+		plugin.saveResource("Config.yml", true);
 	}
 }

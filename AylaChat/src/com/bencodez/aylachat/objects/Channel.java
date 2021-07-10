@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AylaChat.Objects;
+package com.bencodez.aylachat.objects;
 
 import java.util.ArrayList;
 
@@ -7,9 +7,9 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import com.Ben12345rocks.AdvancedCore.AdvancedCorePlugin;
-import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
-import com.Ben12345rocks.AylaChat.Config.Config;
+import com.bencodez.advancedcore.AdvancedCorePlugin;
+import com.bencodez.advancedcore.api.messages.StringParser;
+import com.bencodez.aylachat.AylaChatMain;
 import com.massivecraft.factions.entity.MPlayer;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -80,9 +80,9 @@ public class Channel {
 		if (p == null) {
 			return false;
 		}
-		User user = UserManager.getInstance().getAylaChatUser(p);
+		AylaChatUser user = UserManager.getInstance().getAylaChatUser(p);
 		if (user.isMuted()) {
-			user.sendMessage(Config.getInstance().formatMuted);
+			user.sendMessage(AylaChatMain.plugin.getConfigFile().formatMuted);
 			return false;
 		}
 

@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AylaChat.Commands;
+package com.bencodez.aylachat.commands;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,31 +9,29 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Ben12345rocks.AdvancedCore.CommandAPI.CommandHandler;
-import com.Ben12345rocks.AdvancedCore.CommandAPI.TabCompleteHandle;
-import com.Ben12345rocks.AdvancedCore.CommandAPI.TabCompleteHandler;
-import com.Ben12345rocks.AdvancedCore.Rewards.RewardBuilder;
-import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory;
-import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventory.ClickEvent;
-import com.Ben12345rocks.AdvancedCore.Util.Inventory.BInventoryButton;
-import com.Ben12345rocks.AdvancedCore.Util.Item.ItemBuilder;
-import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.MiscUtils;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.PlayerUtils;
-import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessage;
-import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessageHandler;
-import com.Ben12345rocks.AylaChat.Main;
-import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliasHandle;
-import com.Ben12345rocks.AylaChat.Commands.Executors.CommandAliases;
-import com.Ben12345rocks.AylaChat.Commands.GUI.EditingGUI;
-import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasHandleTabCompleter;
-import com.Ben12345rocks.AylaChat.Commands.TabComplete.AliasesTabCompleter;
-import com.Ben12345rocks.AylaChat.Config.Config;
-import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
-import com.Ben12345rocks.AylaChat.Objects.MessageData;
-import com.Ben12345rocks.AylaChat.Objects.User;
-import com.Ben12345rocks.AylaChat.Objects.UserManager;
+import com.bencodez.advancedcore.api.command.CommandHandler;
+import com.bencodez.advancedcore.api.command.TabCompleteHandle;
+import com.bencodez.advancedcore.api.command.TabCompleteHandler;
+import com.bencodez.advancedcore.api.inventory.BInventory;
+import com.bencodez.advancedcore.api.inventory.BInventory.ClickEvent;
+import com.bencodez.advancedcore.api.inventory.BInventoryButton;
+import com.bencodez.advancedcore.api.item.ItemBuilder;
+import com.bencodez.advancedcore.api.messages.StringParser;
+import com.bencodez.advancedcore.api.misc.ArrayUtils;
+import com.bencodez.advancedcore.api.misc.MiscUtils;
+import com.bencodez.advancedcore.api.misc.PlayerUtils;
+import com.bencodez.advancedcore.api.rewards.RewardBuilder;
+import com.bencodez.advancedcore.bungeeapi.pluginmessage.PluginMessageHandler;
+import com.bencodez.aylachat.AylaChatMain;
+import com.bencodez.aylachat.commands.executors.CommandAliasHandle;
+import com.bencodez.aylachat.commands.executors.CommandAliases;
+import com.bencodez.aylachat.commands.gui.EditingGUI;
+import com.bencodez.aylachat.commands.tabcomplete.AliasHandleTabCompleter;
+import com.bencodez.aylachat.commands.tabcomplete.AliasesTabCompleter;
+import com.bencodez.aylachat.objects.AylaChatUser;
+import com.bencodez.aylachat.objects.ChannelHandler;
+import com.bencodez.aylachat.objects.MessageData;
+import com.bencodez.aylachat.objects.UserManager;
 import com.google.common.collect.Iterables;
 
 import net.md_5.bungee.api.chat.TextComponent;
@@ -44,7 +42,7 @@ public class CommandLoader {
 	static CommandLoader instance = new CommandLoader();
 
 	/** The plugin. */
-	static Main plugin = Main.plugin;
+	static AylaChatMain plugin = AylaChatMain.plugin;
 
 	/**
 	 * Gets the single instance of CommandLoader.
@@ -66,10 +64,10 @@ public class CommandLoader {
 		plugin.setCommands(new ArrayList<CommandHandler>());
 
 		ArrayList<CommandHandler> advancedCoreCommands = new ArrayList<CommandHandler>();
-		advancedCoreCommands.addAll(com.Ben12345rocks.AdvancedCore.Commands.CommandLoader.getInstance()
-				.getBasicAdminCommands(Main.plugin.getName()));
-		advancedCoreCommands.addAll(com.Ben12345rocks.AdvancedCore.Commands.CommandLoader.getInstance()
-				.getBasicCommands(Main.plugin.getName()));
+		advancedCoreCommands.addAll(com.bencodez.advancedcore.command.CommandLoader.getInstance()
+				.getBasicAdminCommands(AylaChatMain.plugin.getName()));
+		advancedCoreCommands.addAll(com.bencodez.advancedcore.command.CommandLoader.getInstance()
+				.getBasicCommands(AylaChatMain.plugin.getName()));
 		for (CommandHandler handle : advancedCoreCommands) {
 			String[] args = handle.getArgs();
 			String[] newArgs = new String[args.length + 1];
@@ -87,9 +85,9 @@ public class CommandLoader {
 			public void execute(CommandSender sender, String[] args) {
 				ArrayList<TextComponent> texts = new ArrayList<TextComponent>();
 				HashMap<String, TextComponent> unsorted = new HashMap<String, TextComponent>();
-				texts.add(StringParser.getInstance().stringToComp(Config.getInstance().formatHelpTitle));
+				texts.add(StringParser.getInstance().stringToComp(plugin.getConfigFile().formatHelpTitle));
 
-				boolean requirePerms = Config.getInstance().formatHelpRequirePermission;
+				boolean requirePerms = plugin.getConfigFile().formatHelpRequirePermission;
 
 				for (CommandHandler cmdHandle : plugin.getCommands()) {
 					if (!cmdHandle.isAdvancedCoreCommand()) {
@@ -118,9 +116,9 @@ public class CommandLoader {
 					public void execute(CommandSender sender, String[] args) {
 						ArrayList<TextComponent> texts = new ArrayList<TextComponent>();
 						HashMap<String, TextComponent> unsorted = new HashMap<String, TextComponent>();
-						texts.add(StringParser.getInstance().stringToComp(Config.getInstance().formatHelpTitle));
+						texts.add(StringParser.getInstance().stringToComp(plugin.getConfigFile().formatHelpTitle));
 
-						boolean requirePerms = Config.getInstance().formatHelpRequirePermission;
+						boolean requirePerms = plugin.getConfigFile().formatHelpRequirePermission;
 
 						for (CommandHandler cmdHandle : plugin.getCommands()) {
 							if (cmdHandle.isAdvancedCoreCommand()) {
@@ -159,8 +157,9 @@ public class CommandLoader {
 			@Override
 			public void execute(CommandSender sender, String[] args) {
 				UserManager.getInstance().getAylaChatUser((Player) sender).setCurrentChannel(args[1]);
-				sendMessage(sender, StringParser.getInstance().replacePlaceHolder(Config.getInstance().formatChannelSet,
-						"channel", ChannelHandler.getInstance().getChannel(args[1]).getChannelName()));
+				sendMessage(sender,
+						StringParser.getInstance().replacePlaceHolder(plugin.getConfigFile().formatChannelSet,
+								"channel", ChannelHandler.getInstance().getChannel(args[1]).getChannelName()));
 			}
 		});
 
@@ -184,7 +183,7 @@ public class CommandLoader {
 					ChannelHandler.getInstance().clearChat(p);
 					sendMessage(sender, "&cChat cleared for " + p.getName());
 				} else {
-					if (Config.getInstance().useBungeeCoord) {
+					if (plugin.getConfigFile().useBungeeCoord) {
 						plugin.sendPluginMessage(PlayerUtils.getInstance().getRandomPlayer(), "ClearChat", args[1]);
 						sendMessage(sender, "&cChat cleared for " + args[1]);
 						return;
@@ -199,7 +198,7 @@ public class CommandLoader {
 
 			@Override
 			public void execute(CommandSender sender, String[] args) {
-				User user = UserManager.getInstance().getAylaChatUser((Player) sender);
+				AylaChatUser user = UserManager.getInstance().getAylaChatUser((Player) sender);
 				user.setSocialSpyEnabled(Boolean.valueOf(args[1]));
 				if (user.getSocialSpyEnabled()) {
 					sendMessage(sender, "&cEnabled socialspy");
@@ -214,7 +213,7 @@ public class CommandLoader {
 
 			@Override
 			public void execute(CommandSender sender, String[] args) {
-				User user = UserManager.getInstance().getAylaChatUser((Player) sender);
+				AylaChatUser user = UserManager.getInstance().getAylaChatUser((Player) sender);
 				user.setSocialSpyEnabled(!user.getSocialSpyEnabled());
 				if (user.getSocialSpyEnabled()) {
 					sendMessage(sender, "&cEnabled socialspy");
@@ -229,7 +228,7 @@ public class CommandLoader {
 
 					@Override
 					public void execute(CommandSender sender, String[] args) {
-						User user = UserManager.getInstance().getAylaChatUser(args[1]);
+						AylaChatUser user = UserManager.getInstance().getAylaChatUser(args[1]);
 						if (user.isMuted()) {
 							user.unMute();
 							sendMessage(sender, "&cUnmuted " + user.getPlayerName());
@@ -283,16 +282,16 @@ public class CommandLoader {
 				placeholders.put("Channel", data.getChannel());
 				placeholders.put("player", data.getPlayer());
 				BInventory inv = new BInventory("Player: " + data.getPlayer() + " (" + args[1] + ")");
-				for (final String key : Config.getInstance().JsonButtonGUI()) {
+				for (final String key : plugin.getConfigFile().JsonButtonGUI()) {
 					inv.addButton(new BInventoryButton(new ItemBuilder(
-							Config.getInstance().getData().getConfigurationSection("JsonButtonGUI." + key))
+							plugin.getConfigFile().getData().getConfigurationSection("JsonButtonGUI." + key))
 									.setPlaceholders(placeholders)) {
 
 						@Override
 						public void onClick(ClickEvent event) {
 							Player player = Bukkit.getPlayer(data.getPlayer());
 							if (player != null) {
-								ArrayList<String> cmds = Config.getInstance().getJsonButtonGUIKeyCommands(key);
+								ArrayList<String> cmds = plugin.getConfigFile().getJsonButtonGUIKeyCommands(key);
 								if (!cmds.isEmpty()) {
 									MiscUtils.getInstance().executeConsoleCommands(player, cmds, placeholders);
 								}
@@ -311,6 +310,7 @@ public class CommandLoader {
 		/*
 		 * plugin.getCommands().add(new CommandHandler(new String[] { "RemoveMessage",
 		 * "(Number)" }, "AylaChat.RemoveMessage", "Remove Message", false) {
+		 * 
 		 * @Override public void execute(CommandSender sender, String[] args) {
 		 * MessageData data =
 		 * ChannelHandler.getInstance().getMessageHistory().get(Integer.parseInt(args[1]
@@ -335,7 +335,7 @@ public class CommandLoader {
 
 		loadAliases();
 
-		PluginMessage.getInstance().add(new PluginMessageHandler("GUICommand") {
+		plugin.getPluginMessaging().add(new PluginMessageHandler("GUICommand") {
 
 			@Override
 			public void onRecieve(String subChannel, ArrayList<String> messageData) {
@@ -352,12 +352,12 @@ public class CommandLoader {
 				Player player = Bukkit.getPlayer(p);
 				if (player != null) {
 					MiscUtils.getInstance().executeConsoleCommands(p,
-							Config.getInstance().getJsonButtonGUIKeyCommands(key), placeholders);
+							plugin.getConfigFile().getJsonButtonGUIKeyCommands(key), placeholders);
 				}
 			}
 		});
 
-		PluginMessage.getInstance().add(new PluginMessageHandler("Msg") {
+		plugin.getPluginMessaging().add(new PluginMessageHandler("Msg") {
 
 			@Override
 			public void onRecieve(String subChannel, ArrayList<String> messageData) {
@@ -369,14 +369,14 @@ public class CommandLoader {
 			}
 		});
 
-		PluginMessage.getInstance().add(new PluginMessageHandler("Mute") {
+		plugin.getPluginMessaging().add(new PluginMessageHandler("Mute") {
 
 			@Override
 			public void onRecieve(String subChannel, ArrayList<String> messageData) {
 				String player = messageData.get(0);
 				String muted = messageData.get(1);
 
-				User user = UserManager.getInstance().getAylaChatUser(player);
+				AylaChatUser user = UserManager.getInstance().getAylaChatUser(player);
 				if (Boolean.valueOf(muted)) {
 					user.mute();
 				} else {
@@ -420,13 +420,13 @@ public class CommandLoader {
 	}
 
 	public void messageReceived(String sender, String toSend, String msg) {
-		toSend = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(toSend);
-		sender = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(sender);
+		toSend = com.bencodez.advancedcore.api.user.UserManager.getInstance().getProperName(toSend);
+		sender = com.bencodez.advancedcore.api.user.UserManager.getInstance().getProperName(sender);
 		HashMap<String, String> placeholders = new HashMap<String, String>();
 		placeholders.put("player", toSend);
 		placeholders.put("fromsender", sender);
 		placeholders.put("message", msg);
-		String format = StringParser.getInstance().replacePlaceHolder(Config.getInstance().formatMessageReceive,
+		String format = StringParser.getInstance().replacePlaceHolder(plugin.getConfigFile().formatMessageReceive,
 				placeholders);
 
 		Player p = Bukkit.getPlayer(toSend);
@@ -435,7 +435,7 @@ public class CommandLoader {
 			UserManager.getInstance().getAylaChatUser(p).setlastMessageSender(sender);
 		}
 
-		new RewardBuilder(Config.getInstance().getData(), Config.getInstance().formatMessageRewards).send(p);
+		new RewardBuilder(plugin.getConfigFile().getData(), plugin.getConfigFile().formatMessageRewards).send(p);
 
 		ChannelHandler.getInstance().socialSpyMessage(format);
 
@@ -443,7 +443,7 @@ public class CommandLoader {
 
 	public void sendMessage(CommandSender player, String toSend, String msg) {
 		if (toSend.equals("")) {
-			player.sendMessage(StringParser.getInstance().colorize(Config.getInstance().formatMessageNoReply));
+			player.sendMessage(StringParser.getInstance().colorize(plugin.getConfigFile().formatMessageNoReply));
 			return;
 		}
 
@@ -453,17 +453,17 @@ public class CommandLoader {
 		} else {
 			UserManager.getInstance().getAylaChatUser(player.getName()).setlastMessageSender(toSend);
 		}
-		toSend = com.Ben12345rocks.AdvancedCore.UserManager.UserManager.getInstance().getProperName(toSend);
+		toSend = com.bencodez.advancedcore.api.user.UserManager.getInstance().getProperName(toSend);
 		HashMap<String, String> placeholders = new HashMap<String, String>();
 		placeholders.put("player", sender);
 		placeholders.put("toSend", toSend);
 		placeholders.put("message", msg);
-		String format = StringParser.getInstance().replacePlaceHolder(Config.getInstance().formatMessageSend,
+		String format = StringParser.getInstance().replacePlaceHolder(plugin.getConfigFile().formatMessageSend,
 				placeholders);
 
 		player.sendMessage(StringParser.getInstance().colorize(format));
 
-		if (Config.getInstance().useBungeeCoord) {
+		if (plugin.getConfigFile().useBungeeCoord) {
 			plugin.sendPluginMessage(Iterables.getFirst(Bukkit.getOnlinePlayers(), null), "Msg", sender, toSend, msg);
 		} else {
 			messageReceived(sender, toSend, msg);

@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AylaChat.Objects;
+package com.bencodez.aylachat.objects;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -10,14 +10,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
 
-import com.Ben12345rocks.AdvancedCore.AdvancedCorePlugin;
-import com.Ben12345rocks.AdvancedCore.Util.Messages.StringParser;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
-import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessage;
-import com.Ben12345rocks.AdvancedCore.Util.PluginMessage.PluginMessageHandler;
-import com.Ben12345rocks.AylaChat.Main;
-import com.Ben12345rocks.AylaChat.Commands.Executors.ChannelCommands;
-import com.Ben12345rocks.AylaChat.Config.Config;
+import com.bencodez.advancedcore.AdvancedCorePlugin;
+import com.bencodez.advancedcore.api.messages.StringParser;
+import com.bencodez.advancedcore.api.misc.ArrayUtils;
+import com.bencodez.advancedcore.bungeeapi.pluginmessage.PluginMessageHandler;
+import com.bencodez.aylachat.AylaChatMain;
+import com.bencodez.aylachat.commands.executors.ChannelCommands;
 
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -32,7 +30,7 @@ public class ChannelHandler {
 		return instance;
 	}
 
-	private Main plugin = Main.plugin;
+	private AylaChatMain plugin = AylaChatMain.plugin;
 
 	private ArrayList<String> socialSpyPlayers = new ArrayList<String>();
 
@@ -49,7 +47,7 @@ public class ChannelHandler {
 		if (p.hasPermission("AylaChat.Button")) {
 			return StringParser.getInstance()
 					.parseJson(message += " [Text=\""
-							+ StringParser.getInstance().colorize(Config.getInstance().formatJsonButton)
+							+ StringParser.getInstance().colorize(plugin.getConfigFile().formatJsonButton)
 							+ "\",command=\"/aylachat button " + hash + "\"]");
 		} else {
 			return new TextComponent(message);
@@ -83,13 +81,12 @@ public class ChannelHandler {
 	 * clearChatAll(player, channel); ArrayList<String> messages = new
 	 * ArrayList<String>(); for (Entry<Integer, MessageData> entry :
 	 * messageHistory.entrySet()) { for (Player p : channel.getPlayers(player)) {
-	 * p.sendMessage(entry.getValue().getMessage()); } }
-	 * }
+	 * p.sendMessage(entry.getValue().getMessage()); } } }
 	 */
 
 	public void create(String value) {
-		Config.getInstance().getData().createSection("Channels." + value);
-		Config.getInstance().saveData();
+		plugin.getConfigFile().getData().createSection("Channels." + value);
+		plugin.getConfigFile().saveData();
 	}
 
 	public void forceChat(String playerName, Channel ch, String msg, int hash) {
@@ -111,7 +108,7 @@ public class ChannelHandler {
 			}
 		} else {
 			if (player != null) {
-				player.sendMessage(StringParser.getInstance().colorize(Config.getInstance().formatNoOneListening));
+				player.sendMessage(StringParser.getInstance().colorize(plugin.getConfigFile().formatNoOneListening));
 			}
 		}
 
@@ -177,7 +174,7 @@ public class ChannelHandler {
 
 	@SuppressWarnings("deprecation")
 	public String getDefaultChannelName() {
-		String defaultChannel = Config.getInstance().getData().getString("DefaultChanne", "");
+		String defaultChannel = plugin.getConfigFile().getData().getString("DefaultChanne", "");
 
 		for (Channel ch : getChannels()) {
 			if (ch.isDefaultChannel()) {
@@ -213,8 +210,9 @@ public class ChannelHandler {
 		// implement channel load
 		channels = new ArrayList<Channel>();
 
-		for (String ch : Config.getInstance().getChannels()) {
-			Channel channel = new Channel(Config.getInstance().getData().getConfigurationSection("Channels." + ch), ch);
+		for (String ch : plugin.getConfigFile().getChannels()) {
+			Channel channel = new Channel(plugin.getConfigFile().getData().getConfigurationSection("Channels." + ch),
+					ch);
 			channels.add(channel);
 
 			if (!ch.equalsIgnoreCase("town") && !ch.equalsIgnoreCase("nation")) {
@@ -230,7 +228,7 @@ public class ChannelHandler {
 			}
 		}
 
-		PluginMessage.getInstance().add(new PluginMessageHandler("Chat") {
+		plugin.getPluginMessaging().add(new PluginMessageHandler("Chat") {
 
 			@Override
 			public void onRecieve(String subChannel, ArrayList<String> messageData) {
@@ -256,7 +254,7 @@ public class ChannelHandler {
 
 		});
 
-		PluginMessage.getInstance().add(new PluginMessageHandler("ClearChat") {
+		plugin.getPluginMessaging().add(new PluginMessageHandler("ClearChat") {
 
 			@Override
 			public void onRecieve(String subChannel, ArrayList<String> messageData) {
@@ -298,7 +296,7 @@ public class ChannelHandler {
 
 		String msg = format(message, ch, player, h);
 
-		if (Config.getInstance().useBungeeCoord && ch.isBungeecoord()) {
+		if (plugin.getConfigFile().useBungeeCoord && ch.isBungeecoord()) {
 			plugin.sendPluginMessage(player, "Chat", ch.getChannelName(), msg, player.getName(), "" + h);
 			messageHistory.put(h, new MessageData(player.getName(), ch.getChannelName(), msg));
 		} else {
@@ -307,15 +305,15 @@ public class ChannelHandler {
 	}
 
 	public void setValue(String channelName, String key, Object value) {
-		Config.getInstance().getData().set("Channels." + channelName + "." + key, value);
-		Config.getInstance().saveData();
+		plugin.getConfigFile().getData().set("Channels." + channelName + "." + key, value);
+		plugin.getConfigFile().saveData();
 	}
 
 	public void socialSpyMessage(String msg) {
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			User user = UserManager.getInstance().getAylaChatUser(p);
+			AylaChatUser user = UserManager.getInstance().getAylaChatUser(p);
 			if (user.getSocialSpyEnabled()) {
-				String format = Config.getInstance().formatMessageSocialSpy;
+				String format = plugin.getConfigFile().formatMessageSocialSpy;
 				format = StringParser.getInstance().replacePlaceHolder(format, "msg", msg);
 				user.sendMessage(format);
 			}

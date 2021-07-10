@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AylaChat.Objects;
+package com.bencodez.aylachat.objects;
 
 public class MessageData {
 	private String player;

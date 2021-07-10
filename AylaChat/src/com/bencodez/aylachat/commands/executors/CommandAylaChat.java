@@ -1,12 +1,12 @@
-package com.Ben12345rocks.AylaChat.Commands.Executors;
+package com.bencodez.aylachat.commands.executors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.Ben12345rocks.AdvancedCore.CommandAPI.CommandHandler;
-import com.Ben12345rocks.AylaChat.Main;
+import com.bencodez.advancedcore.api.command.CommandHandler;
+import com.bencodez.aylachat.AylaChatMain;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -18,7 +18,7 @@ public class CommandAylaChat implements CommandExecutor {
 	private static CommandAylaChat instance = new CommandAylaChat();
 
 	/** The plugin. */
-	private static Main plugin;
+	private static AylaChatMain plugin;
 
 	/**
 	 * Gets the single instance of CommandVote.
@@ -41,7 +41,7 @@ public class CommandAylaChat implements CommandExecutor {
 	 * @param plugin
 	 *            the plugin
 	 */
-	public CommandAylaChat(Main plugin) {
+	public CommandAylaChat(AylaChatMain plugin) {
 		CommandAylaChat.plugin = plugin;
 	}
 

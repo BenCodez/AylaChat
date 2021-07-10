@@ -1,20 +1,20 @@
-package com.Ben12345rocks.AylaChat.Listeners;
+package com.bencodez.aylachat.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import com.Ben12345rocks.AylaChat.Main;
-import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
-import com.Ben12345rocks.AylaChat.Objects.User;
-import com.Ben12345rocks.AylaChat.Objects.UserManager;
+import com.bencodez.aylachat.AylaChatMain;
+import com.bencodez.aylachat.objects.ChannelHandler;
+import com.bencodez.aylachat.objects.AylaChatUser;
+import com.bencodez.aylachat.objects.UserManager;
 
 public class PlayerChatListener implements Listener {
 
 	/** The plugin. */
 	@SuppressWarnings("unused")
-	private static Main plugin;
+	private static AylaChatMain plugin;
 
 	/**
 	 * Instantiates a new player join event.
@@ -22,7 +22,7 @@ public class PlayerChatListener implements Listener {
 	 * @param plugin
 	 *            the plugin
 	 */
-	public PlayerChatListener(Main plugin) {
+	public PlayerChatListener(AylaChatMain plugin) {
 		PlayerChatListener.plugin = plugin;
 	}
 
@@ -35,7 +35,7 @@ public class PlayerChatListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		event.setCancelled(true);
-		User user = UserManager.getInstance().getAylaChatUser(event.getPlayer());
+		AylaChatUser user = UserManager.getInstance().getAylaChatUser(event.getPlayer());
 		ChannelHandler.getInstance().onChat(event.getPlayer(), user.getCurrentChannel(), event.getMessage());
 	}
 

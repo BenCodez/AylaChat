@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AylaChat.Commands.Executors;
+package com.bencodez.aylachat.commands.executors;
 
 import java.util.ArrayList;
 
@@ -7,12 +7,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 
-import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
-import com.Ben12345rocks.AylaChat.Main;
-import com.Ben12345rocks.AylaChat.Objects.Channel;
-import com.Ben12345rocks.AylaChat.Objects.ChannelHandler;
-import com.Ben12345rocks.AylaChat.Objects.User;
-import com.Ben12345rocks.AylaChat.Objects.UserManager;
+import com.bencodez.advancedcore.api.misc.ArrayUtils;
+import com.bencodez.aylachat.AylaChatMain;
+import com.bencodez.aylachat.objects.Channel;
+import com.bencodez.aylachat.objects.ChannelHandler;
+import com.bencodez.aylachat.objects.AylaChatUser;
+import com.bencodez.aylachat.objects.UserManager;
 
 public class ChannelCommands extends BukkitCommand {
 	private Channel ch;
@@ -29,11 +29,11 @@ public class ChannelCommands extends BukkitCommand {
 		if (sender instanceof Player) {
 			final Player player = (Player) sender;
 
-			Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new Runnable() {
+			Bukkit.getScheduler().runTaskAsynchronously(AylaChatMain.plugin, new Runnable() {
 
 				@Override
 				public void run() {
-					User user = UserManager.getInstance().getAylaChatUser(player);
+					AylaChatUser user = UserManager.getInstance().getAylaChatUser(player);
 					if (args.length == 0) {
 						user.setCurrentChannel(ch.getChannelName());
 						sender.sendMessage("Channel set");

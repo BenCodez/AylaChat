@@ -1,4 +1,4 @@
-package com.Ben12345rocks.AylaChat.Commands.Executors;
+package com.bencodez.aylachat.commands.executors;
 
 import java.util.ArrayList;
 
@@ -7,9 +7,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.Ben12345rocks.AdvancedCore.CommandAPI.CommandHandler;
-import com.Ben12345rocks.AdvancedCore.Util.Misc.ArrayUtils;
-import com.Ben12345rocks.AylaChat.Main;
+import com.bencodez.advancedcore.api.command.CommandHandler;
+import com.bencodez.advancedcore.api.misc.ArrayUtils;
+import com.bencodez.aylachat.AylaChatMain;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -19,7 +19,7 @@ public class CommandAliasHandle implements CommandExecutor {
 
 	/** The plugin. */
 	@SuppressWarnings("unused")
-	private Main plugin = Main.plugin;
+	private AylaChatMain plugin = AylaChatMain.plugin;
 
 	/** The cmd handle. */
 	private ArrayList<CommandHandler> cmdHandles;
