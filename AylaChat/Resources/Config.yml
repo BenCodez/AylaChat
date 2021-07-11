@@ -108,7 +108,7 @@ Format:
   
   NoPerms: '&cYou do not have enough permission!'
   NotNumber: '&cError on &6%arg%&c, number expected!'
-  HelpLine: '&3&l%Command% - &3%HelpMessage%'
+  HelpLine: '&6%Command% - &6%HelpMessage%'
   
   PrevPage: '&aPrevious Page'
   NextPage: '&aNext Page'
@@ -119,7 +119,7 @@ Format:
   
 JsonButtonGUI:
   MessageInfo:
-    Material: SIGN
+    Material: OAK_SIGN
     Amount: 1
     Name: '&cMessage Info'
     Lore:

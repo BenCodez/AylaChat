@@ -1,38 +1,27 @@
 package com.bencodez.aylachat.objects;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class MessageData {
+	@Getter
+	@Setter
 	private String player;
+	@Getter
+	@Setter
 	private String message;
+	@Getter
+	@Setter
 	private String channel;
+	@Getter
+	@Setter
+	private String rawMessage;
 
-	public MessageData(String player, String channel, String message) {
+	public MessageData(String player, String channel, String message, String rawMessage) {
 		this.player = player;
 		this.channel = channel;
 		this.message = message;
-	}
-
-	public String getChannel() {
-		return channel;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public String getPlayer() {
-		return player;
-	}
-
-	public void setChannel(String channel) {
-		this.channel = channel;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public void setPlayer(String player) {
-		this.player = player;
+		this.rawMessage = rawMessage;
 	}
 
 }

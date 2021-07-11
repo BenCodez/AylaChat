@@ -156,7 +156,7 @@
 								<resource>
 									<directory>${basedir}/target</directory>
 									<includes>
-										<include>${project.artifactId}.jar</include>
+										<include>AylaChat.jar</include>
 									</includes>
 								</resource>
 							</resources>
@@ -175,6 +175,10 @@
 		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
+		</repository>
+		<repository>
+			<id>bencodez repo</id>
+			<url>http://51.161.110.19:8081/repository/maven-releases/</url>
 		</repository>
 		<repository>
 			<id>vault-repo</id>
@@ -196,7 +200,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.16.4-R0.1-SNAPSHOT</version>
+			<version>1.17.1-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

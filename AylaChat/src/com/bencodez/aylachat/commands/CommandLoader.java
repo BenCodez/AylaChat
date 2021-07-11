@@ -277,33 +277,35 @@ public class CommandLoader {
 			@Override
 			public void execute(CommandSender sender, String[] args) {
 				MessageData data = ChannelHandler.getInstance().getMessageHistory().get(Integer.parseInt(args[1]));
-				HashMap<String, String> placeholders = new HashMap<String, String>();
-				placeholders.put("Message", data.getMessage());
-				placeholders.put("Channel", data.getChannel());
-				placeholders.put("player", data.getPlayer());
-				BInventory inv = new BInventory("Player: " + data.getPlayer() + " (" + args[1] + ")");
-				for (final String key : plugin.getConfigFile().JsonButtonGUI()) {
-					inv.addButton(new BInventoryButton(new ItemBuilder(
-							plugin.getConfigFile().getData().getConfigurationSection("JsonButtonGUI." + key))
-									.setPlaceholders(placeholders)) {
+				if (data != null) {
+					HashMap<String, String> placeholders = new HashMap<String, String>();
+					placeholders.put("Message", "&r" + data.getRawMessage());
+					placeholders.put("Channel", "&r" + data.getChannel());
+					placeholders.put("player", data.getPlayer());
+					BInventory inv = new BInventory("Player: " + data.getPlayer() + " (" + args[1] + ")");
+					for (final String key : plugin.getConfigFile().JsonButtonGUI()) {
+						inv.addButton(new BInventoryButton(new ItemBuilder(
+								plugin.getConfigFile().getData().getConfigurationSection("JsonButtonGUI." + key))
+										.setPlaceholders(placeholders)) {
 
-						@Override
-						public void onClick(ClickEvent event) {
-							Player player = Bukkit.getPlayer(data.getPlayer());
-							if (player != null) {
-								ArrayList<String> cmds = plugin.getConfigFile().getJsonButtonGUIKeyCommands(key);
-								if (!cmds.isEmpty()) {
-									MiscUtils.getInstance().executeConsoleCommands(player, cmds, placeholders);
+							@Override
+							public void onClick(ClickEvent event) {
+								Player player = Bukkit.getPlayer(data.getPlayer());
+								if (player != null) {
+									ArrayList<String> cmds = plugin.getConfigFile().getJsonButtonGUIKeyCommands(key);
+									if (!cmds.isEmpty()) {
+										MiscUtils.getInstance().executeConsoleCommands(player, cmds, placeholders);
+									}
+								} else {
+									plugin.sendPluginMessage(event.getPlayer(), "GUICommand", data.getPlayer(), key,
+											data.getChannel(), data.getMessage());
 								}
-							} else {
-								plugin.sendPluginMessage(event.getPlayer(), "GUICommand", data.getPlayer(), key,
-										data.getChannel(), data.getMessage());
 							}
-						}
-					});
-				}
+						});
+					}
 
-				inv.openInventory((Player) sender);
+					inv.openInventory((Player) sender);
+				}
 			}
 		});
 
@@ -335,55 +337,57 @@ public class CommandLoader {
 
 		loadAliases();
 
-		plugin.getPluginMessaging().add(new PluginMessageHandler("GUICommand") {
+		if (plugin.getConfigFile().useBungeeCoord) {
+			plugin.getPluginMessaging().add(new PluginMessageHandler("GUICommand") {
 
-			@Override
-			public void onRecieve(String subChannel, ArrayList<String> messageData) {
-				String p = messageData.get(0);
-				String msg = messageData.get(3);
-				String channel = messageData.get(2);
-				String key = messageData.get(1);
+				@Override
+				public void onRecieve(String subChannel, ArrayList<String> messageData) {
+					String p = messageData.get(0);
+					String msg = messageData.get(3);
+					String channel = messageData.get(2);
+					String key = messageData.get(1);
 
-				HashMap<String, String> placeholders = new HashMap<String, String>();
-				placeholders.put("Message", msg);
-				placeholders.put("Channel", channel);
-				placeholders.put("player", p);
+					HashMap<String, String> placeholders = new HashMap<String, String>();
+					placeholders.put("Message", msg);
+					placeholders.put("Channel", channel);
+					placeholders.put("player", p);
 
-				Player player = Bukkit.getPlayer(p);
-				if (player != null) {
-					MiscUtils.getInstance().executeConsoleCommands(p,
-							plugin.getConfigFile().getJsonButtonGUIKeyCommands(key), placeholders);
+					Player player = Bukkit.getPlayer(p);
+					if (player != null) {
+						MiscUtils.getInstance().executeConsoleCommands(p,
+								plugin.getConfigFile().getJsonButtonGUIKeyCommands(key), placeholders);
+					}
 				}
-			}
-		});
+			});
 
-		plugin.getPluginMessaging().add(new PluginMessageHandler("Msg") {
+			plugin.getPluginMessaging().add(new PluginMessageHandler("Msg") {
 
-			@Override
-			public void onRecieve(String subChannel, ArrayList<String> messageData) {
-				String sender = messageData.get(0);
-				String toSend = messageData.get(1);
-				String msg = messageData.get(2);
+				@Override
+				public void onRecieve(String subChannel, ArrayList<String> messageData) {
+					String sender = messageData.get(0);
+					String toSend = messageData.get(1);
+					String msg = messageData.get(2);
 
-				messageReceived(sender, toSend, msg);
-			}
-		});
-
-		plugin.getPluginMessaging().add(new PluginMessageHandler("Mute") {
-
-			@Override
-			public void onRecieve(String subChannel, ArrayList<String> messageData) {
-				String player = messageData.get(0);
-				String muted = messageData.get(1);
-
-				AylaChatUser user = UserManager.getInstance().getAylaChatUser(player);
-				if (Boolean.valueOf(muted)) {
-					user.mute();
-				} else {
-					user.unMute();
+					messageReceived(sender, toSend, msg);
 				}
-			}
-		});
+			});
+
+			plugin.getPluginMessaging().add(new PluginMessageHandler("Mute") {
+
+				@Override
+				public void onRecieve(String subChannel, ArrayList<String> messageData) {
+					String player = messageData.get(0);
+					String muted = messageData.get(1);
+
+					AylaChatUser user = UserManager.getInstance().getAylaChatUser(player);
+					if (Boolean.valueOf(muted)) {
+						user.mute();
+					} else {
+						user.unMute();
+					}
+				}
+			});
+		}
 	}
 
 	public void loadAliases() {

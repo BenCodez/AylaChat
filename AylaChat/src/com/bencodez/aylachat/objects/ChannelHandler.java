@@ -89,10 +89,10 @@ public class ChannelHandler {
 		plugin.getConfigFile().saveData();
 	}
 
-	public void forceChat(String playerName, Channel ch, String msg, int hash) {
+	public void forceChat(String playerName, Channel ch, String msg, String rawMessage, int hash) {
 		Player player = Bukkit.getPlayer(playerName);
 		synchronized (ob) {
-			messageHistory.put(hash, new MessageData(playerName, ch.getChannelName(), msg));
+			messageHistory.put(hash, new MessageData(playerName, ch.getChannelName(), msg, rawMessage));
 			if (messageHistory.size() > 300) {
 				messageHistory.remove(messageHistory.keySet().iterator().next());
 			}
@@ -204,6 +204,8 @@ public class ChannelHandler {
 		return socialSpyPlayers;
 	}
 
+	private boolean pluginmessagingloaded = false;
+
 	public void load() {
 		messageHistory = new LinkedHashMap<Integer, MessageData>();
 
@@ -228,44 +230,48 @@ public class ChannelHandler {
 			}
 		}
 
-		plugin.getPluginMessaging().add(new PluginMessageHandler("Chat") {
+		if (plugin.getConfigFile().useBungeeCoord && !pluginmessagingloaded) {
+			pluginmessagingloaded = true;
+			plugin.getPluginMessaging().add(new PluginMessageHandler("Chat") {
 
-			@Override
-			public void onRecieve(String subChannel, ArrayList<String> messageData) {
+				@Override
+				public void onRecieve(String subChannel, ArrayList<String> messageData) {
 
-				String chatchannel = messageData.get(0);
-				String msg = messageData.get(1);
-				String name = messageData.get(2);
-				String h = messageData.get(3);
-				int hash = Integer.parseInt(h);
+					String chatchannel = messageData.get(0);
+					String msg = messageData.get(1);
+					String rawmsg = messageData.get(2);
+					String name = messageData.get(3);
+					String h = messageData.get(4);
+					int hash = Integer.parseInt(h);
 
-				Channel ch = ChannelHandler.getInstance().getChannel(chatchannel);
-				if (ch == null) {
-					plugin.debug("Channel doesn't exist: " + chatchannel);
-					return;
+					Channel ch = ChannelHandler.getInstance().getChannel(chatchannel);
+					if (ch == null) {
+						plugin.debug("Channel doesn't exist: " + chatchannel);
+						return;
+					}
+					if (ch.isBungeecoord()) {
+						ChannelHandler.getInstance().forceChat(name, ch, msg, rawmsg, hash);
+					} else {
+						plugin.debug(ch.getChannelName() + " isn't bungeecoord, error?");
+					}
+
 				}
-				if (ch.isBungeecoord()) {
-					ChannelHandler.getInstance().forceChat(name, ch, msg, hash);
-				} else {
-					plugin.debug(ch.getChannelName() + " isn't bungeecoord, error?");
+
+			});
+
+			plugin.getPluginMessaging().add(new PluginMessageHandler("ClearChat") {
+
+				@Override
+				public void onRecieve(String subChannel, ArrayList<String> messageData) {
+					String players = messageData.get(0);
+					if (players.equals("All")) {
+						ChannelHandler.getInstance().clearChatAll();
+					} else {
+						ChannelHandler.getInstance().clearChat(Bukkit.getPlayer(players));
+					}
 				}
-
-			}
-
-		});
-
-		plugin.getPluginMessaging().add(new PluginMessageHandler("ClearChat") {
-
-			@Override
-			public void onRecieve(String subChannel, ArrayList<String> messageData) {
-				String players = messageData.get(0);
-				if (players.equals("All")) {
-					ChannelHandler.getInstance().clearChatAll();
-				} else {
-					ChannelHandler.getInstance().clearChat(Bukkit.getPlayer(players));
-				}
-			}
-		});
+			});
+		}
 	}
 
 	private void loadChannelCommand(String cmd, Channel channel) {
@@ -297,10 +303,10 @@ public class ChannelHandler {
 		String msg = format(message, ch, player, h);
 
 		if (plugin.getConfigFile().useBungeeCoord && ch.isBungeecoord()) {
-			plugin.sendPluginMessage(player, "Chat", ch.getChannelName(), msg, player.getName(), "" + h);
-			messageHistory.put(h, new MessageData(player.getName(), ch.getChannelName(), msg));
+			plugin.sendPluginMessage(player, "Chat", ch.getChannelName(), msg, message, player.getName(), "" + h);
+			messageHistory.put(h, new MessageData(player.getName(), ch.getChannelName(), msg, message));
 		} else {
-			forceChat(player.getName(), ch, msg, h);
+			forceChat(player.getName(), ch, msg, message, h);
 		}
 	}
 

@@ -29,13 +29,13 @@ import lombok.Setter;
 public class AylaChatMain extends AdvancedCorePlugin {
 
 	public static AylaChatMain plugin;
-	
+
 	@Getter
 	@Setter
 	private ArrayList<CommandHandler> commands;
-	
+
 	private Updater updater;
-	
+
 	@Getter
 	private Config configFile;
 
@@ -69,10 +69,6 @@ public class AylaChatMain extends AdvancedCorePlugin {
 
 	@Override
 	public void onPostLoad() {
-		if (configFile.useBungeeCoord) {
-			registerBungeeChannels("aylachat:aylachat");
-		}
-
 		PluginUtils.getInstance().registerEvents(new PlayerChatListener(plugin), plugin);
 		PluginUtils.getInstance().registerEvents(new PlayerJoinListener(), plugin);
 
@@ -107,6 +103,10 @@ public class AylaChatMain extends AdvancedCorePlugin {
 		plugin = this;
 
 		configFile = new Config(this);
+
+		if (configFile.useBungeeCoord) {
+			registerBungeeChannels("aylachat:aylachat");
+		}
 
 		ChannelHandler.getInstance().load();
 
