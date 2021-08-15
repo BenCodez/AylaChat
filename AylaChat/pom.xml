@@ -173,27 +173,19 @@
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-		<repository>
-			<id>bencodez repo</id>
-			<url>https://nexus.bencodez.com/repository/maven-releases/</url>
-		</repository>
-		<repository>
 			<id>vault-repo</id>
 			<url>http://nexus.hc.to/content/repositories/pub_releases</url>
 		</repository>
 		<repository>
-			<id>bungeecord-repo</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<id>bencodez repo</id>
+			<url>https://nexus.bencodez.com/repository/maven-public/</url>
 		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>com.bencodez</groupId>
 			<artifactId>advancedcore</artifactId>
-			<version>3.2.1</version>
+			<version>LATEST</version>
 		</dependency>
 		<!-- <dependency> <groupId>com.Ben12345rocks</groupId> <artifactId>AdvancedCore</artifactId> 
 			<version>LATEST</version> <scope>compile</scope> </dependency> -->

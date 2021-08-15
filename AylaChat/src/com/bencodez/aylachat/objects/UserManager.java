@@ -1,12 +1,13 @@
 package com.bencodez.aylachat.objects;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.bencodez.advancedcore.api.misc.PlayerUtils;
-import com.bencodez.advancedcore.api.user.UUID;
+import com.bencodez.advancedcore.api.user.AdvancedCoreUser;
+import com.bencodez.aylachat.AylaChatMain;
 
 public class UserManager {
 	/** The instance. */
@@ -26,16 +27,11 @@ public class UserManager {
 	}
 
 	public ArrayList<String> getAllUUIDs() {
-		return com.bencodez.advancedcore.api.user.UserManager.getInstance().getAllUUIDs();
+		return AylaChatMain.plugin.getUserManager().getAllUUIDs();
 	}
 
-	public AylaChatUser getAylaChatUser(java.util.UUID uuid) {
-		return getAylaChatUser(new UUID(uuid.toString()));
-
-	}
-
-	public AylaChatUser getAylaChatUser(OfflinePlayer player) {
-		return getAylaChatUser(player.getName());
+	public AylaChatUser getAylaChatUser(AdvancedCoreUser user) {
+		return new AylaChatUser(user);
 	}
 
 	public AylaChatUser getAylaChatUser(Player player) {
@@ -43,7 +39,7 @@ public class UserManager {
 	}
 
 	public AylaChatUser getAylaChatUser(String playerName) {
-		return getAylaChatUser(new UUID(PlayerUtils.getInstance().getUUID(playerName)));
+		return getAylaChatUser(UUID.fromString(PlayerUtils.getInstance().getUUID(playerName)));
 	}
 
 	@SuppressWarnings("deprecation")

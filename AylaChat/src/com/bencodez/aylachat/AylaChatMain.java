@@ -12,7 +12,6 @@ import com.bencodez.advancedcore.api.metrics.BStatsMetrics;
 import com.bencodez.advancedcore.api.misc.PluginUtils;
 import com.bencodez.advancedcore.api.updater.Updater;
 import com.bencodez.advancedcore.api.user.AdvancedCoreUser;
-import com.bencodez.advancedcore.api.user.UUID;
 import com.bencodez.advancedcore.api.user.UserStartup;
 import com.bencodez.aylachat.commands.CommandLoader;
 import com.bencodez.aylachat.commands.executors.CommandAylaChat;
@@ -124,7 +123,7 @@ public class AylaChatMain extends AdvancedCorePlugin {
 
 			@Override
 			public void onStartUp(AdvancedCoreUser user) {
-				UserManager.getInstance().getAylaChatUser(new UUID(user.getUUID())).checkChannels();
+				UserManager.getInstance().getAylaChatUser(user).checkChannels();
 			}
 		});
 
@@ -143,7 +142,7 @@ public class AylaChatMain extends AdvancedCorePlugin {
 
 	public void sendPluginMessage(Player player, String channel, String... args) {
 		if (configFile.useBungeeCoord) {
-			plugin.getPluginMessaging().sendPluginMessage(player, channel, args);
+			plugin.getPluginMessaging().sendPluginMessage(channel, args);
 		}
 	}
 }

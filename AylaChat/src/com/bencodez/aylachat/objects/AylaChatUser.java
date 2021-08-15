@@ -1,10 +1,11 @@
 package com.bencodez.aylachat.objects;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import com.bencodez.advancedcore.api.user.UUID;
+import com.bencodez.advancedcore.api.user.AdvancedCoreUser;
 import com.bencodez.aylachat.AylaChatMain;
 
 // TODO: Auto-generated Javadoc
@@ -57,6 +58,10 @@ public class AylaChatUser extends com.bencodez.advancedcore.api.user.AdvancedCor
 	@Deprecated
 	public AylaChatUser(UUID uuid, boolean loadName) {
 		super(AylaChatMain.plugin, uuid, loadName);
+	}
+
+	public AylaChatUser(AdvancedCoreUser user) {
+		super(AylaChatMain.plugin, user);
 	}
 
 	public void checkChannels() {

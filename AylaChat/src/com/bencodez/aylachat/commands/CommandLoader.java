@@ -424,8 +424,8 @@ public class CommandLoader {
 	}
 
 	public void messageReceived(String sender, String toSend, String msg) {
-		toSend = com.bencodez.advancedcore.api.user.UserManager.getInstance().getProperName(toSend);
-		sender = com.bencodez.advancedcore.api.user.UserManager.getInstance().getProperName(sender);
+		toSend = plugin.getUserManager().getProperName(toSend);
+		sender = plugin.getUserManager().getProperName(sender);
 		HashMap<String, String> placeholders = new HashMap<String, String>();
 		placeholders.put("player", toSend);
 		placeholders.put("fromsender", sender);
@@ -457,7 +457,7 @@ public class CommandLoader {
 		} else {
 			UserManager.getInstance().getAylaChatUser(player.getName()).setlastMessageSender(toSend);
 		}
-		toSend = com.bencodez.advancedcore.api.user.UserManager.getInstance().getProperName(toSend);
+		toSend = plugin.getUserManager().getProperName(toSend);
 		HashMap<String, String> placeholders = new HashMap<String, String>();
 		placeholders.put("player", sender);
 		placeholders.put("toSend", toSend);
