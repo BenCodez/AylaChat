@@ -79,7 +79,7 @@ public class CommandLoader {
 			plugin.getCommands().add(handle);
 		}
 
-		plugin.getCommands().add(new CommandHandler(new String[] { "Help" }, "AylaChat.Help", "View help information") {
+		plugin.getCommands().add(new CommandHandler(plugin, new String[] { "Help" }, "AylaChat.Help", "View help information") {
 
 			@Override
 			public void execute(CommandSender sender, String[] args) {
@@ -110,7 +110,7 @@ public class CommandLoader {
 		});
 
 		plugin.getCommands()
-				.add(new CommandHandler(new String[] { "AdvancedCoreHelp" }, "AylaChat.Help", "View help information") {
+				.add(new CommandHandler(plugin, new String[] { "AdvancedCoreHelp" }, "AylaChat.Help", "View help information") {
 
 					@Override
 					public void execute(CommandSender sender, String[] args) {
@@ -142,7 +142,7 @@ public class CommandLoader {
 					}
 				});
 
-		plugin.getCommands().add(new CommandHandler(new String[] { "Reload" }, "AylaChat.Reload", "Reload the plugin") {
+		plugin.getCommands().add(new CommandHandler(plugin, new String[] { "Reload" }, "AylaChat.Reload", "Reload the plugin") {
 
 			@Override
 			public void execute(CommandSender sender, String[] args) {
@@ -151,7 +151,7 @@ public class CommandLoader {
 			}
 		});
 
-		plugin.getCommands().add(new CommandHandler(new String[] { "SetChannel", "(Channel)" }, "AylaChat.SetChannel",
+		plugin.getCommands().add(new CommandHandler(plugin, new String[] { "SetChannel", "(Channel)" }, "AylaChat.SetChannel",
 				"Set your channel", false) {
 
 			@Override
@@ -163,7 +163,7 @@ public class CommandLoader {
 			}
 		});
 
-		plugin.getCommands().add(new CommandHandler(new String[] { "ClearChat" }, "AylaChat.ClearChat", "Clear Chat") {
+		plugin.getCommands().add(new CommandHandler(plugin, new String[] { "ClearChat" }, "AylaChat.ClearChat", "Clear Chat") {
 
 			@Override
 			public void execute(CommandSender sender, String[] args) {
@@ -173,7 +173,7 @@ public class CommandLoader {
 			}
 		});
 
-		plugin.getCommands().add(new CommandHandler(new String[] { "ClearChat", "(Player)" },
+		plugin.getCommands().add(new CommandHandler(plugin, new String[] { "ClearChat", "(Player)" },
 				"AylaChat.ClearChat.Player", "Clear Chat for a specific player") {
 
 			@Override
@@ -193,7 +193,7 @@ public class CommandLoader {
 			}
 		});
 
-		plugin.getCommands().add(new CommandHandler(new String[] { "SocialSpy", "(Boolean)" }, "AylaChat.SocialSpy",
+		plugin.getCommands().add(new CommandHandler(plugin, new String[] { "SocialSpy", "(Boolean)" }, "AylaChat.SocialSpy",
 				"Set whether or not social spy is enabled", false) {
 
 			@Override
@@ -208,7 +208,7 @@ public class CommandLoader {
 			}
 		});
 
-		plugin.getCommands().add(new CommandHandler(new String[] { "SocialSpy" }, "AylaChat.SocialSpy",
+		plugin.getCommands().add(new CommandHandler(plugin, new String[] { "SocialSpy" }, "AylaChat.SocialSpy",
 				"Set whether or not social spy is enabled", false) {
 
 			@Override
@@ -224,7 +224,7 @@ public class CommandLoader {
 		});
 
 		plugin.getCommands()
-				.add(new CommandHandler(new String[] { "Mute", "(Player)" }, "AylaChat.Mute", "Mute player") {
+				.add(new CommandHandler(plugin, new String[] { "Mute", "(Player)" }, "AylaChat.Mute", "Mute player") {
 
 					@Override
 					public void execute(CommandSender sender, String[] args) {
@@ -241,7 +241,7 @@ public class CommandLoader {
 				});
 
 		plugin.getCommands().add(
-				new CommandHandler(new String[] { "Msg", "(Player)", "(List)" }, "AylaChat.Msg", "Msg other players") {
+				new CommandHandler(plugin, new String[] { "Msg", "(Player)", "(List)" }, "AylaChat.Msg", "Msg other players") {
 
 					@Override
 					public void execute(CommandSender sender, String[] args) {
@@ -250,7 +250,7 @@ public class CommandLoader {
 				});
 
 		plugin.getCommands()
-				.add(new CommandHandler(new String[] { "Reply", "(List)" }, "AylaChat.Msg", "Reply to last message") {
+				.add(new CommandHandler(plugin, new String[] { "Reply", "(List)" }, "AylaChat.Msg", "Reply to last message") {
 
 					@Override
 					public void execute(CommandSender sender, String[] args) {
@@ -263,7 +263,7 @@ public class CommandLoader {
 				});
 
 		plugin.getCommands().add(
-				new CommandHandler(new String[] { "ChannelEdit" }, "AylaChat.ChannelEdit", "Edit channels", false) {
+				new CommandHandler(plugin, new String[] { "ChannelEdit" }, "AylaChat.ChannelEdit", "Edit channels", false) {
 
 					@Override
 					public void execute(CommandSender sender, String[] args) {
@@ -271,7 +271,7 @@ public class CommandLoader {
 					}
 				});
 
-		plugin.getCommands().add(new CommandHandler(new String[] { "button", "(Number)" }, "AylaChat.Button",
+		plugin.getCommands().add(new CommandHandler(plugin, new String[] { "button", "(Number)" }, "AylaChat.Button",
 				"Command to access Json Button", false) {
 
 			@Override
@@ -310,7 +310,7 @@ public class CommandLoader {
 		});
 
 		/*
-		 * plugin.getCommands().add(new CommandHandler(new String[] { "RemoveMessage",
+		 * plugin.getCommands().add(new CommandHandler(plugin, new String[] { "RemoveMessage",
 		 * "(Number)" }, "AylaChat.RemoveMessage", "Remove Message", false) {
 		 * 
 		 * @Override public void execute(CommandSender sender, String[] args) {
