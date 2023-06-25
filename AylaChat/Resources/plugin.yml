@@ -1,5 +1,5 @@
 name: ${project.name}
-version: ${project.version}
+version: "${project.version}"
 main: com.bencodez.aylachat.AylaChatMain
 description: Highly Customizable Chat Plugin
 author: BenCodez
